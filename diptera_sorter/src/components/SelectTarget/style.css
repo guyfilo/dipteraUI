@@ -1,0 +1,78 @@
+.select-target {
+    width: 271px;
+    height: 222px;
+}
+.select-target-line-wrapper {
+    position: relative;
+    height: 25px; /* or however tall the line should be */
+    margin-bottom: 20px; /* spacing between lines */
+}
+
+.select-target-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex; /* ⬅️ this is necessary */
+    align-items: center;
+    gap: 20px;
+    flex-wrap: nowrap;
+    padding-top: 20px;
+}
+.select-target-line .target-title {
+    position: absolute;
+    left: 74px;
+    top: 10px;
+    display: flex;
+    width: 271px;
+    font-weight: 400;
+    font-size: 18px;
+    text-align: center;
+    cursor: pointer;
+    font-family: Assistant;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.select-target-line .target-checkbox {
+    position: absolute;
+    left: 2px;
+    top: 10px;
+}
+
+.select-target-line .select-target-icon {
+    position: absolute;
+    left: 34px;
+    top: 10px;
+}
+
+.select-target-line .male_nfl_icon {
+    width: 19px;
+    height: 18px;
+    left: 42px;
+}
+.select-target-line .male_fl_icon {
+    width: 29px;
+    height: 27px;
+}
+.select-target-line .female_nfl_icon {
+    width: 12px;
+    height: 19px;
+    left: 42px;
+
+}
+.select-target-line .female_fl_icon {
+    width: 29px;
+    height: 27px;
+}
+.select-target-line .male_female_nfl_icon {
+    width: 19px;
+    height: 22px;
+    left: 42px;
+}
+.select-target-line .male_female_fl_icon {
+    width: 29px;
+    height: 27px;
+}
+

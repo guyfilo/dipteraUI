@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@400&display=swap');
+
+.running-statistics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    grid-template-rows: repeat(2, auto);
+    width: 400px;
+    position: relative;
+}
+.stat-item {
+    display: flex;
+    align-items: center;
+}
+
+.stat-item-warning {
+    color: var(--caution-orange) !important;
+}
+
+.stat-value {
+    position: relative;
+    font-size: 15px;
+    letter-spacing: 0.03em;
+    font-family: var(--font-assistant);
+    color: var(--Dark-Grey);
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+
+.stat-label {
+    width: 90px;
+    position: relative;
+    text-align: left;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    line-height: 30px;
+    color: var(--Mid-Grey);
+    display: flex;
+}
+
+body {
+    margin: 0; line-height: normal;
+}
+:root {
+    /* Fonts */
+    --font-assistant: Assistant;
+    /* Figma Variables */
+    /* Color Variables */
+    --Mid-Grey: #bababa;
+    --Dark-Grey: #707070;
+
+}
+

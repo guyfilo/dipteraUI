@@ -1,0 +1,330 @@
+.start-new-session {
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.start-new-session .div {
+    background-color: #f4f4f4;
+    border: 1px solid;
+    border-color: #b5b5b5;
+    height: 560px;
+    position: relative;
+    width: 803px;
+}
+
+.start-new-session .overlap {
+    height: 42px;
+    left: 47px;
+    position: absolute;
+    top: 39px;
+    width: 711px;
+}
+
+.start-new-session .session-title-input-title {
+    color: #000000;
+    font-size: 24px;
+    font-family: Assistant;
+    font-weight: 600;
+    letter-spacing: 0.72px;
+    word-wrap: break-word;
+    position: absolute;
+}
+
+
+.start-new-session .session-title-input {
+    border: 1px solid;
+    border-color: #9f9f9f;
+    border-radius: 2px;
+    height: 31px;
+    left: 190px;
+    position: absolute;
+    top: 1px;
+    width: 521px;
+}
+
+.start-new-session .session-description-input-title {
+    color: #000000;
+
+    font-size: 20px;
+    font-weight: 400;
+    height: 42px;
+    left: 47px;
+    letter-spacing: 0;
+    line-height: 18px;
+    position: absolute;
+    top: 81px;
+    width: 124px;
+}
+
+.start-new-session .session-description-input {
+    border: 1px solid;
+    border-color: #9f9f9f;
+    border-radius: 2px;
+    height: 91px;
+    left: 181px;
+    position: absolute;
+    top: 80px;
+    width: 577px;
+}
+
+
+.dark_ellipse {
+    background-color: #030000;
+    border-radius: 5px;
+    height: 10px;
+    position: absolute;
+    top: 524px;
+    width: 10px;
+}
+
+.bright_ellipse {
+    background-color: #d9d9d9;
+    border-radius: 5px;
+    height: 10px;
+    position: absolute;
+    top: 524px;
+    width: 10px;
+}
+
+.session-setup-in .ellipse-3 {
+    background-color: #d9d9d9;
+    border-radius: 5px;
+    height: 10px;
+    left: 375px;
+    position: absolute;
+    top: 524px;
+    width: 10px;
+}
+
+.session-setup-in .overlap-group {
+    background-size: 100% 100%;
+    height: 172px;
+    left: 316px;
+    position: absolute;
+    top: 194px;
+    width: 172px;
+}
+
+.session-setup-in .subtract {
+    height: 172px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 172px;
+}
+
+.session-setup-in .text-wrapper {
+    color: #000000;
+
+    font-size: 20px;
+    font-weight: 400;
+    height: 42px;
+    left: 107px;
+    letter-spacing: 0;
+    line-height: 18px;
+    position: absolute;
+    top: 55px;
+    width: 246px;
+}
+
+
+.start-session-window {
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+
+.start-session-window .div {
+    background-color: #f4f4f4;
+    border: 1px solid;
+    border-color: #b5b5b5;
+    height: 560px;
+    position: relative;
+    width: 880px;
+}
+
+.session-setup .text-wrapper {
+    color: #000000;
+    font-family: var(--font-bold);
+    font-size: 24px;
+    font-weight: 700;
+    height: 42px;
+    left: 297px;
+    letter-spacing: 0;
+    line-height: 18px;
+    position: absolute;
+    top: 201px;
+    width: 210px;
+}
+
+.session-setup .ellipse {
+    background-color: #d9d9d9;
+    border-radius: 5px;
+    height: 10px;
+    left: 397px;
+    position: absolute;
+    top: 524px;
+    width: 10px;
+}
+
+.session-setup .ellipse-2 {
+    background-color: #000000;
+    border-radius: 5px;
+    height: 10px;
+    left: 419px;
+    position: absolute;
+    top: 524px;
+    width: 10px;
+}
+
+.session-setup .ellipse-3 {
+    background-color: #d9d9d9;
+    border-radius: 5px;
+    height: 10px;
+    left: 375px;
+    position: absolute;
+    top: 524px;
+    width: 10px;
+}
+
+.session-setup .butten-instance {
+    left: 358px !important;
+    position: absolute !important;
+    top: 258px !important;
+    width: 87px !important;
+}
+
+.session-setup .design-component-instance-node {
+    left: 10px !important;
+    width: 67px !important;
+}
+
+.start-new-session-targets-wrapper {
+    width: 222px;
+    position: absolute;
+    top: 194px;
+}
+
+.start-new-session-targets {
+    position: relative;
+    display: flex;
+    gap: 70px;
+    padding-left: 40px;
+
+}
+
+.next-step-button {
+    position: absolute;
+    top: 492px;
+    right: 20px;
+}
+
+.next-step-button-wash {
+    position: absolute;
+    top: 440px;
+    right: 20px;
+
+}
+
+.select-target-warning {
+    color: red;
+    position: absolute;
+    bottom: 10px;
+    left: 20px;
+}
+
+.choose-machines-window {
+    position: relative;
+    gap: 40px;
+    left: 100px;
+    top: 70px;
+}
+
+.choose-all-machines-new-session{
+    position: relative;
+    padding: 10px;
+}
+.optional-machines-new-session {
+    position: relative;
+    gap: 40px;
+
+}
+.machine-option-line {
+    position: relative;
+    padding: 10px;
+    left: 40px;
+}
+
+.session-init-summery {
+    width: 668px;
+    position: relative;
+    font-size: 16px;
+    letter-spacing: 0.03em;
+    font-family: var(--font-assistant);
+    color: var(--Black);
+    text-align: left;
+    display: flex;
+    top: 59px;
+}
+
+.session-init-summery-machines {
+    position: absolute;
+    left: 100px;
+    top: 112px;
+}
+.session-init-retry {
+    position: absolute;
+    right: 40px;
+    bottom: 30px;
+}
+.session-init-continue {
+    position: absolute;
+    right: 200px;
+    bottom: 30px;
+}
+
+.session-init-summery-machine {
+    position: relative;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+}
+.session-init-summery-checkbox {
+    position: relative;
+    left: 150px;
+}
+.init-status-text {
+    width: 102px;
+    position: relative;
+    font-size: 16px;
+    letter-spacing: 0.03em;
+    font-family: var(--font-assistant);
+    color: var(--Black);
+    text-align: left;
+    display: flex;
+    height: 42px;
+    align-items: center;
+}
+
+.session-init-summery-msg {
+    width: 174px;
+    position: relative;
+    font-size: 16px;
+    letter-spacing: 0.03em;
+    font-family: var(--font-assistant);
+    color: var(--Dark-Grey);
+    text-align: left;
+    display: flex;
+    align-items: center;
+    height: 42px;
+}
+
+.session-init-summery-sep-line {
+    position: relative;
+    width: 690px !important;
+}

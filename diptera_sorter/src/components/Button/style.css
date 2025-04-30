@@ -1,0 +1,34 @@
+.button {
+    background-color: #8c8c8c;
+    border-radius: 5px;
+    height: 43px;
+    position: relative;
+    min-width: 147px;
+    padding: 0 16px;
+    align-items: center;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+
+}
+
+.button .button-text {
+    color: #ffffff;
+    cursor: default;
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    letter-spacing: 0;
+    white-space: nowrap;
+}
+
+/* Hover Effect */
+.button:hover {
+    background-color: #007bff;
+}
+
+/* Active (Pressed) Effect - Higher Priority */
+.button.button-pressed {
+    background-color: #0056b3 !important;
+    transform: scale(0.95);
+}

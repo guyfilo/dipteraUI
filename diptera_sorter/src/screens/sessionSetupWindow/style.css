@@ -1,0 +1,157 @@
+.session-setup-in {
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+
+.session-setup-in .div {
+    background-color: #f4f4f4;
+    border: 1px solid;
+    border-color: #b5b5b5;
+    height: 560px;
+    position: relative;
+    width: 803px;
+}
+
+.charging-machine-messages {
+    position: absolute;
+    top: 40px;
+    left: 100px;
+    width: 500px;
+    font-size: 16px;
+    letter-spacing: 0.03em;
+    font-family: var(--font-assistant);
+    color: var(--Black);
+    text-align: left;
+    /*display: flex;*/
+    align-items: center;
+    height: 42px;
+}
+.session-setup-in .ellipse {
+    background-color: #030000;
+    border-radius: 5px;
+    height: 10px;
+    left: 397px;
+    position: absolute;
+    top: 524px;
+    width: 10px;
+}
+
+.session-setup-in .ellipse-2 {
+    background-color: #d9d9d9;
+    border-radius: 5px;
+    height: 10px;
+    left: 419px;
+    position: absolute;
+    top: 524px;
+    width: 10px;
+}
+
+.session-setup-in .ellipse-3 {
+    background-color: #d9d9d9;
+    border-radius: 5px;
+    height: 10px;
+    left: 375px;
+    position: absolute;
+    top: 524px;
+    width: 10px;
+}
+
+.session-setup-in .overlap-group {
+    height: 172px;
+    left: 316px;
+    position: absolute;
+    top: 194px;
+    width: 172px;
+}
+
+.session-setup-in .subtract {
+    height: 172px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 172px;
+    /*transform: rotate(90deg); !* Rotate 90 degrees *!*/
+}
+
+.session-setup-in .text-wrapper {
+    color: #000000;
+
+    font-size: 20px;
+    font-weight: 400;
+    height: 42px;
+    left: 107px;
+    letter-spacing: 0;
+    line-height: 18px;
+    position: absolute;
+    top: 55px;
+    width: 246px;
+}
+
+.session-setup-in .div {
+    background-color: #f4f4f4;
+    border: 1px solid;
+    border-color: #b5b5b5;
+    height: 560px;
+    position: relative;
+    width: 803px;
+}
+
+.session-setup-in .text-wrapper-start {
+    color: #000000;
+    font-family: var(--font-bold);
+    font-size: 24px;
+    font-weight: 700;
+    height: 42px;
+    left: 297px;
+    letter-spacing: 0;
+    line-height: 18px;
+    position: absolute;
+    top: 201px;
+    width: 210px;
+}
+
+.session-setup-in .ellipse-11 {
+    background-color: #d9d9d9;
+    border-radius: 5px;
+    height: 10px;
+    left: 397px;
+    position: absolute;
+    top: 524px;
+    width: 10px;
+}
+
+.session-setup-in .ellipse-12 {
+    background-color: #000000;
+    border-radius: 5px;
+    height: 10px;
+    left: 419px;
+    position: absolute;
+    top: 524px;
+    width: 10px;
+}
+
+.session-setup-in .ellipse-13 {
+    background-color: #d9d9d9;
+    border-radius: 5px;
+    height: 10px;
+    left: 375px;
+    position: absolute;
+    top: 524px;
+    width: 10px;
+}
+
+.session-setup-in .button-instance-start {
+    left: 358px !important;
+    position: absolute !important;
+    top: 258px !important;
+    width: 87px !important;
+}
+
+.session-setup-in .design-component-instance-node-start {
+    left: 10px !important;
+    width: 67px !important;
+}
+

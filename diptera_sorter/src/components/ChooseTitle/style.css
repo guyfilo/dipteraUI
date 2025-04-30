@@ -1,0 +1,22 @@
+.choose-title {
+    display: flex;
+    align-items: center; /* Aligns them vertically */
+    white-space: nowrap; /* Prevents text wrapping */
+    width: max-content;
+    min-width: 200px;
+}
+.choose-left {
+    padding-right:20px; /* Adds 40px (20px on each side) */
+
+}
+.choose-right {
+    padding-left:20px; /* Adds 40px (20px on each side) */
+}
+.choose-title-text {
+    width: auto;
+    font-size: 24px;
+    line-height: 18px;
+    color: #000;
+    text-align: left;
+    align-items: center;
+}

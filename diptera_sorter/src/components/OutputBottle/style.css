@@ -1,0 +1,60 @@
+.outputBottleRectangle {
+    width: 40px;
+    height: 60px;
+    position: relative;
+
+}
+
+.target-icon {
+    position: absolute;
+    overflow: hidden;
+    height: 31%;
+    width: 42%;
+    top: 57%;
+    left: 26%;
+}
+
+
+.bottle-number {
+    width: 30%;
+    left: 30%;
+    height: 25%;
+    line-height: 1em;
+    position: absolute;
+    display: flex;
+    color: #707070;
+    text-align: left;
+    justify-content: center;
+    align-items: center;
+}
+
+.bottle-number-blink {
+    width: 30%;
+    left: 30%;
+    height: 25%;
+    line-height: 1em;
+    position: absolute;
+    display: flex;
+    color: var(--dipteraai-main);
+    text-align: left;
+    justify-content: center;
+    align-items: center;
+}
+
+.output-bottle-icon {
+    position: absolute;
+    height: 80%;
+    width: 100%;
+    top: 30%;
+    left: -5%;
+}
+
+.output-bottle {
+    position: relative;
+    display: flex;
+}
+
+.outputBottles {
+    display: flex;
+
+}

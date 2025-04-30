@@ -1,0 +1,145 @@
+.machinesInfoWindow {
+
+}
+
+
+.machinesInfoWindow .session-title {
+    width: 264px;
+    position: relative;
+    font-size: 24px;
+    line-height: 18px;
+    font-family: Alef;
+    color: #000;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    height: 35px;
+    padding-top: 15px;
+}
+.machine-info-table {
+    position: relative;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 10px !important;
+}
+.machine-info-table p {
+    font-size: 16px;
+    line-height: 18px;
+    font-family: Alef;
+    color: #000;
+    text-align: left;
+    height: 35px;
+}
+
+.machine-info-table tr {
+    position: relative;
+
+
+}
+.machine-info-table .cell-header {
+    width: max-content;
+    position: absolute;
+    top: 6px;
+    left: 25px;
+    height: 35px;
+    align-items: center;
+    display: flex;
+
+
+}
+.machine-info-table .machine-status {
+    position: relative;
+    width: 179px;
+    height: 126px;
+}
+.machine-info-table .machine-larva-counter {
+    position: relative;
+    width: 195px;
+    height: 126px;
+}
+.machine-info-table .machine-status-icon {
+    position: absolute;
+    top: 41px;
+    left: 54px;
+}
+.machine-info-table .machine-input-bottles-widget {
+    position: absolute;
+    left: 20px;
+    top: 35px;
+}
+
+.machine-info-table .machine-input-bottle {
+    position: relative;
+    width: 176px;
+    height: 126px;
+
+}
+.machine-info-table .machine-output-bottle  {
+    position: relative;
+    width: 249px;
+    height: 126px;
+
+}
+
+.machine-info-table .machine-output-bottles-widget  {
+    position: absolute;
+    left: 28px;
+    top: 56px;
+}
+
+.machine-info-table .machine-warnings  {
+    position: relative;
+    width: 287px;
+    height: 126px;
+}
+
+.machine-info-table td {
+    position: relative;
+    border-radius: 10px;
+    background-color: #fefefe;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.machine-info-table .larva-count-text {
+    position: absolute;
+    font-size: 64px;
+    line-height: 18px;
+    color: #000;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    height: 97px;
+    top: 20px;
+    left: 51px;
+}
+
+.machine-info-table .machine-pie {
+    height: 387px;
+    width: 382px;
+}
+.machine-info-table .machine-histogram {
+    height: 387px;
+    width: 382px;
+}
+
+.machine-info-table .machine-dashboard {
+    position: relative;
+    width: 1000px;
+    height: 229px;
+    flex-direction: row; /* or column */
+    display: flex;
+    padding-left: 90px;
+}
+
+.machine-info-table .machine-dashboard-gauge {
+    height: 229px;
+    width: 300px;
+    padding-left: 20px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: row; /* or column */
+
+}

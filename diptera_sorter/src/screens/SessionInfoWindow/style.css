@@ -1,0 +1,82 @@
+.session-info-window {
+    position: absolute;
+    overflow-x: visible;
+}
+
+.session-info-window .choose-session {
+    position: absolute;
+    left: 13px;
+
+}
+
+.session-info-window .larva-counter {
+    width: 195px;
+    position: absolute;
+    border-radius: 10px;
+    background-color: #fefefe;
+    height: 176px;
+    padding: 14px;
+    left: 13px;
+    top: 92px;
+}
+
+.session-info-window .larva-counter-title {
+    width: 141px;
+    position: absolute;
+    font-size: 16px;
+    line-height: 18px;
+    color: #000;
+    text-align: left;
+    left: 54px;
+    top: 17px;
+    display: flex;
+    align-items: center;
+    height: 35px;
+}
+
+.session-info-window .larva-count {
+    width: 110px;
+    position: absolute;
+    font-size: 64px;
+    line-height: 18px;
+    color: #000;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    height: 97px;
+    left: 51px;
+    top: 40px;
+}
+
+.session-info-window .session-pie {
+    position: absolute;
+    height: 387px;
+    width: 382px;
+    top: 279px;
+    left: 13px;
+}
+
+.session-info-window .larva-area-histogram-container {
+    height: 387px;
+    width: 732px;
+    left: 407px;
+    top: 279px;
+    position: absolute;
+}
+
+.session-info-window .area-histogram {
+    position: absolute;
+}
+
+.session-info-window .session-dashboard {
+    height: 216px;
+    width: 1130px;
+    left: 10px;
+    top: 680px;
+    position: absolute;
+}
+
+.session-info-window .session-live-table {
+    top: 66px;
+    left: 222px;
+    position: absolute;}

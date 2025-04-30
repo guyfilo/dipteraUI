@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@400&display=swap');
+
+:root {
+  --font-regular: Assistant, Helvetica;
+  --font-bold: Assistant, Helvetica;
+}
+
+body {
+  font-family: var(--font-regular);
+}
+
+strong, b {
+  font-family: var(--font-bold);
+}
+
+
+/* Usage */
+p {
+  font-weight: 400; /* Regular */
+}
+
+strong, b {
+  font-weight: 700; /* Bold */
+}
+
+
+body {
+  margin: 0; line-height: normal;
+  font-family: var(--font-regular), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  /* Figma Variables */
+  /* Color Variables */
+  --warnning-red: #fc4747;
+  --font-assistant: Assistant;
+  --caution-orange: #fca447;
+
+  /* Figma Variables */
+  /* Color Variables */
+  --Almost-white: #fefefe;
+  --Black: #000;
+
+}
+
+code {
+  font-family: sans-serif;
+}

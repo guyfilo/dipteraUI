@@ -1,0 +1,70 @@
+.start-new-session {
+  background-color: #f4f4f4;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.start-new-session .div {
+  background-color: #f4f4f4;
+  border: 1px solid;
+  border-color: #b5b5b5;
+  height: 560px;
+  position: relative;
+  width: 803px;
+}
+
+.start-new-session .overlap {
+  height: 42px;
+  left: 47px;
+  position: absolute;
+  top: 39px;
+  width: 711px;
+}
+
+.start-new-session .session-title-input-title {
+  color: #000000;
+  font-size: 24px;
+  font-family: Assistant;
+  font-weight: 600;
+  letter-spacing: 0.72px;
+  word-wrap: break-word;
+  position: absolute;
+}
+
+
+.start-new-session .session-title-input {
+  border: 1px solid;
+  border-color: #9f9f9f;
+  border-radius: 2px;
+  height: 31px;
+  left: 190px;
+  position: absolute;
+  top: 1px;
+  width: 521px;
+}
+
+.start-new-session .session-description-input-title {
+  color: #000000;
+
+  font-size: 20px;
+  font-weight: 400;
+  height: 42px;
+  left: 47px;
+  letter-spacing: 0;
+  line-height: 18px;
+  position: absolute;
+  top: 81px;
+  width: 124px;
+}
+
+.start-new-session .session-description-input {
+  border: 1px solid;
+  border-color: #9f9f9f;
+  border-radius: 2px;
+  height: 91px;
+  left: 181px;
+  position: absolute;
+  top: 80px;
+  width: 577px;
+}

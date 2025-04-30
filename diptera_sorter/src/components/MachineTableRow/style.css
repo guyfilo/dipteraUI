@@ -1,0 +1,22 @@
+.machine-checkbox {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.machine-name-container {
+    font-size: 24px;
+    line-height: 18px;
+    color: #000;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    height: 35px;
+    cursor: pointer;
+}
+
+.machine-checkbox-rectangle {
+    height: 18px;
+    width: 18px;
+
+}

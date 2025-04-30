@@ -1,0 +1,140 @@
+.menu {
+  height: 528px;
+  position: relative;
+  width: 215px;
+}
+
+.menu .group {
+  height: 528px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 225px;
+}
+
+.menu .rectangle {
+  background-color: #e4e4e4;
+  border-radius: 10px;
+  height: 528px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 214px;
+}
+
+.menu .div {
+  color: #707070;
+  font-size: 16px;
+  font-weight: 400;
+  height: 35px;
+  left: 23px;
+  letter-spacing: 0;
+  line-height: 18px;
+  position: absolute;
+  top: 73px;
+  width: 139px;
+}
+
+.menu .text-wrapper-2 {
+  color: #707070;
+  font-size: 16px;
+  font-weight: 400;
+  height: 35px;
+  left: 23px;
+  letter-spacing: 0;
+  line-height: 18px;
+  position: absolute;
+  top: 23px;
+  width: 139px;
+}
+
+.menu .text-wrapper-3 {
+  color: #707070;
+
+  font-size: 16px;
+  font-weight: 400;
+  height: 35px;
+  left: 23px;
+  letter-spacing: 0;
+  line-height: 18px;
+  position: absolute;
+  top: 124px;
+  width: 139px;
+}
+
+.menu .treatments-warnings {
+  color: #707070;
+
+  font-size: 16px;
+  font-weight: 400;
+  height: 35px;
+  left: 23px;
+  letter-spacing: 0;
+  line-height: 18px;
+  position: absolute;
+  top: 174px;
+  width: 192px;
+}
+
+.menu .text-t1-male {
+  color: #707070;
+
+  font-size: 16px;
+  font-weight: 400;
+  height: 35px;
+  left: 23px;
+  letter-spacing: 0;
+  line-height: 18px;
+  position: absolute;
+  top: 225px;
+  width: 192px;
+}
+
+.menu .overlap-wrapper {
+  height: 127px;
+  left: 0;
+  position: absolute;
+  top: 544px;
+  width: 218px;
+}
+
+.menu .overlap {
+  background-color: #e4e4e4;
+  border-radius: 10px;
+  height: 127px;
+  position: relative;
+  width: 214px;
+}
+
+.menu .text-t1-female {
+  color: #707070;
+
+  font-size: 16px;
+  font-weight: 400;
+  height: 35px;
+  left: 22px;
+  letter-spacing: 0;
+  line-height: 18px;
+  position: absolute;
+  top: 23px;
+  width: 139px;
+}
+
+.menu .text-t1-fl {
+  color: #707070;
+
+  font-size: 16px;
+  font-weight: 400;
+  height: 35px;
+  left: 22px;
+  letter-spacing: 0;
+  line-height: 18px;
+  position: absolute;
+  top: 69px;
+  width: 139px;
+}
+/* Active (Pressed) Effect - Higher Priority */
+.menu .menu-option-selected {
+  color: #0056b3 !important;
+}
+

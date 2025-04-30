@@ -1,0 +1,43 @@
+.command-button {
+    height: 53px;
+    width: 53px;
+    flex-direction: row;
+
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    color: #707070;
+
+}
+
+.command-button .tooltip {
+    position: absolute;
+    top: 110%; /* places it just below the image */
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+    background-color: #fefefe;
+    width: max-content;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 3px;
+    box-sizing: border-box;
+    text-align: left;
+    font-size: 20px;
+    opacity: 0;
+    color: #707070;
+    z-index: 999;
+}
+
+.command-button:hover .tooltip {
+    opacity: 1;
+}
+
+.command-button .command-button-img {
+    color: #707070;
+    display: block;
+}
+
+

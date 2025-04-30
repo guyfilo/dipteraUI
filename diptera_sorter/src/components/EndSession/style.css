@@ -1,0 +1,37 @@
+.exit-session-window {
+    width: 100%;
+    position: relative;
+    border-radius: 5px;
+    background-color: #d9d9d9;
+    height: 218px;
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+}
+
+.exit-session-window h2 {
+    position: relative;
+    font-size: 24px;
+    letter-spacing: 0.03em;
+    font-weight: 600;
+    font-family: var(--font-assistant);
+    color: #000;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 96px;
+}
+
+
+.exit-session-buttons {
+    width: 100%;
+    position: relative;
+    border-radius: 5px;
+    height: 218px;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    gap: 10px;
+}

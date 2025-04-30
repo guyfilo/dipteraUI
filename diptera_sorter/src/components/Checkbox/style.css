@@ -1,0 +1,25 @@
+.checkbox-container {
+    height: 18px;
+    width: 18px;
+}
+
+.checkbox-rectangle {
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 0px;
+    top:0px;
+    background-color: #d9d9d9;
+}
+
+.checkbox-text {
+    min-width: max-content;
+    position: relative;
+    font-size: 16px;
+    line-height: 18px;
+    color: #6f6f6f;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    left: 200%;
+}

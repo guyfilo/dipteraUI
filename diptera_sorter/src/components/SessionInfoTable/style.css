@@ -1,0 +1,114 @@
+.session-info-table-container {
+    position: relative;
+
+
+}
+.choose-all-checkbox {
+    position: relative;
+    display: flex;
+    left: 10px;
+}
+.choose-all-text {
+    width: 150px;
+    position: relative;
+    font-size: 16px;
+    line-height: 18px;
+    color: #787878;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    height: 35px;
+}
+.scroll-table {
+    position: relative;
+    top:8px;
+
+    overflow-y: auto; /* Enables vertical scrolling */
+    overflow-x: hidden;
+    height: 176px;
+    background-color: #fefefe;
+    border-radius: 10px;
+}
+.session-info-table {
+    position: relative;
+
+
+}
+
+html {
+    scrollbar-width: thin;  /* Makes the scrollbar thinner */
+    scrollbar-color:#e5e5e5 #fff ;  /* Thumb color and track color */
+}
+.session-info-table tr{
+    display: flex;
+    position: relative;
+    align-items: center;
+    flex-direction: row;
+    padding-left: 10px;
+    padding-right: 10px;
+
+}
+.table-data {
+    height: 64px;
+
+}
+
+
+
+.col-running-stats {
+    position: relative;
+    top: -15px;
+}
+.session-info-table td {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+
+}
+.session-info-table .line-under-row {
+    position: relative;
+}
+.table-data p {
+    position: relative;
+    width: max-content;
+    font-size: 16px;
+    line-height: 18px;
+    color: #707070;
+    text-align: left;
+}
+.table-data .td-widget {
+    position: relative;
+    padding-left: 10px;
+}
+
+.session-info-table .col-machine-name {
+    position: relative;
+    width: 131px;
+
+}
+.session-info-table .col-status {
+    position: relative;
+    width: 109px;
+}
+.session-info-table .col-input-bottle {
+    position: relative;
+    width:195px;
+}
+.session-info-table .col-output-bottle {
+    position: relative;
+    width:280px;
+}
+.session-info-table .col-warnings {
+    position: relative;
+    width:183px;
+    display: flex;
+}
+
+.session-info-table .line-under-row-table {
+    display: block !important;
+    position: relative;
+    width: 820px;
+    left: 35px;
+}
+
