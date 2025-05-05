@@ -22,27 +22,37 @@ export const Menu = ({className, divClassName, selected, setSelected}) => {
                         onClick={() => (select("Home"))}
                         className={(selected === "Home" ? "menu-option-selected" : "")}
                     />
+                    <div className={"header-menu-option"} style={{top: "59px"}}>
+                        Dashboards
+                    </div>
+
                     <MenuOption
                         text="Sessions"
-                        style={{top: "70px"}}
+                        style={{top: "89px", left: "49px"}}
                         onClick={() => (select("Sessions"))}
                         className={(selected === "Sessions" ? "menu-option-selected" : "")}
                     />
                     <MenuOption
                         text="Machines"
-                        style={{top: "120px"}}
+                        style={{top: "119px", left: "49px"}}
                         onClick={() => (select("Machines"))}
                         className={(selected === "Machines" ? "menu-option-selected" : "")}
                     />
                     <MenuOption
+                        text="Scanner"
+                        style={{top: "159px"}}
+                        onClick={() => (select("Scanner"))}
+                        className={(selected === "Scanner" ? "menu-option-selected" : "")}
+                    />
+                    <MenuOption
                         text="Treatments & Warnings"
-                        style={{top: "170px"}}
+                        style={{top: "200px"}}
                         onClick={() => (select("Treatments"))}
                         className={(selected === "Treatments" ? "menu-option-selected" : "")}
                     />
                     <MenuOption
                         text="Reports"
-                        style={{top: "220px"}}
+                        style={{top: "240px"}}
                         onClick={() => (select("Reports"))}
                         className={(selected === "Reports" ? "menu-option-selected" : "")}
                     />

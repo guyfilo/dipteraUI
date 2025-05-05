@@ -6,7 +6,7 @@ import "./style.css";
 
 import { useState, useEffect } from "react";
 
-export const OutputBottle = ({ index, male, female, fl, recycle, junk, width, height, collect }) => {
+export const OutputBottle = ({ index, male, female, fl, recycle, junk, width, height, collect , empty}) => {
     const [blink, setBlink] = useState(false);
 
     useEffect(() => {
@@ -38,7 +38,7 @@ export const OutputBottle = ({ index, male, female, fl, recycle, junk, width, he
 
     return (
         <div className="outputBottleRectangle" style={{ width, height: `${height}px`, fontSize: `${0.4 * height}px` }}>
-            <img className="target-icon" alt="" src={target_icon} />
+            {!empty ? <img className="target-icon" alt="" src={target_icon}/> : null}
             <b className={collect ? "bottle-number-blink" : "bottle-number"}>{index}</b>
             <img className="output-bottle-icon" alt="outBottle" src={bottle_icon} />
         </div>
@@ -46,31 +46,33 @@ export const OutputBottle = ({ index, male, female, fl, recycle, junk, width, he
 };
 
 export const OutputBottles = ({target1 = [], target2 = [], className, height, width, collectTarget1,
-                                  collectTarget2}) => {
+                                  collectTarget2, scanner= false}) => {
 
     return <div className={`outputBottles ${className}`}>
         <div className="output-bottle">
-            <OutputBottle index="1"
-                          male={target1.includes("male")}
-                          female={target1.includes("female")}
-                          fl={target1.includes("fl")}
-                          width={width}
-                          height={height}
-                          collect={collectTarget1}
-            />
-            <OutputBottle  junk={true} width={width}
-                           index=""
-                          height={height}/>
-            <OutputBottle  recycle={true} width={width}
-                           index=""
-                           height={height}/>
             <OutputBottle index="2"
                           male={target2.includes("male")}
                           female={target2.includes("female")}
                           fl={target2.includes("fl")}
                           width={width}
                           height={height}
-                          collect={collectTarget2}
+                          collect={collectTarget1}
+                          empty={scanner}
+            />
+            <OutputBottle  junk={true} width={width}
+                           index=""
+                           empty={scanner}
+                           height={height}/>
+            <OutputBottle  recycle={!scanner} width={width} junk={scanner}
+                           index=""
+                           height={height}/>
+            <OutputBottle index="1"
+                          male={scanner || target1.includes("male")}
+                          female={scanner || target1.includes("female")}
+                          fl={scanner || target1.includes("fl")}
+                          width={width}
+                          height={height}
+                          collect={collectTarget1}
             />
         </div>
     </div>

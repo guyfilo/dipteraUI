@@ -52,15 +52,6 @@ export const SessionInfoTable = ({className, session_data, machines_data}) => {
                         </div>
                     </td>
 
-                    <td className="table-data col-warnings">
-                        <p>Warnings:</p>
-                        <div className="td-widget">
-                            <WarningIcon
-                                isError={machineData.error}
-                                warnings={machineData.warnings}/>
-                        </div>
-
-                    </td>
                 </tr>
                 <tr>
                     <td colSpan={5}>
@@ -90,12 +81,12 @@ export const SessionInfoTable = ({className, session_data, machines_data}) => {
                             <Button className={"handle-error-button"} text={"restart"}
                                     onClick={async () => {
                                         await restart_machines([machine_id]);
-                                    }}>
+                                    }} once={true}>
                             </Button>
                             <Button  className={"handle-error-button"} text={"remove"}
                                      onClick={async () => {
                                          await removeMachine(machineData.session_id, machine_id);
-                                     }}>
+                                     }} once={true}>
                             </Button>
                         </div>
 

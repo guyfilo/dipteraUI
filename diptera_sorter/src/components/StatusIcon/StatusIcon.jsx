@@ -1,5 +1,5 @@
 import React from "react";
-
+import "./style.css"
 
 function StatusIcon({ status, error=false, width = 24, height = 24, className }) {
     const statusIcons = {
@@ -11,12 +11,13 @@ function StatusIcon({ status, error=false, width = 24, height = 24, className })
         Calibrating: "/status_calibrate.svg",
         Connected:"/status_calibrate.svg",
         Init:"/status_calibrate.svg",
+        Sleep:"/status_sleep.svg",
     };
 
     return (
         <img
-            className={className}
-            src={error? statusIcons["error"]: statusIcons[status]}
+            className={`${className || ""} ${["Calibrating", "Connected", "Init"].includes(status) ? "rotate" : ""}`}
+            src={error ? statusIcons["error"] : statusIcons[status]}
             alt={status}
             width={width}
             height={height}

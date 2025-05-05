@@ -74,8 +74,8 @@ const PieChart = ({ width, height, selected }) => {
     return (
         <div
             style={{
-                width: "100%",
-                height: "100%",
+                width: "100px",
+                height: "100px",
                 display: "flex",
                 flexDirection: "column",
             }}

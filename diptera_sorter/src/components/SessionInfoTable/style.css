@@ -48,9 +48,22 @@ html {
     padding-right: 10px;
 
 }
+
+.table-row {
+    position: relative;
+    align-items: center;
+    flex-direction: row;
+    padding-left: 10px;
+    padding-right: 10px;
+}
 .table-data {
     height: 64px;
+    position: relative;
 
+}
+
+.col-stop {
+    position: relative;
 }
 
 

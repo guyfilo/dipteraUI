@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {InfoContainer} from "../../components/InfoContainer/InfoContainer.jsx";
 import {ChooseTitle} from "../../components/ChooseTitle/ChooseTitle.jsx";
 import "./style.css"
@@ -6,8 +6,18 @@ import {SessionInfoTable} from "../../components/SessionInfoTable/SessionInfoTab
 import {AreaHistogram} from "../../components/AreaHistogram/AreaHistogram.jsx";
 import PieChart from "../../components/PieChart/PieChart.jsx";
 
-export const SessionInfoWindow = ({data, sessions, selectedMachines, setSelectedMachines}) => {
+import { SelectedMachinesContext } from "../../components/SelectedMachinesContext/SelectedMachinesContext.jsx";
+
+export const SessionInfoWindow = ({ data, sessions }) => {
+    const { selectSession, removeAll } = useContext(SelectedMachinesContext);
     const [selected, setSelected] = useState(Object.values(sessions).at(0));
+
+    useEffect(() => {
+        if (selected) {
+            removeAll(); // clear previous selections
+            selectSession(selected.session_id, true); // select only this session
+        }
+    }, [selected]);
     const machines_data = Object.fromEntries(
         Object.entries(data).filter(
             ([machineId]) => selected.machine_ids.includes(machineId)

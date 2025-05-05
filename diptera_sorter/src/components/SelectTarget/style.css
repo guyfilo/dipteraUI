@@ -1,11 +1,14 @@
 .select-target {
-    width: 271px;
+    width: 100px;
     height: 222px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
 }
 .select-target-line-wrapper {
     position: relative;
-    height: 25px; /* or however tall the line should be */
-    margin-bottom: 20px; /* spacing between lines */
+    height: 60px; /* or however tall the line should be */
 }
 
 .select-target-line {
@@ -14,10 +17,9 @@
     left: 0;
     right: 0;
     display: flex; /* ⬅️ this is necessary */
-    align-items: center;
-    gap: 20px;
+    gap: 10px;
     flex-wrap: nowrap;
-    padding-top: 20px;
+    padding-top: 25px;
 }
 .select-target-line .target-title {
     position: absolute;
@@ -35,10 +37,10 @@
     text-overflow: ellipsis;
 }
 
-.select-target-line .target-checkbox {
+.select-target-line .select-target-checkbox {
     position: absolute;
     left: 2px;
-    top: 10px;
+    top: 13px;
 }
 
 .select-target-line .select-target-icon {

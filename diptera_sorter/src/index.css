@@ -42,6 +42,25 @@ body {
   /* Color Variables */
   --Almost-white: #fefefe;
   --Black: #000;
+  --font-assistant: Assistant;
+  /* font sizes */
+  --font-size-base: 16px;
+  /* Colors */
+  --color-darkgray: #9f9f9f;
+  --color-gainsboro-100: #d9d9d9;
+  /* Paddings */
+  --padding-8xs: 5px;
+  /* Border radiuses */
+  --br-11xs: 2px;
+  --br-8xs: 5px;
+  /* Figma Variables */
+  /* Color Variables */
+  --Almost-white: #fefefe;
+  --Black: #000;
+  --Dark-Grey: #707070;
+  --Light-Grey: #e7e7e7;
+  --dipteraai-darker: rgba(36, 88, 128, 1);
+  --dipteraai-main: rgba(57, 140, 203, 1);
 
 }
 

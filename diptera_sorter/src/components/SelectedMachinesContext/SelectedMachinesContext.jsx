@@ -8,6 +8,8 @@ export const SelectedMachinesContext = createContext();
 export const SelectedMachinesProvider = ({ children }) => {
     const [selectedMachines, setSelectedMachines] = useState([]);
     const [selectedSessions, setSelectedSessions] = useState([]);
+    const [stopRequest, setStopRequest] = useState([]);
+    const [stopSessionRequest, setStopSessionRequest] = useState([]);
     const {sessions, liveData} = useContext(DataContext);
 
 
@@ -56,6 +58,11 @@ export const SelectedMachinesProvider = ({ children }) => {
         });
     };
 
+    const removeAll = () => {
+        setSelectedSessions([]);
+        setSelectedMachines([]);
+    };
+
     const selectSession = (session_id, state) => {
 
         const machines = sessions[session_id].machine_ids || [];
@@ -100,7 +107,12 @@ export const SelectedMachinesProvider = ({ children }) => {
             selectedSessions,
             selectMachine,
             selectSession,
-            selectAll
+            selectAll,
+            removeAll,
+            stopRequest,
+            setStopRequest,
+            stopSessionRequest,
+            setStopSessionRequest
         }}>
             {children}
         </SelectedMachinesContext.Provider>

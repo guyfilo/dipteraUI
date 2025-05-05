@@ -12,8 +12,14 @@ export const NewSessionForm = ({onNext, setSessionInfo}) => {
     const [target2Interval, setTarget2Interval] = useState("");
     const [selectedTarget1, setSelectedTarget1] = useState(null);
     const [selectedTarget2, setSelectedTarget2] = useState(null);
+    const [scannerSession, setScannerSession] = useState(false);
+    const [washSession, setWashSession] = useState(false);
     const [warning, setWarning] = useState("");
+    const [speciesList] = useState(["Anopheles PMB1", "Anopheles gambiae", "Other"]);
+    const [selectedSpecies, setSelectedSpecies] = useState("Anopheles PMB1");
+    const [customSpecies, setCustomSpecies] = useState("");
     useEffect(() => {
+        console.log(selectedTarget1, selectedTarget2)
         if (!selectedTarget1) {
             setWarning("you must select target1");
         } else if (!selectedTarget2) {
@@ -25,9 +31,9 @@ export const NewSessionForm = ({onNext, setSessionInfo}) => {
             const target1 = selectedTarget1.split("_");
             const target2 = selectedTarget2.split("_");
 
-            if  (target2.every(item => target1.includes(item))) {
+            if (target2.every(item => target1.includes(item))) {
                 setWarning("target2 cannot be contained in taget1");
-            } else if (target1.every(item => target2.includes(item))){
+            } else if (target1.every(item => target2.includes(item))) {
                 setWarning("target1 cannot be contained in taget2");
             } else {
                 setWarning("");
@@ -35,14 +41,25 @@ export const NewSessionForm = ({onNext, setSessionInfo}) => {
         }
 
     }, [selectedTarget1, selectedTarget2])
-    const getSessionId = (wash=true) => {
+
+    useEffect( () => {
+        if (washSession) {
+            setSessionTitle("Wash ");
+        } else if (scannerSession) {
+            setSessionTitle("Scan ");
+        }
+    }
+
+    )
+    const getSessionId = () => {
         const now = new Date();
 
         const pad = (n) => n.toString().padStart(2, '0');
 
 
+
         return (
-            `${wash ? "WASH_" : ""}SESS` +
+            `${washSession ? "WASH_" : ""}${scannerSession ? "SCAN_" : ""}SESS` +
             pad(now.getFullYear() % 100) + // %y
             pad(now.getDate()) +          // %d
             pad(now.getMonth() + 1) +     // %m
@@ -54,84 +71,148 @@ export const NewSessionForm = ({onNext, setSessionInfo}) => {
     };
 
     const setSession = () => {
-        if (warning) {
-            return;
-        }
-        setSessionInfo(prev => ({
-            ...prev,
+        const normalSession = !scannerSession && !washSession;
+        const scannerMode = scannerSession && !washSession;
+        const washMode = washSession;
+
+        if (normalSession && warning) return;
+
+        const baseInfo = {
             session_id: getSessionId(),
             session_title: sessionTitle,
             session_description: sessionDescription,
-            target1_quanta: parseInt(target1Interval),
-            target2_quanta: parseInt(target2Interval),
+            wash_mode: washMode,
+            scanner_mode: scannerMode,
+            specie: selectedSpecies === "Other" ? customSpecies : selectedSpecies,
+        };
+
+        const targetsInfo = normalSession ? {
+            target1_quanta: target1Interval? parseInt(target1Interval): 0,
+            target2_quanta: target2Interval? parseInt(target2Interval): 0,
             target1: selectedTarget1.split("_"),
             target2: selectedTarget2.split("_"),
-            wash_mode: false,
+        } : {
+            target1_quanta: 0,
+            target2_quanta: 0,
+            target1: [],
+            target2: [],
+        };
+
+        setSessionInfo(prev => ({
+            ...prev,
+            ...baseInfo,
+            ...targetsInfo,
         }));
+
         onNext();
-    }
+    };
 
 
     return (
         <div className="start-new-session">
             <div className="div">
-                <div className="overlap">
-                    <div className="session-title-input-title">Session Tittle:</div>
+                <div className="sessionTittle">Session Title:</div>
 
-                    <input type="text" placeholder="Type here.." className="session-title-input"
-                           onChange={(e) => setSessionTitle(e.target.value)}
-                    />
-                </div>
-                <div className="session-description-input-title">Description:</div>
+                <input type="text" placeholder="Type here.." className="startNewSessionChild"
+                       onChange={(e) => setSessionTitle(e.target.value)}
+                       value={sessionTitle}
+                />
+                <div className="description">Description:</div>
 
                 <textarea placeholder="Type here.." onChange={(e) => setSessionDescription(e.target.value)}
-                          className="session-description-input"/>
-                <div className={"start-new-session-targets-wrapper"}>
-                    <div className={"start-new-session-targets"}>
-                        <div className={"start-new-session-target1"}>
-                            <div className={"new-session-target-title"}>
-                                Sorting target 1:
-                            </div>
-                            <div className={"new-session-target-input-title"}>
-                                Limit larva interval:
-                            </div>
-                            <input className={"new-session-target-input"}
-                                   onChange={(e) => setTarget1Interval(e.target.value)}
-                                   type="number"/>
-                            <div className={"select-target1"}>
-                                <SelectTarget selectedTarget={selectedTarget1} setSelectedTarget={setSelectedTarget1}></SelectTarget>
-                            </div>
-                        </div>
-                        <div className={"start-new-session-target2"}>
-                            <div className={"new-session-target-title"}>
-                                Sorting target 2:
-                            </div>
-                            <div className={"new-session-target-input-title"}>
-                                Limit larva interval:
-                            </div>
-                            <input className={"new-session-target-input"}
-                                   onChange={(e) => setTarget2Interval(e.target.value)}
-                                   type="number"/>
-                            <div className={"select-target2"}>
-                                <SelectTarget selectedTarget={selectedTarget2} setSelectedTarget={setSelectedTarget2}></SelectTarget>
-                            </div>
+                          className="startNewSessionItem"/>
+                <div className="species-section">
+                    <div className="species-label">Specie:</div>
+                    <select
+                        className="species-select"
+                        value={selectedSpecies}
+                        onChange={(e) => setSelectedSpecies(e.target.value)}
+                    >
+                        {speciesList.map((s, idx) => (
+                            <option key={idx} value={s}>{s}</option>
+                        ))}
+                    </select>
+                    {selectedSpecies === "Other" && (
+                        <input
+                            type="text"
+                            className="custom-species-input"
+                            placeholder="Enter custom specie..."
+                            value={customSpecies}
+                            onChange={(e) => setCustomSpecies(e.target.value)}
+                        />
+                    )}
+                </div>
+                {scannerSession || washSession ? null : <>
+                    <div className={"sortingTarget1"}>
+                        Sorting target 1:
+                    </div>
+                    <div className={"sortingTarget2"}>
+                        Sorting target 2:
+                    </div>
+                    <div className={"setLimit"}>
+                        <div className={"limitLarvaInterval"}>Limit larva interval:</div>
+                        <input className={"setLimitChild"}
+                               onChange={(e) => setTarget1Interval(e.target.value)}
+                               type="number"
+                               value={target1Interval}
+                        />
+                    </div>
+                    <div className={"setLimit1"}>
+                        <div className={"limitLarvaInterval"}>Limit larva interval:</div>
+                        <input className={"setLimitChild"}
+                               onChange={(e) => setTarget2Interval(e.target.value)}
+                               type="number"
+                               value={target2Interval}
+                        />
+                    </div>
+                    <div className={"start-new-session-target2"}>
+                        <div className={"select-target2"}>
+                            <SelectTarget selectedTarget={selectedTarget2}
+                                          setSelectedTarget={setSelectedTarget2}></SelectTarget>
                         </div>
                     </div>
+                    <div className={"vertical-sep-line"}></div>
+                    <div className={"start-new-session-target1"}>
+                        <div className={"select-target1"}>
+                            <SelectTarget selectedTarget={selectedTarget1}
+                                          setSelectedTarget={setSelectedTarget1}></SelectTarget>
+                        </div>
+                    </div>
+                    <div className={"select-target-warning"}>{warning}</div>
+                </>}
+                <Button className={"next-step-button button"}
+                        text={"Next Step"}
+                        onClick={setSession}
+                        once={false}></Button>
+                <div className={"template-buttons"}>
+                    <div className={"template-buttons-wrapper"}>
+                        <Button className={" startSetup1 button-hover"} ButtonClassName={"bwButten"}
+                                text={"default sorting session"}
+                                onClick={() => {
+                                    setScannerSession(false);
+                                    setSelectedSpecies(speciesList.at(0));
+                                    setSelectedTarget1("male_fl");
+                                    setSelectedTarget2("female_nfl");
+                                    setTarget1Interval("1000");
+                                    setTarget2Interval("1000");
+                                }}>
+
+                        </Button>
+
+                        <Button className={"startSetup1 button-hover"} text={"wash session"}
+                                ButtonClassName={washSession ? "bwButten1-pressed" : "bwButten1"}
+                                onClick={() => setWashSession(!washSession)}
+                        >
+                        </Button>
+                        <Button className={"startSetup1 button-hover"} text={"scanner session"}
+                                ButtonClassName={scannerSession ? "bwButten2-pressed" : "bwButten2"}
+                                onClick={() => setScannerSession(!scannerSession)}>
+                        </Button>
+                    </div>
                 </div>
-                <div className={"select-target-warning"}>{warning}</div>
-                <Button className={"next-step-button"} text={"Next Step"} onClick={setSession}></Button>
-                <Button
-                    className={"next-step-button-wash"}
-                    text={"Start Wash Session"}
-                    onClick={() => {
-                        setSessionInfo({
-                            session_id: getSessionId(),
-                            session_title: "Wash",
-                            washMode: true,
-                        });
-                        onNext();
-                    }}
-                ></Button>
+
+                {/*<Button className={"addTemplateButton startSetup1"}>*/}
+                {/*</Button>*/}
             </div>
 
 

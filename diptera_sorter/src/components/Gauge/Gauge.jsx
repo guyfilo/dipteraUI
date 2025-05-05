@@ -2,7 +2,7 @@ import React, {useRef} from 'react';
 import GaugeComponent from 'react-gauge-component';
 
 
-export const Gauge = ({val, style, suffix = '', ticks, subArcs, minValue, maxValue}) => {
+export const Gauge = ({val, style, suffix = '', ticks, subArcs, minValue, maxValue, warning=false}) => {
 
     return (
         <GaugeComponent
@@ -17,20 +17,18 @@ export const Gauge = ({val, style, suffix = '', ticks, subArcs, minValue, maxVal
                     type: "outer",
                     defaultTickValueConfig: {
                         formatTextValue: (value) => value + suffix,
-                        style: {fontSize: 20}
+                        style: {fontSize: 15}
                     },
                     ticks: ticks
                 },
                 valueLabel: {
                     formatTextValue: value => value + suffix,
                     style: {
-                        width: "33px",
-                        fontSize: "60px",
+                        fontSize: 40,
                         fontFamily: "var(--font-regular)",
-                        fill: "#707070",
-                        color: "#707070",
+                        fill: (!warning) ? "#707070": "var(--caution-orange)",
+                        color: (!warning) ? "#707070": "var(--caution-orange)",
                         textShadow: "none",
-                        display: "flex",
                         alignItems: "center",
                     }
                 }

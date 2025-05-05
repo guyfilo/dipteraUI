@@ -20,6 +20,8 @@ export const SelectTarget = ({selectedTarget, setSelectedTarget}) => {
             <div className="select-target-line-wrapper">
                 <div className="select-target-line" key={target}>
                     <Checkbox
+                        toggle={true}
+                        className={`select-target-checkbox`}
                         id={target}
                         boolVar={selectedTarget === target}
                         setBoolVar={(checked) => setSelectedTarget(checked ? target : null)}

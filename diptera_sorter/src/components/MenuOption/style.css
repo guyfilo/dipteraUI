@@ -12,6 +12,20 @@
     width: 200px;
 }
 
+.header-menu-option {
+    color: #707070;
+    cursor: default;
+
+    font-size: 16px;
+    font-weight: 400;
+    height: 35px;
+    left: 23px;
+    letter-spacing: 0;
+    line-height: 18px;
+    position: absolute;
+    width: 200px;
+}
+
 /* Hover Effect */
 .menu-option:hover {
     color: #007bff;

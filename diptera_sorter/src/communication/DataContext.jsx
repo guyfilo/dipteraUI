@@ -77,6 +77,7 @@ export const DataProvider = ({ children }) => {
 
     // REST API calls (same as before)...
     const createSession = async (sessionData) => {
+        console.log("sessionData:", JSON.stringify(sessionData, null, 2));
         const res = await fetch("http://localhost:8000/api/session/create", {
             method: "POST",
             headers: { "Content-Type": "application/json" },

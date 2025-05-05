@@ -1,0 +1,38 @@
+.lights-container {
+    width: 214px;
+    left: 28px;
+    position: absolute;
+    border-radius: 10px;
+    top:319px;
+    background-color: var(--Light-Grey);
+
+    height: 93px;
+}
+
+.lights-overlap {
+    position: relative;
+}
+
+.red-light {
+    position: absolute;
+    left: 26px;
+    top: 33px;
+    width: 33px;
+    height: 27px;
+}
+
+.blue-light {
+    position: absolute;
+    left: 94px;
+    top: 33px;
+    width: 33px;
+    height: 27px;
+}
+
+.green-light {
+    position: absolute;
+    left: 161px;
+    top: 33px;
+    width: 33px;
+    height: 27px;
+}

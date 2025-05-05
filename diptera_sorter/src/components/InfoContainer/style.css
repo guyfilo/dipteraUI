@@ -42,28 +42,24 @@
 
 .info-container .info-tooltip {
     position: absolute;
-    left: calc(90% + 21px);
-    top: 20px;/* Position next to the icon */
-    min-width: max-content; /* Ensures width matches the longest text */
-    /*max-width: 40;*/
-    border-radius: 2px;
-    background-color: #707070;
-    display: none;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 4px;
-    box-sizing: border-box;
-    text-align: left;
-    font-size: 16px;
-    color: #fefefe;
-    z-index: 9999;
-    opacity: 0;
+    width: 90%;
+    height: calc(100% - 60px);
+    left: 5%;
+    top: 50px;
+    border-radius: 10px;
+    background-color: #d9d9d9;
+}
+.info-container .info-tooltip-overlap {
+    position: relative;
+    display: flex;
 
-    transition: opacity 1s ease-in-out;
 }
 
-.info-icon:hover + .info-tooltip {
-    display: block; /* Show on hover */
-    opacity: 1;
+.info-tooltip-text {
+    position: relative;
+    font-size: 30px;
+    letter-spacing: 0.03em;
+    font-family: var(--font-assistant);
+    color: var(--Black);
+    left: 30%;
 }

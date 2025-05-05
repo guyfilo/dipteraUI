@@ -14,6 +14,8 @@ import {
     SelectedMachinesProvider,
     SelectedMachinesContext
 } from "../../components/SelectedMachinesContext/SelectedMachinesContext.jsx";
+import {ScannerWindow} from "../ScannerWindow/ScannerWindow.jsx";
+import {Lights} from "../../components/Lights/Lights.jsx";
 
 export const AppWindow = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -33,7 +35,11 @@ export const AppWindow = () => {
 
     const {
         selectedMachines,
-        selectedSessions
+        selectedSessions,
+        stopRequest,
+        setStopRequest,
+        stopSessionRequest,
+        setStopSessionRequest,
     } = useContext(SelectedMachinesContext);
 
     const [selected, setSelected] = useState("Home");
@@ -60,6 +66,8 @@ export const AppWindow = () => {
                 setHomeBody(<SessionInfoWindow data={liveData} sessions={sessions}/>)
             } else if (selected === "Machines") {
                 setHomeBody(<MachinesInfoWindow data={liveData} sessions={sessions}></MachinesInfoWindow>)
+            } else if (selected === "Scanner") {
+                setHomeBody(<ScannerWindow data={liveData} sessions={sessions}></ScannerWindow>)
             }
         } else if (selected === "Treatments & Warnings") {
             setHomeBody(<div>Treatments & Warnings</div>)
@@ -76,6 +84,8 @@ export const AppWindow = () => {
                 return <SessionInfoWindow data={liveData} sessions={sessions}/>;
             } else if (selected === "Machines") {
                 return <MachinesInfoWindow data={liveData} sessions={sessions}/>;
+            } else if (selected === "Scanner") {
+                return <ScannerWindow data={liveData} sessions={sessions}/>;
             }
         }
 
@@ -84,6 +94,25 @@ export const AppWindow = () => {
         }
 
         return home_default;
+    };
+
+    const handleStop = async () => {
+        // Compute updated stop session list
+        const newStopSessions = [...new Set([...stopSessionRequest, ...selectedSessions])];
+
+        // Build a Set for fast lookup
+        const sessionsToStopSet = new Set(newStopSessions);
+        const stopRequestSet = new Set(stopRequest);
+
+        // Filter machines that are not in a stopped session and not already in stopRequest
+        const newMachines = selectedMachines.filter(machineId => {
+            const sessionId = liveData[machineId]?.session_id;
+            return !sessionsToStopSet.has(sessionId) && !stopRequestSet.has(machineId);
+        });
+
+        // Apply both state updates
+        setStopSessionRequest(newStopSessions);
+        setStopRequest(prev => [...prev, ...newMachines]);
     };
 
 
@@ -99,21 +128,10 @@ export const AppWindow = () => {
                     <div className="button-grid">
                         <CommandButton text="New Session" className="new-session-button-instance" id="new_session"
                                        onClick={() => setIsPopupOpen(true)}/>
-                        <CommandButton text="Pause" className="pause-button" id="pause"
-                                       onClick={() => sendCommand(
-                                           "pause",
-                                           selectedMachines,
-                                           selectedSessions
-                                       )}/>
+
                         <CommandButton text="Start" className="start-button" id="start"
                                        onClick={() => sendCommand(
                                            "run",
-                                           selectedMachines,
-                                           selectedSessions
-                                       )}/>
-                        <CommandButton text="Stop" className="stop-button" id="stop"
-                                       onClick={() => sendCommand(
-                                           "stop",
                                            selectedMachines,
                                            selectedSessions
                                        )}/>
@@ -123,11 +141,28 @@ export const AppWindow = () => {
                                            selectedMachines,
                                            selectedSessions
                                        )}/>
+
+                        <CommandButton text="Pause" className="pause-button" id="pause"
+                                       onClick={() => sendCommand(
+                                           "pause",
+                                           selectedMachines,
+                                           selectedSessions
+                                       )}/>
+
+                        <CommandButton text="Sleep" className="sleep-button" id="sleep"
+                                       onClick={() => sendCommand(
+                                           "sleep",
+                                           selectedMachines,
+                                           selectedSessions
+                                       )}/>
+                        <CommandButton text="Stop" className="stop-button" id="stop"
+                                       onClick={() => handleStop(
+                                       )}/>
                     </div>
                 </div>
 
                 <div className="start-window-header">
-                    <div className="prog_title">Program Tittle</div>
+                    <div className="prog_title">Session Manager</div>
 
                     <div className="diptera_header">Diptera.ai</div>
 
@@ -139,6 +174,7 @@ export const AppWindow = () => {
                 </div>
 
                 <Menu className="menu-instance" divClassName="menu-2" setSelected={setSelected} selected={selected}/>
+                <Lights liveData={liveData} sessions={sessions}></Lights>
             </div>
             <PopupModal isOpen={isPopupOpen} onClose={closePopUp}>
                 <StartSession closeWindowCbk={closePopUp}></StartSession>

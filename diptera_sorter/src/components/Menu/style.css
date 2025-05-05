@@ -15,7 +15,17 @@
 .menu .rectangle {
   background-color: #e4e4e4;
   border-radius: 10px;
-  height: 528px;
+  height: 417px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 214px;
+}
+
+.menu .lights-rectangle {
+  background-color: #e4e4e4;
+  border-radius: 10px;
+  height: 40px;
   left: 0;
   position: absolute;
   top: 0;
@@ -94,7 +104,7 @@
   height: 127px;
   left: 0;
   position: absolute;
-  top: 544px;
+  top: 435px;
   width: 218px;
 }
 

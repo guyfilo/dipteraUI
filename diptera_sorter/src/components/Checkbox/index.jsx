@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import "./style.css";
-import vector8 from "./state=checked.svg";
 
 export const Checkbox = ({
                              id,
@@ -8,30 +7,40 @@ export const Checkbox = ({
                              rectangleClassName = "",
                              text = "",
                              boolVar,
-                             setBoolVar
+                             setBoolVar,
+                             toggle = false,
                          }) => {
     const handleToggle = () => {
-        if (typeof setBoolVar === "function") {
-            setBoolVar(setBoolVar.length === 0 ? undefined : !boolVar);
-        }
+        setBoolVar(!boolVar);
     };
 
     return (
-        <div className={`checkbox-container ${className}`}>
-            {boolVar ? (
-                <img
-                    className={`checkbox-rectangle ${rectangleClassName}`}
-                    onClick={handleToggle}
-                    alt="Checked"
-                    src={vector8}
-                />
-            ) : (
-                <div
-                    className={`checkbox-rectangle ${rectangleClassName}`}
-                    onClick={handleToggle}
-                />
-            )}
-            {text && <div className="checkbox-text">{text}</div>}
+        <div className="checkbox-wrapper">
+            <div className={`checkbox-container ${className}`}>
+                {boolVar ? (
+                    <img
+                        className={`toggle-rectangle ${rectangleClassName}`}
+                        onClick={handleToggle}
+                        alt="Checked"
+                        src={!toggle ? "/state=checked.svg" : "/toggle_full.svg"}
+                    />
+                ) : (
+                    !toggle ? (
+                        <div
+                            className={`checkbox-rectangle ${rectangleClassName}`}
+                            onClick={handleToggle}
+                        />
+                    ) : (
+                        <img
+                            className={`toggle-rectangle ${rectangleClassName}`}
+                            onClick={handleToggle}
+                            alt="Unchecked"
+                            src="/toggle_empty.svg"
+                        />
+                    )
+                )}
+                {text && <div className="checkbox-text">{text}</div>}
+            </div>
         </div>
     );
 };

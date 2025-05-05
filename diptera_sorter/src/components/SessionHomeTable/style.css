@@ -16,9 +16,16 @@
 }
 .exit-session-button {
     position: absolute;
+    right: 15px;
+    top: 14px;
+    z-index: 1;
+}
+
+.exit-session-button-hover {
+    position: absolute;
     right: 10px;
     top: 10px;
-    z-index: 9999;
+    z-index: 1;
 }
 .machine-list-in .select-all-checkbox {
     height: 18px !important;

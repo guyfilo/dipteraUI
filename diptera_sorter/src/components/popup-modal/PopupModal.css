@@ -8,12 +8,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 20px;
+
 }
 
 .popup-content {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
+
+    border-radius: 20px;
     text-align: center;
 }
 

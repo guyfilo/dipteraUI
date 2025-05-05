@@ -12,6 +12,11 @@
 
 }
 
+.button-hover {
+
+
+}
+
 .button .button-text {
     color: #ffffff;
     cursor: default;
@@ -23,12 +28,12 @@
 }
 
 /* Hover Effect */
-.button:hover {
+.button-hover:hover {
     background-color: #007bff;
 }
 
 /* Active (Pressed) Effect - Higher Priority */
-.button.button-pressed {
+.button-hover.button-pressed {
     background-color: #0056b3 !important;
     transform: scale(0.95);
 }

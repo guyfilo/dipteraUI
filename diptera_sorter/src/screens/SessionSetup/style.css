@@ -1,14 +1,14 @@
 .start-new-session {
-    background-color: #f4f4f4;
+    background-color: #fefefe;
     display: flex;
     flex-direction: row;
     justify-content: center;
+    border-radius: 5px;
+
 }
 
 .start-new-session .div {
-    background-color: #f4f4f4;
-    border: 1px solid;
-    border-color: #b5b5b5;
+    background-color: #fefefe;
     height: 560px;
     position: relative;
     width: 803px;
@@ -71,22 +71,78 @@
 
 
 .dark_ellipse {
-    background-color: #030000;
-    border-radius: 5px;
-    height: 10px;
-    position: absolute;
-    top: 524px;
-    width: 10px;
+    background-color: var(--Black);
+
 }
 
 .bright_ellipse {
-    background-color: #d9d9d9;
-    border-radius: 5px;
-    height: 10px;
-    position: absolute;
-    top: 524px;
-    width: 10px;
+    background-color: var(--color-gainsboro-100);
+
 }
+.pageChange {
+    position: absolute;
+    top: 610px;
+    left: calc(50% - 35px);
+    width: 70px;
+    height: 10px;
+}
+.startNewSession {
+    width: 100%;
+    position: relative;
+    border-radius: 15px;
+    background-color: var(--Almost-white);
+    border: 1px solid var(--Mid-Grey);
+    box-sizing: border-box;
+    height: 650px;
+    overflow: hidden;
+    text-align: left;
+    font-size: var(--font-size-base);
+    color: var(--Black);
+    font-family: var(--font-assistant);
+}
+
+
+.pageChangeChild {
+    position: absolute;
+    height: 100%;
+    width: 14.29%;
+    top: 0%;
+    right: 57.14%;
+    bottom: 0%;
+    left: 28.57%;
+    border-radius: 50%;
+}
+.pageChangeItem {
+    position: absolute;
+    height: 100%;
+    width: 14.29%;
+    top: 0%;
+    right: 28.57%;
+    bottom: 0%;
+    left: 57.14%;
+    border-radius: 50%;
+}
+.pageChangeInner {
+    position: absolute;
+    height: 100%;
+    width: 14.29%;
+    top: 0%;
+    right: 0%;
+    bottom: 0%;
+    left: 85.71%;
+    border-radius: 50%;
+}
+.ellipseDiv {
+    position: absolute;
+    height: 100%;
+    width: 14.29%;
+    top: 0%;
+    right: 85.71%;
+    bottom: 0%;
+    left: 0%;
+    border-radius: 50%;
+}
+
 
 .session-setup-in .ellipse-3 {
     background-color: #d9d9d9;
@@ -131,18 +187,18 @@
 
 
 .start-session-window {
-    background-color: #f4f4f4;
     display: flex;
     flex-direction: row;
     justify-content: center;
+    border-radius: 10px;
+    background-color: #fefefe;
+
     width: 100%;
 }
 
 .start-session-window .div {
-    background-color: #f4f4f4;
-    border: 1px solid;
-    border-color: #b5b5b5;
-    height: 560px;
+    border-radius: 10px;
+    height: 650px;
     position: relative;
     width: 880px;
 }
@@ -206,21 +262,29 @@
 .start-new-session-targets-wrapper {
     width: 222px;
     position: absolute;
-    top: 194px;
+    top: 300px;
 }
 
-.start-new-session-targets {
-    position: relative;
+.start-new-session-target2 {
+    position: absolute;
     display: flex;
-    gap: 70px;
-    padding-left: 40px;
+    top: 346px;
+    left: 465px;
+
+
+}
+.start-new-session-target1 {
+    position: absolute;
+    left: 37px;
+    top: 346px;
+    display: flex;
 
 }
 
 .next-step-button {
     position: absolute;
-    top: 492px;
-    right: 20px;
+    bottom: 30px;
+    right: 40px;
 }
 
 .next-step-button-wash {
@@ -328,3 +392,559 @@
     position: relative;
     width: 690px !important;
 }
+
+.species-section {
+
+}
+
+.species-label {
+    position: absolute;
+    top: 160px;
+    left: 40px;
+    letter-spacing: 0.03em;
+    display: flex;
+    align-items: center;
+    width: 124px;
+    height: 42px;
+}
+
+.species-select {
+    position: absolute;
+    top: 170px;
+    left: 134px;
+    border-radius: var(--br-11xs);
+    border: 1px solid var(--color-darkgray);
+    box-sizing: border-box;
+    width: 200px;
+    height: 31px;
+}
+.custom-species-input {
+    width: 200px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    position: absolute;
+    height: 31px;
+    top: 170px;
+    left: 340px;
+}
+
+
+
+
+.sessionTittle {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    font-size: 24px;
+    letter-spacing: 0.03em;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    width: 273px;
+    height: 42px;
+}
+.sortingTarget1 {
+    position: absolute;
+    top: 262px;
+    left: 40px;
+    letter-spacing: 0.03em;
+    display: flex;
+    align-items: center;
+    width: 182px;
+    height: 42px;
+}
+.sortingTarget2 {
+    position: absolute;
+    top: 262px;
+    left: 467px;
+    letter-spacing: 0.03em;
+    display: flex;
+    align-items: center;
+    width: 182px;
+    height: 42px;
+}
+.description {
+    position: absolute;
+    top: 73px;
+    left: 40px;
+    letter-spacing: 0.03em;
+    display: flex;
+    align-items: center;
+    width: 124px;
+    height: 42px;
+}
+.startNewSessionChild {
+    position: absolute;
+    top: 44px;
+    left: 202px;
+    border-radius: var(--br-11xs);
+    border: 1px solid var(--color-darkgray);
+    box-sizing: border-box;
+    width: 561px;
+    height: 31px;
+}
+.startNewSessionItem {
+    position: absolute;
+    top: 88px;
+    left: 134px;
+    border-radius: var(--br-11xs);
+    border: 1px solid var(--color-darkgray);
+    box-sizing: border-box;
+    width: 629px;
+    height: 78px;
+}
+.buttenChild {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0%;
+    right: 0%;
+    bottom: 0%;
+    left: 0%;
+    border-radius: var(--br-8xs);
+    background-color: var(--Dark-Grey);
+}
+.startSetup {
+    position: absolute;
+    height: 32.56%;
+    width: 73.47%;
+    top: 32.56%;
+    left: 12.93%;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+}
+.butten {
+    position: absolute;
+    top: 577px;
+    left: 696px;
+    width: 124px;
+    height: 43px;
+    font-size: 20px;
+    color: var(--Almost-white);
+}
+.targetToggleChild {
+    position: absolute;
+    height: 8.78%;
+    width: 7.2%;
+    top: 36.94%;
+    right: 92.07%;
+    bottom: 54.28%;
+    left: 0.74%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+}
+.vectorStrokeIcon {
+    position: absolute;
+    height: 8.78%;
+    width: 7.2%;
+    top: 89.75%;
+    right: 91.97%;
+    bottom: 1.46%;
+    left: 0.83%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+}
+.vectorStrokeIcon1 {
+    position: absolute;
+    height: 8.78%;
+    width: 7.2%;
+    top: 72.18%;
+    right: 91.97%;
+    bottom: 19.03%;
+    left: 0.83%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+}
+.vectorStrokeIcon2 {
+    position: absolute;
+    height: 8.78%;
+    width: 7.2%;
+    top: 54.62%;
+    right: 91.97%;
+    bottom: 36.6%;
+    left: 0.83%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+}
+.vectorStrokeIcon3 {
+    position: absolute;
+    height: 8.78%;
+    width: 7.2%;
+    top: 19.48%;
+    right: 91.97%;
+    bottom: 71.73%;
+    left: 0.83%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+}
+.vectorStrokeIcon4 {
+    position: absolute;
+    height: 8.78%;
+    width: 7.2%;
+    top: 1.91%;
+    right: 91.97%;
+    bottom: 89.3%;
+    left: 0.83%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+}
+.vectorIcon {
+    position: absolute;
+    height: 8.11%;
+    width: 7.01%;
+    top: 53.6%;
+    right: 77.49%;
+    bottom: 38.29%;
+    left: 15.5%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+}
+.targetToggleItem {
+    position: absolute;
+    height: 12.07%;
+    width: 10.74%;
+    top: 35.14%;
+    right: 76.72%;
+    bottom: 52.79%;
+    left: 12.55%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+}
+.vectorIcon1 {
+    position: absolute;
+    height: 8.56%;
+    width: 4.43%;
+    top: 91.44%;
+    right: 80.07%;
+    bottom: 0%;
+    left: 15.5%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+}
+.targetToggleInner {
+    position: absolute;
+    height: 12.03%;
+    width: 10.74%;
+    top: 70.27%;
+    right: 76.72%;
+    bottom: 17.7%;
+    left: 12.55%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+}
+.groupIcon {
+    position: absolute;
+    height: 11.13%;
+    width: 6.83%;
+    top: 18.47%;
+    right: 77.68%;
+    bottom: 70.41%;
+    left: 15.5%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+}
+.targetToggleChild1 {
+    position: absolute;
+    height: 12.03%;
+    width: 10.7%;
+    top: 0%;
+    right: 76.75%;
+    bottom: 87.97%;
+    left: 12.55%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+}
+.maleFemale {
+    position: absolute;
+    height: 7.66%;
+    width: 72.69%;
+    top: 2.7%;
+    left: 27.31%;
+    letter-spacing: 0.03em;
+    display: flex;
+    align-items: center;
+}
+.maleFemale1 {
+    position: absolute;
+    height: 7.66%;
+    width: 39.11%;
+    top: 20.27%;
+    left: 27.31%;
+    letter-spacing: 0.03em;
+    display: flex;
+    align-items: center;
+}
+.maleFluorescent {
+    position: absolute;
+    height: 7.66%;
+    width: 44.65%;
+    top: 38.29%;
+    left: 27.31%;
+    letter-spacing: 0.03em;
+    display: flex;
+    align-items: center;
+}
+.male {
+    position: absolute;
+    height: 7.66%;
+    width: 44.65%;
+    top: 55.41%;
+    left: 27.31%;
+    letter-spacing: 0.03em;
+    display: flex;
+    align-items: center;
+}
+.femaleFluorescent {
+    position: absolute;
+    height: 7.66%;
+    width: 52.03%;
+    top: 72.97%;
+    left: 27.31%;
+    letter-spacing: 0.03em;
+    display: flex;
+    align-items: center;
+}
+.female {
+    position: absolute;
+    height: 7.66%;
+    width: 44.65%;
+    top: 90.54%;
+    left: 27.31%;
+    letter-spacing: 0.03em;
+    display: flex;
+    align-items: center;
+}
+.targetToggle {
+    position: absolute;
+    top: 346px;
+    left: 37px;
+    width: 271px;
+    height: 222px;
+    color: var(--Dark-Grey);
+}
+.targetToggle1 {
+    position: absolute;
+    top: 346px;
+    left: 465px;
+    width: 271px;
+    height: 222px;
+    color: var(--Dark-Grey);
+}
+
+.pageChange {
+    position: absolute;
+    top: 610px;
+    left: calc(50% - 35px);
+    width: 70px;
+    height: 10px;
+}
+.startNewSessionInner {
+    position: absolute;
+    top: 279.5px;
+    left: calc(50% - 0.5px);
+    border-right: 1px solid var(--Light-Grey);
+    box-sizing: border-box;
+    width: 1px;
+    height: 292px;
+}
+.limitLarvaInterval {
+    position: absolute;
+    height: 100%;
+    width: 61.86%;
+    top: 0%;
+    left: 0%;
+    letter-spacing: 0.03em;
+    display: flex;
+    align-items: center;
+}
+.setLimitChild {
+    position: absolute;
+    height: 50%;
+    width: 36.02%;
+    top: 28.57%;
+    right: 0%;
+    bottom: 21.43%;
+    left: 63.98%;
+    border-radius: var(--br-11xs);
+    border: 1px solid var(--color-darkgray);
+    box-sizing: border-box;
+}
+.setLimit {
+    position: absolute;
+    top: 292px;
+    left: 89px;
+    width: 236px;
+    height: 42px;
+}
+.setLimit1 {
+    position: absolute;
+    top: 292px;
+    left: 516px;
+    width: 236px;
+    height: 42px;
+}
+.startSetup1 {
+    letter-spacing: 0.03em;
+}
+.template-buttons {
+    position: absolute;
+    top: 216px;
+    left: 40px;
+
+
+}
+
+.template-buttons-wrapper {
+    position: relative;
+    display: flex;
+    gap: 10px;
+}
+
+.vertical-sep-line {
+    position: relative;
+    border-right: 1px solid var(--Light-Grey);
+    box-sizing: border-box;
+    height: 292px;
+    width: 1px;
+    left: 430px;
+    top: 280px;
+}
+
+.bwButten {
+
+    border-radius: var(--br-8xs);
+    background-color: var(--Mid-Grey);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding-8xs);
+    color: var(--Almost-white);
+}
+.bwButten1 {
+
+     border-radius: var(--br-8xs);
+     background-color: var(--Mid-Grey);
+     overflow: hidden;
+     display: flex;
+     flex-direction: row;
+     align-items: center;
+     justify-content: center;
+     padding: var(--padding-8xs);
+     color: var(--Almost-white);
+ }
+.bwButten2 {
+
+    border-radius: var(--br-8xs);
+    background-color: var(--Mid-Grey);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding-8xs);
+    color: var(--Almost-white);
+}
+
+.bwButten1-pressed{
+
+    border-radius: var(--br-8xs);
+    background-color: #007bff;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding-8xs);
+    color: var(--Almost-white);
+}
+
+.bwButten2-pressed {
+
+    border-radius: var(--br-8xs);
+    background-color: #007bff;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding-8xs);
+    color: var(--Almost-white);
+}
+.addTemplateButton {
+    position: absolute;
+    top: 216px;
+    left: 339px;
+    border-radius: var(--br-8xs);
+    background-color: var(--Mid-Grey);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding-8xs);
+    color: var(--Almost-white);
+}
+.exitButtonChild {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0%;
+    right: 0%;
+    bottom: 0%;
+    left: 0%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+}
+.exitButtonItem {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0%;
+    right: 0%;
+    bottom: 0%;
+    left: 0%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+    object-fit: contain;
+}
+.exitButton {
+    position: absolute;
+    top: 24px;
+    left: 806px;
+    width: 14px;
+    height: 15px;
+}
+.startNewSession {
+    width: 100%;
+    position: relative;
+    border-radius: 15px;
+    background-color: var(--Almost-white);
+    border: 1px solid var(--Mid-Grey);
+    box-sizing: border-box;
+    height: 650px;
+    overflow: hidden;
+    text-align: left;
+    font-size: var(--font-size-base);
+    color: var(--Black);
+    font-family: var(--font-assistant);
+}
+
+v
