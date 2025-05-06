@@ -1,0 +1,81 @@
+.master-page {
+    padding: 20px;
+    font-family: sans-serif;
+    color: #333;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.master-page h2 {
+    font-size: 20px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    color: #444;
+}
+.flow-control {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 400px;
+}
+.master-page table {
+    width: 500px;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+    background-color: #fefefe;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 5px rgba(0,0,0,0.05);
+}
+
+.master-page table th,
+.master-page table td {
+    padding: 5px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.master-page input[type="checkbox"] {
+    transform: scale(1.2);
+}
+
+.master-page label {
+    margin-right: 15px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.master-page input[type="text"],
+.master-page input[type="number"] {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100px;
+    margin-right: 10px;
+}
+
+.master-page div {
+    margin-bottom: 10px;
+}
+
+.master-page button,
+.master-page .button {
+    margin: 10px 5px 10px 0;
+    padding: 8px 16px;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.master-page button:hover,
+.master-page .button:hover {
+    background-color: #d2d2d2;
+}

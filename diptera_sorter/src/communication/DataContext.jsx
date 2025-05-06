@@ -124,12 +124,12 @@ export const DataProvider = ({ children }) => {
         return res.json();
     };
 
-    const sendCommand = async (command, machines, sessions) => {
+    const sendCommand = async (command, machines, sessions, kwargs={}) => {
         console.log(machines);
         const res = await fetch("http://localhost:8000/api/command", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ command, machines , sessions}),
+            body: JSON.stringify({ command, machines , sessions, kwargs}),
         });
         return res.json();
     };

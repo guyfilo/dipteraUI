@@ -16,6 +16,7 @@ import {
 } from "../../components/SelectedMachinesContext/SelectedMachinesContext.jsx";
 import {ScannerWindow} from "../ScannerWindow/ScannerWindow.jsx";
 import {Lights} from "../../components/Lights/Lights.jsx";
+import {MasterPage} from "../MasterScreen/MasterScreen.jsx";
 
 export const AppWindow = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -87,6 +88,9 @@ export const AppWindow = () => {
             } else if (selected === "Scanner") {
                 return <ScannerWindow data={liveData} sessions={sessions}/>;
             }
+        }
+        if (selected === "Master Mode") {
+            return <MasterPage></MasterPage>
         }
 
         if (selected === "Treatments & Warnings") {
