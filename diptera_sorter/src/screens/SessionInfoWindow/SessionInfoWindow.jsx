@@ -61,7 +61,7 @@ export const SessionInfoWindow = ({ data, sessions }) => {
                          options={Object.values(sessions)}></ChooseTitle>
         </div>
         <div className="larva-counter">
-            <div className="larva-counter-title">Lara Sorted</div>
+            <div className="larva-counter-title">Larvae Sorted</div>
             <div className="larva-count">{totalSuccess}</div>
         </div>
         <div className="session-live-table">
@@ -69,12 +69,12 @@ export const SessionInfoWindow = ({ data, sessions }) => {
         </div>
         <div className="session-pie">
             <InfoContainer info={"Loops Pie"} title={"Loops Pie"}>
-                <PieChart width={350} height={320} selected={combinedData}></PieChart>
+                <PieChart width={450} height={400} selected={combinedData}></PieChart>
             </InfoContainer>
         </div>
         <div className="larva-area-histogram-container">
             <InfoContainer info={"Loops Pie"} title={"Lara Area Histogram"}>
-                <AreaHistogram className="area-histogram" width={640} height={320} values={allLarvaAreas}></AreaHistogram>
+                <AreaHistogram className="area-histogram" width={750} height={400} values={allLarvaAreas}></AreaHistogram>
             </InfoContainer>
         </div>
 

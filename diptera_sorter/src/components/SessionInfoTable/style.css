@@ -22,16 +22,14 @@
 .scroll-table {
     position: relative;
     top:8px;
-
+    width: 1200px;
     overflow-y: auto; /* Enables vertical scrolling */
     overflow-x: hidden;
     height: 176px;
     background-color: #fefefe;
     border-radius: 10px;
 }
-.session-info-table {
-    position: relative;
-
+.session-page-info-table {
 
 }
 
@@ -39,7 +37,7 @@ html {
     scrollbar-width: thin;  /* Makes the scrollbar thinner */
     scrollbar-color:#e5e5e5 #fff ;  /* Thumb color and track color */
 }
-.session-info-table tr{
+.session-page-info-table tr{
     display: flex;
     position: relative;
     align-items: center;
@@ -53,8 +51,8 @@ html {
     position: relative;
     align-items: center;
     flex-direction: row;
-    padding-left: 10px;
-    padding-right: 10px;
+    display: flex;
+    padding: 10px;
 }
 .table-data {
     height: 64px;
@@ -75,8 +73,9 @@ html {
 .session-info-table td {
     position: relative;
     display: flex;
-    align-items: center;
+    align-items: end;
     flex-direction: row;
+    padding-bottom: 2px;
 
 }
 .session-info-table .line-under-row {
@@ -97,8 +96,8 @@ html {
 
 .session-info-table .col-machine-name {
     position: relative;
-    width: 131px;
-
+    width: 170px;
+    top: -3px;
 }
 .session-info-table .col-status {
     position: relative;
@@ -119,9 +118,9 @@ html {
 }
 
 .session-info-table .line-under-row-table {
-    display: block !important;
     position: relative;
-    width: 820px;
-    left: 35px;
+    left: 3%;
+    width: 97%;
+
 }
 

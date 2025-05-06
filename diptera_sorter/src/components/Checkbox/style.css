@@ -1,11 +1,11 @@
 .checkbox-container {
-    height: 18px;
-    width: 18px;
-    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 15px;
 }
 
 .checkbox-rectangle {
-    position: absolute;
     height: 18px;
     width: 18px;
     left: 0px;
@@ -14,21 +14,17 @@
 }
 
 .toggle-rectangle {
-    position: absolute;
     height: 18px;
     width: 18px;
-    left: 0px;
-    top:0px;
+
 }
 
 .checkbox-text {
-    min-width: max-content;
-    position: relative;
+
     font-size: 16px;
     line-height: 18px;
     color: #6f6f6f;
     text-align: left;
-    display: flex;
     align-items: center;
-    left: 200%;
+    min-width: max-content;
 }

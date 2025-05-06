@@ -66,10 +66,10 @@ export const SessionHomeTable = ({ session_data, machines_data }) => {
         if (machineData.error) {
             return (
                 <React.Fragment key={machine_id}>
-                    <tr className="table-row">
-                        <td className="table-data col-machine-name"><MachineTableRow machineId={machine_id} /></td>
-                        <td className="table-data col-status"><StatusIcon status={machineData.machine_state} error={machineData.error} /></td>
-                        <td className="table-data" colSpan={4}>
+                    <tr className="machines-table-row">
+                        <td className="session-table-data col-machine-name"><MachineTableRow machineId={machine_id} /></td>
+                        <td className="session-table-data col-status"><StatusIcon status={machineData.machine_state} error={machineData.error} /></td>
+                        <td className="session-table-data" colSpan={4}>
                             <div className="error-handle">
                                 <div className="theMachineHas">The machine has stopped due to an error.</div>
                                 <Button className="handle-error-button" text="restart" onClick={async () => await restart_machines([machine_id])} />
@@ -77,7 +77,7 @@ export const SessionHomeTable = ({ session_data, machines_data }) => {
                             </div>
                         </td>
                     </tr>
-                    <tr><td colSpan={6}><SepLine className="line-under-row" /></td></tr>
+                    <tr><td colSpan={5}><SepLine className="line-under-row" /></td></tr>
                 </React.Fragment>
             );
         }
@@ -85,30 +85,30 @@ export const SessionHomeTable = ({ session_data, machines_data }) => {
         if (stopRequest.includes(machine_id)) {
             return (
                 <React.Fragment key={machine_id}>
-                    <tr className="table-row">
-                        <td className="table-data col-machine-name"><MachineTableRow machineId={machine_id} /></td>
-                        <td className="table-data col-status"><StatusIcon status={machineData.machine_state} /></td>
-                        <td className="table-data col-stop" colSpan={4}>
+                    <tr style={{ height: "20%" }} >
+                        <td className="session-table-data col-machine-name"><MachineTableRow machineId={machine_id} /></td>
+                        <td className="session-table-data col-status"><StatusIcon status={machineData.machine_state}/></td>
+                        <td className="session-table-data col-stop" colSpan={4}>
                             <HandleStop setStopRequest={setStopRequest} machine_id={machine_id} />
                         </td>
                     </tr>
-                    <tr><td colSpan={6}><SepLine className="line-under-row" /></td></tr>
+                    <tr><td colSpan={5}><SepLine className="line-under-row" /></td></tr>
                 </React.Fragment>
             );
         }
 
         return (
             <React.Fragment key={machine_id}>
-                <tr className="table-row">
-                    <td className="table-data col-machine-name"><MachineTableRow machineId={machine_id} /></td>
-                    <td className="table-data col-status"><StatusIcon status={machineData.machine_state} error={machineData.error} /></td>
-                    <td className="table-data col-input-bottle">
+                <tr className="machines-table-row">
+                    <td className="session-table-data col-machine-name"><MachineTableRow machineId={machine_id} /></td>
+                    <td className="session-table-data col-status"><StatusIcon status={machineData.machine_state} error={machineData.error} /></td>
+                    <td className="session-table-data col-input-bottle">
                         <InputBottle
                             cleanBottleFull={machineData.water_bottle_state === "Full"}
                             larvaeBottleFull={machineData.larvae_bottle_state === "Full"}
                         />
                     </td>
-                    <td className="table-data col-output-bottle">
+                    <td className="session-table-data col-output-bottle" style={{ width: "200px" }}>
                         <OutputBottles
                             target1={session_data.target1}
                             target2={session_data.target2}
@@ -116,11 +116,11 @@ export const SessionHomeTable = ({ session_data, machines_data }) => {
                             collectTarget2={machineData.collect_target2}
                         />
                     </td>
-                    <td colSpan={2} className="table-data col-running-stats">
+                    <td colSpan={1} className="session-table-data ">
                         <RunningStatistics stats={machineData} />
                     </td>
                 </tr>
-                <tr><td colSpan={6}><SepLine className="line-under-row" /></td></tr>
+                <tr><td colSpan={5}><SepLine className="line-under-row" /></td></tr>
             </React.Fragment>
         );
     };
@@ -167,13 +167,13 @@ export const SessionHomeTable = ({ session_data, machines_data }) => {
 
                 <table className="table-session-short">
                     <thead>
-                    <tr>
+                    <tr style={{ height: "5%" }} className="machines-table-row">
                         {[
-                            { key: "#", label: "", width: "175px" },
-                            { key: "status", label: "Status", width: "70px" },
-                            { key: "inBottle", label: "Input Bottle", width: "150px" },
-                            { key: "outBottle", label: "Output Bottle", width: "200px" },
-                            { key: "stats", label: "Running Stats", width: "200px" },
+                            { key: "#", label: "", width: "15%" },
+                            { key: "status", label: "Status", width: "7%" },
+                            { key: "inBottle", label: "Input Bottle", width: "10%"},
+                            { key: "outBottle", label: "Output Bottle", width: "20%"},
+                            { key: "stats", label: "Running Stats",  },
                         ].map(({ key, label, width }) => (
                             <th key={key} className="headers" style={{ width }}>{label}</th>
                         ))}
@@ -182,7 +182,7 @@ export const SessionHomeTable = ({ session_data, machines_data }) => {
                     <tbody>
                     {Object.entries(machinesInSession).map(([id, data]) => renderMachineRow(id, data))}
                     <tr>
-                        <td colSpan={6}>
+                        <td colSpan={5}>
                             <div className="add-machine">+ Add another machine to this session</div>
                         </td>
                     </tr>

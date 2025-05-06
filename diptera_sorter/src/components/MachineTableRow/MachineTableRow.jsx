@@ -16,7 +16,7 @@ export const MachineTableRow = ({ machineId }) => {
             <Checkbox
                 boolVar={isSelected}
                 setBoolVar={toggleSelected}
-                text={`Machine ${machineId}`}
+                text={<b className={"machine-checkbox-text"}>{`Machine ${machineId}`}</b>}
                 id={machineId}
                 textClassName="machine-name-container"
                 rectangleClassName="machine-checkbox-rectangle"

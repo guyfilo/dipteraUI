@@ -2,28 +2,28 @@
     color: #707070;
     cursor: default;
 
-    font-size: 16px;
+    font-size: 1.6vh;
     font-weight: 400;
-    height: 35px;
-    left: 23px;
+    height: 2vh;
+    width: 80%;
+    left: 10%;
     letter-spacing: 0;
-    line-height: 18px;
+    line-height: 1vh;
     position: absolute;
-    width: 200px;
 }
 
 .header-menu-option {
     color: #707070;
     cursor: default;
 
-    font-size: 16px;
+    font-size: 1.6vh;
     font-weight: 400;
-    height: 35px;
-    left: 23px;
+    height: 4vh;
+    width: 80%;
+    left: 10%;
     letter-spacing: 0;
-    line-height: 18px;
+    line-height: 2vh;
     position: absolute;
-    width: 200px;
 }
 
 /* Hover Effect */
@@ -31,9 +31,7 @@
     color: #007bff;
 }
 
-/* Hover Effect */
+/* Selected State */
 .menu-option .chosen {
     color: #007bff;
 }
-
-

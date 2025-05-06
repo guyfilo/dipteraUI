@@ -11,7 +11,7 @@
     overflow: visible; /* Ensures it doesn't cut off the table */
     border-radius: 10px;
     position: relative;
-    width: 1100px;
+    width: 95%;
     /*align-items: stretch;*/
 }
 .exit-session-button {
@@ -20,6 +20,7 @@
     top: 14px;
     z-index: 1;
 }
+
 
 .exit-session-button-hover {
     position: absolute;
@@ -75,7 +76,7 @@
 .machine-list-in .table-session-short {
     position: relative;
     left: 93px;
-
+    width: 90%;
 }
 
 .error-handle {
@@ -114,41 +115,25 @@
     text-align: left;
 }
 
-.machine-list-in .table-data {
-    position: relative;
-    min-width: max-content;
+.machine-list-in .session-table-data {
     height: 100px;
-
+    position: relative;
+    border-radius: 5px;
+    align-items: center;
+    vertical-align: middle;
+    display: table-cell;
 }
 .machine-list-in .col-machine-name {
 }
 
-.machine-list-in .col-status {
-    top: 7px;
-}
 
-.machine-list-in .col-input-bottle {
-    bottom: -20px;
-}
-
-.machine-list-in .col-output-bottle {
-    top: 26px;
-}
-
-.machine-list-in .col-warnings {
-    top: 24px;
-}
 
 .machine-list-in .machines-table-row {
-    height: auto;
-    width: 982px;
     position: relative;
 
 }
 
-.machine-list-in .col-running-stats {
-    top: -20px;
-}
+
 
 .machine-list-in .line-under-row {
     width: auto !important;

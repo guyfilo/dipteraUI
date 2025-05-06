@@ -22,7 +22,7 @@ export const ChooseTitle = ({options, selected, setSelected, title_key="session_
     return (<div className="choose-title">
         <img className="choose-left" src="/choose-left.svg" alt="<"
              onClick={decrease}></img>
-        <div className="choose-title-text">{selected[title_key]}</div>
+        <b className="choose-title-text">{selected[title_key]}</b>
         <img className="choose-right" src="/choose-right.svg" alt=">"
              onClick={increase}></img>
 

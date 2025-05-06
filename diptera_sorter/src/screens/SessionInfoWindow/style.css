@@ -11,55 +11,54 @@
 
 .session-info-window .larva-counter {
     width: 195px;
-    position: absolute;
+    position: relative;
     border-radius: 10px;
     background-color: #fefefe;
     height: 176px;
     padding: 14px;
     left: 13px;
     top: 92px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
 }
 
 .session-info-window .larva-counter-title {
-    width: 141px;
-    position: absolute;
+    width: 100%;
+    position: relative;
     font-size: 16px;
     line-height: 18px;
     color: #000;
-    text-align: left;
-    left: 54px;
-    top: 17px;
-    display: flex;
-    align-items: center;
+    text-align: center;
+
     height: 35px;
 }
 
 .session-info-window .larva-count {
-    width: 110px;
-    position: absolute;
-    font-size: 64px;
+    width: 100%;
+    position: relative;
+    font-size: 80px;
     line-height: 18px;
     color: #000;
-    text-align: left;
-    display: flex;
-    align-items: center;
-    height: 97px;
-    left: 51px;
-    top: 40px;
+    text-align: center;
+
+    top: 35px;
+
+
 }
 
 .session-info-window .session-pie {
     position: absolute;
-    height: 387px;
-    width: 382px;
+    width: 550px;
+    height: 480px;
     top: 279px;
     left: 13px;
 }
 
 .session-info-window .larva-area-histogram-container {
-    height: 387px;
-    width: 732px;
-    left: 407px;
+    height: 480px;
+    width: 840px;
+    left: 580px;
     top: 279px;
     position: absolute;
 }

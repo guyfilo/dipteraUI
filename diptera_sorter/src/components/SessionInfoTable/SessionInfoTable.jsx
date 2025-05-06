@@ -23,12 +23,12 @@ export const SessionInfoTable = ({className, session_data, machines_data}) => {
     const getTableRow = ({machine_id, machineData,}) => {
         return (
             <>
-                <tr>
+                <tr className={"table-row"}>
                     <td className="table-data col-machine-name"><MachineTableRow machineId={machine_id}/></td>
 
                     <td className="table-data col-status">
                         <p>Status: </p>
-                        <div className="td-widget">
+                        <div className="td-widget" style={{top: "3px"}}>
                             <StatusIcon status={machineData.machine_state} error={machineData.error}/>
                         </div>
                     </td>
@@ -51,10 +51,14 @@ export const SessionInfoTable = ({className, session_data, machines_data}) => {
                                 collectTarget2={machineData.collect_target2}/>
                         </div>
                     </td>
-
+                    <td className="table-data col-output-bottle">
+                        <div  className="td-widget">
+                            <RunningStatistics stats={machineData} />
+                        </div>
+                    </td>
                 </tr>
-                <tr>
-                    <td colSpan={5}>
+                <tr >
+                    <td colSpan={6}>
                         <SepLine className="line-under-row-table"/>
                     </td>
                 </tr>

@@ -2,10 +2,11 @@
 
 .running-statistics-grid {
     display: grid;
-    grid-template-columns: repeat(3, auto);
-    grid-template-rows: repeat(2, auto);
-    width: 400px;
+    grid-template-columns: repeat(3, max-content);
+    grid-template-rows: repeat(2, 10px);
+    width: 600px;
     position: relative;
+    grid-gap: 20px;
 }
 .stat-item {
     display: flex;
@@ -19,6 +20,7 @@
 .stat-value {
     position: relative;
     font-size: 15px;
+    padding-left: 5px;
     letter-spacing: 0.03em;
     font-family: var(--font-assistant);
     color: var(--Dark-Grey);
@@ -28,13 +30,13 @@
 }
 
 .stat-label {
-    width: 90px;
+    min-width: 65px;
     position: relative;
     text-align: left;
-    font-size: 12px;
+    font-size: 11px;
     letter-spacing: 0.03em;
     line-height: 30px;
-    color: var(--Mid-Grey);
+    color: var(--Dark-Grey);
     display: flex;
 }
 

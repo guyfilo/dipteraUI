@@ -1,19 +1,40 @@
-import React from 'react';
-import cleanBottle from "./cleanBottle.svg"
-import cleanBottleBlink1 from "./cleanBottleBlink1.svg"
-import cleanBottleBlink2 from "./cleanBottleBlink2.svg"
-import larvaBottle from "./larvaBottle.svg"
-import gif from "./laraWaterGif.gif"
-import larvaBottleBlink1 from "./larvaBottleBlink1.svg"
-import larvaBottleBlink2 from "./larvaBottleBlink2.svg"
+import React, {useEffect, useState} from 'react';
 import './style.css';
 
-export const InputBottle = ({cleanBottleFull = false, larvaeBottleFull = false,
-                            className, height=51, width=34}) => {
-    return <div className={`input-bottle ${className}`} style={{height:height}}>
-        {larvaeBottleFull ? <img className="larva_bottle_icon" src={larvaBottle} alt="larva bottle" style={{height:height, width:width}}/> :
-        <img className="larva_bottle_icon blink" src={gif} alt="larva bottle" style={{height:height, width:width}}/>}
-        {cleanBottleFull ? <img className="clean_bottle_icon" src={cleanBottle} alt="clean bottle" style={{height:height, width:width}}/> :
-            <img className="clean_bottle_icon blink" src={cleanBottleBlink2} alt="larva bottle" style={{height:height, width:width}}/>}
-    </div>;
+export const InputBottleOne = ({is_full, bottle_name, height = 51, width = 34}) => {
+    const [blink, setBlink] = useState(true);
+
+    useEffect(() => {
+        let intervalId;
+        if (!is_full) {
+            intervalId = setInterval(() => setBlink(prev => !prev), 500);
+        } else {
+            setBlink(false);
+        }
+        return () => clearInterval(intervalId);
+    }, [is_full]);
+
+
+    const bottle_icon = !is_full
+        ? blink
+            ? `/${bottle_name}_blink0.svg`
+            : `/${bottle_name}_blink1.svg`
+        : `/${bottle_name}.svg`;
+
+    return (
+        <div className="input-bottle" style={{width: width, height: height}}>
+            <img className="input-bottle-icon" alt="outBottle" src={bottle_icon}/>
+        </div>
+    );
+}
+
+export const InputBottle = ({
+                                cleanBottleFull = true, larvaeBottleFull = true,
+                                className, height = 51, width = 34
+                            }) => {
+    return(
+    <div className={`input-bottle ${className}`} style={{height: height}}>
+        <InputBottleOne bottle_name={"larvae"} is_full={larvaeBottleFull} width={width} height={height}></InputBottleOne>
+        <InputBottleOne bottle_name={"clean"} is_full={cleanBottleFull} width={width} height={height}></InputBottleOne>
+    </div>)
 }

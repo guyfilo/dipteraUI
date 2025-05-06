@@ -13,10 +13,14 @@
     padding-left:20px; /* Adds 40px (20px on each side) */
 }
 .choose-title-text {
-    width: auto;
-    font-size: 24px;
-    line-height: 18px;
-    color: #000;
+    position: relative;
     text-align: left;
+    font-size: 32px;
+    color: #000;
+    font-family: var(--font-bold);
+    height: 100%;
+    letter-spacing: 0.03em;
+    display: flex;
     align-items: center;
+
 }

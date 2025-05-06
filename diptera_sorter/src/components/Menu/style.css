@@ -1,150 +1,97 @@
 .menu {
-  height: 528px;
+  height: 60%;
+  width: 22vh;
   position: relative;
-  width: 215px;
 }
 
 .menu .group {
-  height: 528px;
-  left: 0;
+  height: 60%;
+  width: 22vh;
   position: absolute;
   top: 0;
-  width: 225px;
+  left: 0;
 }
 
+.menu-contener {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
 .menu .rectangle {
   background-color: #e4e4e4;
-  border-radius: 10px;
-  height: 417px;
-  left: 0;
+  border-radius: 0.7vw;
+  height: 40vh;
+  width: 100%;
   position: absolute;
   top: 0;
-  width: 214px;
-}
-
-.menu .lights-rectangle {
-  background-color: #e4e4e4;
-  border-radius: 10px;
-  height: 40px;
   left: 0;
-  position: absolute;
-  top: 0;
-  width: 214px;
 }
 
-.menu .div {
+
+.menu .div,
+.menu .text-wrapper-2,
+.menu .text-wrapper-3,
+.menu .treatments-warnings,
+.menu .text-t1-male,
+.menu .text-t1-female,
+.menu .text-t1-fl {
   color: #707070;
-  font-size: 16px;
+  font-size: 1.6vh;
   font-weight: 400;
-  height: 35px;
-  left: 23px;
-  letter-spacing: 0;
-  line-height: 18px;
+  height: 4vh;
+  width: 70%;
+  left: 10%;
   position: absolute;
-  top: 73px;
-  width: 139px;
+  letter-spacing: 0;
+  line-height: 2vh;
 }
 
 .menu .text-wrapper-2 {
-  color: #707070;
-  font-size: 16px;
-  font-weight: 400;
-  height: 35px;
-  left: 23px;
-  letter-spacing: 0;
-  line-height: 18px;
-  position: absolute;
-  top: 23px;
-  width: 139px;
+  top: 3.5vh;
+}
+
+.menu .div {
+  top: 9.5vh;
 }
 
 .menu .text-wrapper-3 {
-  color: #707070;
-
-  font-size: 16px;
-  font-weight: 400;
-  height: 35px;
-  left: 23px;
-  letter-spacing: 0;
-  line-height: 18px;
-  position: absolute;
-  top: 124px;
-  width: 139px;
+  top: 16vh;
 }
 
 .menu .treatments-warnings {
-  color: #707070;
-
-  font-size: 16px;
-  font-weight: 400;
-  height: 35px;
-  left: 23px;
-  letter-spacing: 0;
-  line-height: 18px;
-  position: absolute;
-  top: 174px;
-  width: 192px;
+  top: 22.5vh;
+  width: 85%;
 }
 
 .menu .text-t1-male {
-  color: #707070;
-
-  font-size: 16px;
-  font-weight: 400;
-  height: 35px;
-  left: 23px;
-  letter-spacing: 0;
-  line-height: 18px;
-  position: absolute;
-  top: 225px;
-  width: 192px;
+  top: 29vh;
+  width: 85%;
 }
 
 .menu .overlap-wrapper {
-  height: 127px;
-  left: 0;
+  height: 12vh;
+  width: 100%;
   position: absolute;
-  top: 435px;
-  width: 218px;
+  top: 42vh;
+  left: 0;
 }
 
 .menu .overlap {
   background-color: #e4e4e4;
-  border-radius: 10px;
-  height: 127px;
+  border-radius: 0.7vw;
+  height: 100%;
+  width: 100%;
   position: relative;
-  width: 214px;
 }
 
 .menu .text-t1-female {
-  color: #707070;
-
-  font-size: 16px;
-  font-weight: 400;
-  height: 35px;
-  left: 22px;
-  letter-spacing: 0;
-  line-height: 18px;
-  position: absolute;
-  top: 23px;
-  width: 139px;
+  top: 2vh;
 }
 
 .menu .text-t1-fl {
-  color: #707070;
-
-  font-size: 16px;
-  font-weight: 400;
-  height: 35px;
-  left: 22px;
-  letter-spacing: 0;
-  line-height: 18px;
-  position: absolute;
-  top: 69px;
-  width: 139px;
+  top: 7vh;
 }
-/* Active (Pressed) Effect - Higher Priority */
+
 .menu .menu-option-selected {
   color: #0056b3 !important;
 }
-

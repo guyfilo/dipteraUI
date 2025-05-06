@@ -1,16 +1,5 @@
-.clean_bottle_icon {
-    height: 51px;
-    width: 34px;
-
+.input-bottle {
+    position: relative;
+    display: flex;
+    flex-direction: row;
 }
-
-.larva_bottle_icon {
-    height: 51px;
-    width: 34px;
-
-}
-
-.input_bottle {
-    height: 51px;
-}
-

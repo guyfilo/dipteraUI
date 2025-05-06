@@ -12,19 +12,21 @@ export const CommandButton = ({
 
     return (
         <div className={`command-button ${className}`}
-             onClick={onClick}
-             onMouseDown={() => {
-                 setIsPressed(true)
-             }}
-             onMouseUp={() => {
-                 setIsPressed(false)
-             }}
-             onMouseLeave={() => setIsPressed(false)
-        }>
+
+        >
             <img alt={id} className={`command-button-img`}
                  src={
                     `/btn_${id}${isPressed ? "_pressed" : ""}.svg`
-                 }/>
+                 }
+                 onClick={onClick}
+                 onMouseDown={() => {
+                     setIsPressed(true)
+                 }}
+                 onMouseUp={() => {
+                     setIsPressed(false)
+                 }}
+                 onMouseLeave={() => setIsPressed(false)}
+            />
             <div className={"tooltip"}>{text}</div>
         </div>
     )

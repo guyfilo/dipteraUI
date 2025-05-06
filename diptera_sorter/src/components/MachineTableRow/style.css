@@ -1,7 +1,6 @@
 .machine-checkbox {
-    position: relative;
-    display: flex;
     align-items: center;
+    flex-direction: row;
 }
 
 .machine-name-container {
@@ -18,5 +17,15 @@
 .machine-checkbox-rectangle {
     height: 18px;
     width: 18px;
+
+}
+
+.machine-checkbox-text {
+    font-size: 20px;
+    letter-spacing: 0.05em;
+    font-family: var(--font-assistant);
+    color: #000;
+    text-align: left;
+    align-items: center;
 
 }
