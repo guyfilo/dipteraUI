@@ -4,10 +4,11 @@ import {Button} from "../../components/Button/index.js";
 import StatusIcon from "../../components/StatusIcon/StatusIcon.jsx";
 import {MachineTableRow} from "../../components/MachineTableRow/MachineTableRow.jsx";
 import "./style.css";
+import {SelectedMachinesContext} from "../../components/SelectedMachinesContext/SelectedMachinesContext.jsx";
 
 export const MasterPage = () => {
     const {liveData, availableMachines, createSession, fetchAvailableMachines, sendCommand} = useContext(DataContext);
-    const [selectedMachines, setSelectedMachines] = useState([]);
+    const [selectedAvailableMachines, setSelectedAvailableMachines] = useState([]);
     const [src, setSrc] = useState("");
     const [dst, setDst] = useState("");
     const [washTime, setWashTime] = useState(5);
@@ -15,10 +16,14 @@ export const MasterPage = () => {
     const [pressure2, setPressure2] = useState("");
 
     const toggleMachineSelection = (id) => {
-        setSelectedMachines(prev =>
+        setSelectedAvailableMachines(prev =>
             prev.includes(id) ? prev.filter(mid => mid !== id) : [...prev, id]
         );
     };
+
+    const {
+        selectedMachines,
+    } = useContext(SelectedMachinesContext);
 
     const handleCreateFlowSession = async () => {
         await createSession({
@@ -51,8 +56,6 @@ export const MasterPage = () => {
                 <tbody>
                 {Object.entries(liveData).map(([id, machine]) => (
                     <tr key={id}>
-                        <td><input type="checkbox" onChange={() => toggleMachineSelection(id)}
-                                   checked={selectedMachines.includes(id)}/></td>
                         <td>{<MachineTableRow machineId={id}/>}</td>
                         <td>{<StatusIcon status={machine.machine_state}/>}</td>
                     </tr>
@@ -105,19 +108,22 @@ export const MasterPage = () => {
                     <label>Wash Time: <input type="number" value={washTime}
                                              onChange={e => setWashTime(parseFloat(e.target.value))}/></label>
                     <Button text="Flow Check" onClick={() => sendCommand("flow_check", selectedMachines, [], {
-                        src,
-                        dst,
+                        src:src,
+                        dst: dst,
                         wash_time: washTime
                     })}/>
                 </div>
-
+                <div>
+                    <Button text="close all valves" onClick={() => sendCommand("pause", selectedMachines, [], {})}/>
+                </div>
                 <div>
                     <label>P1: <input type="number" value={pressure1}
                                       onChange={e => setPressure1(e.target.value)}/></label>
                     <Button text="Set Pressure" onClick={() => sendCommand("set_pressure", selectedMachines, [], {
-                        target_pressure: pressure1
+                        target_pressure: parseFloat(pressure1)
                     })}/>
                 </div>
+
             </div>
         </div>
     );

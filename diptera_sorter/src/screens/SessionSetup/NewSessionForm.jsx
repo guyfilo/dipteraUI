@@ -4,7 +4,7 @@ import "./style.css";
 import {Button} from "../../components/Button/index.js";
 import {SelectTarget} from "../../components/SelectTarget/SelectTarget.jsx";
 
-export const NewSessionForm = ({onNext, setSessionInfo}) => {
+export const NewSessionForm = ({onNext, setSessionInfo, scannerMode}) => {
 
     const [sessionTitle, setSessionTitle] = useState("");
     const [sessionDescription, setSessionDescription] = useState("");
@@ -12,7 +12,7 @@ export const NewSessionForm = ({onNext, setSessionInfo}) => {
     const [target2Interval, setTarget2Interval] = useState("");
     const [selectedTarget1, setSelectedTarget1] = useState(null);
     const [selectedTarget2, setSelectedTarget2] = useState(null);
-    const [scannerSession, setScannerSession] = useState(false);
+    const [scannerSession, setScannerSession] = useState(scannerMode);
     const [washSession, setWashSession] = useState(false);
     const [warning, setWarning] = useState("");
     const [speciesList] = useState(["Anopheles PMB1", "Anopheles gambiae", "Other"]);
@@ -46,7 +46,13 @@ export const NewSessionForm = ({onNext, setSessionInfo}) => {
         if (washSession) {
             setSessionTitle("Wash ");
         } else if (scannerSession) {
-            setSessionTitle("Scan ");
+            if (sessionTitle === "Scanner") {
+                setSessionTitle((prev)=> ``);
+            }
+            else if (sessionTitle && !sessionTitle.startsWith("Scanner ")) {
+                setSessionTitle((prev)=> `Scanner ${prev}`);
+
+            }
         }
     }
 
@@ -72,7 +78,7 @@ export const NewSessionForm = ({onNext, setSessionInfo}) => {
 
     const setSession = () => {
         const normalSession = !scannerSession && !washSession;
-        const scannerMode = scannerSession && !washSession;
+        const scanner = scannerSession && !washSession;
         const washMode = washSession;
 
         if (normalSession && warning) return;
@@ -82,7 +88,7 @@ export const NewSessionForm = ({onNext, setSessionInfo}) => {
             session_title: sessionTitle,
             session_description: sessionDescription,
             wash_mode: washMode,
-            scanner_mode: scannerMode,
+            scanner_mode: scanner,
             specie: selectedSpecies === "Other" ? customSpecies : selectedSpecies,
         };
 
@@ -185,8 +191,8 @@ export const NewSessionForm = ({onNext, setSessionInfo}) => {
                         onClick={setSession}
                         once={false}></Button>
                 <div className={"template-buttons"}>
-                    <div className={"template-buttons-wrapper"}>
-                        <Button className={" startSetup1 button-hover"} ButtonClassName={"bwButten"}
+                    {!scannerSession?<div className={"template-buttons-wrapper"}>
+                        <Button className={"startSetup1 button-hover"} ButtonClassName={"bwButten"}
                                 text={"default sorting session"}
                                 onClick={() => {
                                     setScannerSession(false);
@@ -204,11 +210,11 @@ export const NewSessionForm = ({onNext, setSessionInfo}) => {
                                 onClick={() => setWashSession(!washSession)}
                         >
                         </Button>
-                        <Button className={"startSetup1 button-hover"} text={"scanner session"}
-                                ButtonClassName={scannerSession ? "bwButten2-pressed" : "bwButten2"}
-                                onClick={() => setScannerSession(!scannerSession)}>
-                        </Button>
-                    </div>
+                        {/*<Button className={"startSetup1 button-hover"} text={"scanner session"}*/}
+                        {/*        ButtonClassName={scannerSession ? "bwButten2-pressed" : "bwButten2"}*/}
+                        {/*        onClick={() => setScannerSession(!scannerSession)}>*/}
+                        {/*</Button>*/}
+                    </div>: null}
                 </div>
 
                 {/*<Button className={"addTemplateButton startSetup1"}>*/}

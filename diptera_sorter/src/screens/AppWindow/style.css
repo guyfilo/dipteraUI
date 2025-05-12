@@ -29,6 +29,22 @@ html, body {
   left: 30vw !important;
   top: 45vh !important;
 }
+.start-window .butten-instance-start-scanner-session {
+  border-radius: 5px;
+  height: 43px;
+  position: relative;
+  min-width: 147px;
+  padding: 0 16px;
+  align-items: center;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  background-color: #fc4747;
+}
+
+.butten-instance-start-scanner-session:hover {
+  background-color: #d32f2f;
+}
 
 .start-window .design-component-instance-node-start-session {
   height: 3vh !important;
@@ -141,4 +157,26 @@ html, body {
 html {
   scrollbar-width: thin;
   scrollbar-color: #e5e5e5 #fff;
+}
+
+.default-tooltip {
+  position: absolute;
+  top: 120%;
+  border-radius: 2px;
+  background-color: #707070;
+  height: 27px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 3px;
+  box-sizing: border-box;
+  width: max-content;
+  text-align: left;
+  font-size: 16px;
+  color: #fefefe;
+  left: 50%;
+  z-index: 999;
+  transform: translateX(-50%);
+  font-family: Assistant;
 }

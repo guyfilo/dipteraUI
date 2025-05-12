@@ -7,7 +7,7 @@ import {NewSessionForm} from "./NewSessionForm.jsx";
 import {DataContext, DataProvider} from "../../communication/DataContext.jsx";
 import {ChooseMachines} from "./ChooseMachines.jsx";
 
-export const StartSession = ({closeWindowCbk, washMode = false}) => {
+export const StartSession = ({closeWindowCbk, washMode = false, scannerMode= false}) => {
     const {
         liveData,
         availableMachines,
@@ -38,7 +38,7 @@ export const StartSession = ({closeWindowCbk, washMode = false}) => {
 
     let content;
     if (step === "new") {
-        content = <NewSessionForm setSessionInfo={setSessionInfo} onNext={goToNextStep}/>;
+        content = <NewSessionForm setSessionInfo={setSessionInfo} onNext={goToNextStep} scannerMode={scannerMode}/>;
     } else if (step === "choose") {
         content = <ChooseMachines setSessionInfo={setSessionInfo} onNext={goToNextStep} sessionInfo={sessionInfo}/>;
     } else if (step === "charge") {

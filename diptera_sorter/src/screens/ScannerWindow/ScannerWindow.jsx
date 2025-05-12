@@ -106,8 +106,8 @@ export const ScannerWindow = ({data, sessions}) => {
                                 <p className="cell-header">Input Bottles</p>
                                 <InputBottle
                                     className="scanner-input-bottles-widget"
-                                    cleanBottleFull={scanner.water_bottle_state === "Full"}
-                                    larvaeBottleFull={scanner.larvae_bottle_state === "Full"}
+                                    cleanBottleFull={scanner.water_bottle_state }
+                                    larvaeBottleFull={scanner.larvae_bottle_state }
                                     height={80}
                                     width={50}
                                 />
@@ -132,10 +132,10 @@ export const ScannerWindow = ({data, sessions}) => {
                         <td colSpan={1} rowSpan={2}>
                             <div className="scanner-td-container" style={{width: "290px"}}>
                                 <InfoContainer className={"scanner-dashboard"} info={"pressure inside the tankers"}
-                                               title={"Larae Area"}>
+                                               title={"Larvae Size"}>
                                     <Gauge
                                         style={{width: "256px", height: "228px"}}
-                                        val={3}
+                                        val={scanner?.mean_larva_area?.value || 0}
                                         subArcs={[{limit: 2}, {limit: 3}, {limit: 4}]}
                                         ticks={[{value: 2}, {value: 3}, {value: 4}]}
                                         maxValue={6}

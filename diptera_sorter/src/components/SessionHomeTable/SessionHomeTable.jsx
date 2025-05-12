@@ -104,8 +104,8 @@ export const SessionHomeTable = ({ session_data, machines_data }) => {
                     <td className="session-table-data col-status"><StatusIcon status={machineData.machine_state} error={machineData.error} /></td>
                     <td className="session-table-data col-input-bottle">
                         <InputBottle
-                            cleanBottleFull={machineData.water_bottle_state === "Full"}
-                            larvaeBottleFull={machineData.larvae_bottle_state === "Full"}
+                            cleanBottleFull={machineData.water_bottle_state }
+                            larvaeBottleFull={machineData.larvae_bottle_state }
                         />
                     </td>
                     <td className="session-table-data col-output-bottle" style={{ width: "200px" }}>

@@ -1,5 +1,19 @@
 import React, {useState} from 'react';
 import "./style.css";
+
+const Light = ({color, tooltip, className, stateGetter})=>{
+    const [onHover, setOnHover] = useState(false);
+    return (
+        <div className={className}>
+            <img alt={"red"} src={stateGetter() ? `${color}-on.svg` : `${color}-off.svg`}
+                 onMouseEnter={()=>{setOnHover(true)}}
+                 onMouseLeave={()=>{setOnHover(false)}}
+            />
+            {onHover? <div className={"default-tooltip"}>{tooltip}</div>:null
+            }
+        </div>
+    );
+}
 export const Lights = ({sessions, liveData}) => {
 
 
@@ -26,9 +40,11 @@ export const Lights = ({sessions, liveData}) => {
     return (
         <div className={"lights-container"}>
             <div className={"lights-overlap"}>
-                <img className={"red-light"} alt={"red"} src={error() ?"red-on.svg" : "red-off.svg"}/>
-                <img className={"blue-light"} alt={"red"} src={bottleMsg() ? "blue-on.svg": "blue-off.svg"}/>
-                <img className={"green-light"} alt={"red"} src={isRunning() ?"green-on.svg": "green-off.svg"}/>
+
+                <Light className={"red-light"} color={"red"} stateGetter={error} tooltip={"Machine Stoped"}/>
+                <Light className={"blue-light"} color={"blue"} stateGetter={bottleMsg} tooltip={"Container Action"}/>
+                <Light className={"green-light"} color={"green"} stateGetter={isRunning} tooltip={"Machine Running"}/>
+
             </div>
         </div>
     )

@@ -20,7 +20,7 @@ export const RunningStatistics = ({ stats }) => {
                 <div className={`stat-label ${hasWarning ? "stat-item-warning" : ""}`}>{label}</div>
                 <b className={`stat-value ${hasWarning ? "stat-item-warning" : ""}`}
                      title={hasWarning ? msg : ""}
-                >{value?.toFixed(2)} {unit}</b>
+                >{value?.toFixed(2)} {stat? unit: null}</b>
             </div>
         );
     };
@@ -29,13 +29,13 @@ export const RunningStatistics = ({ stats }) => {
         <div className="running-statistics-grid">
             <div className="stat-item">
                 <div className="stat-label">Bottle Target 1</div>
-                <b className="stat-value">{stats?.target1_counter || 100}</b>
+                <b className="stat-value">{stats?.target1_bottle_counter }</b>
             </div>
             {renderStat("Larva Size", stats?.mean_larva_area, "mm")}
             {renderStat("Pressure", stats?.pressure)}
             <div className="stat-item">
                 <div className="stat-label">Bottle Target 2</div>
-                <b className="stat-value">{stats?.target2_counter || 1427}</b>
+                <b className="stat-value">{stats?.target2_bottle_counter }</b>
             </div>
             {renderStat("Waiting Time", stats?.waiting_time, "sec")}
             {renderStat("Sorting Rate", stats?.sorting_rate, "sec")}

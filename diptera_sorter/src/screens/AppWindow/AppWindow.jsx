@@ -45,14 +45,16 @@ export const AppWindow = () => {
 
     const [selected, setSelected] = useState("Home");
 
-    const home_default = <>
+    let home_default = <>
         <Button
-            className="butten-instance-start-session"
-            text="Start A New Session"
+            className={"butten-instance-start-session"}
+            ButtonClassName={selected === "Scanner" ?"butten-instance-start-scanner-session":null}
+
+            text={`Start A New ${selected === "Scanner" ? "SCANNER ": "" }Session`}
             onClick={() => setIsPopupOpen(true)}
         />
-        <p className="no-session-msg">
-            There are no sessions running. Please start a new session
+        <p className="no-session-msg" style={{color: selected === "Scanner" ? "#fc4747" : null}}>
+            There are no {`${selected === "Scanner" ? "SCANNING ": "" }`}sessions running. Please start a new session
         </p>
     </>;
 
@@ -127,7 +129,6 @@ export const AppWindow = () => {
                     {renderHomeBody()}
                 </div>
                 <div className="group-2">
-                    <div className="text-wrapper-7">Actions</div>
 
                     <div className="button-grid">
                         <CommandButton text="New Session" className="new-session-button-instance" id="new_session"
@@ -181,7 +182,7 @@ export const AppWindow = () => {
                 <Lights liveData={liveData} sessions={sessions}></Lights>
             </div>
             <PopupModal isOpen={isPopupOpen} onClose={closePopUp}>
-                <StartSession closeWindowCbk={closePopUp}></StartSession>
+                <StartSession closeWindowCbk={closePopUp} scannerMode={selected==="Scanner"}></StartSession>
             </PopupModal>
         </div>
     );

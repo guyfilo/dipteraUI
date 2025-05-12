@@ -106,7 +106,7 @@
 
 
 .machine-info-table .larva-count-text {
-    font-size: 64px;
+    font-size: 50px;
     font-family: var(--font-assistant);
     color: var(--Black);
 }
@@ -138,6 +138,6 @@
 }
 
 .machine-info-table .machine-dashboard-gauge {
-    flex-direction: row;
+    flex-direction: column;
 
 }

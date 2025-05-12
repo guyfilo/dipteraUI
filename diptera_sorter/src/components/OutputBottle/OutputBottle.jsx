@@ -18,8 +18,10 @@ export const OutputBottle = ({ index, male, female, fl, recycle, junk, width, he
         }
         return () => clearInterval(intervalId);
     }, [collect]);
+    const [onHover, setOnHover] = useState(false);
 
     let target_icon_path = [];
+    let tooltipText = []
     if (recycle || junk) {
         recycle ? target_icon_path.push("recycle") : target_icon_path.push("junk");
     } else {
@@ -27,6 +29,14 @@ export const OutputBottle = ({ index, male, female, fl, recycle, junk, width, he
         if (female) target_icon_path.push("female");
         if (target_icon_path.length === 0) target_icon_path.push("male", "female");
         target_icon_path.push(fl ? "fl" : "nfl");
+    }
+    if (recycle || junk) {
+        recycle ? tooltipText.push("Recycle") : tooltipText.push("Junk");
+    } else {
+        if (male) tooltipText.push("Male");
+        if (female) tooltipText.push("Female");
+        if (tooltipText.length === 0) tooltipText.push("Male", "Female");
+        tooltipText.push(fl ? "Fluorescent" : "Not Fluorescent");
     }
 
     const target_icon = `/${target_icon_path.join("_")}.svg`;
@@ -40,7 +50,12 @@ export const OutputBottle = ({ index, male, female, fl, recycle, junk, width, he
         <div className="outputBottleRectangle" style={{ width, height: `${height}px`, fontSize: `${0.4 * height}px` }}>
             {!empty ? <img className="target-icon" alt="" src={target_icon}/> : null}
             <b className={collect ? "bottle-number-blink" : "bottle-number"}>{index}</b>
-            <img className="output-bottle-icon" alt="outBottle" src={bottle_icon} />
+            <img className="output-bottle-icon" alt="outBottle" src={bottle_icon}
+                 onMouseEnter={()=>{setOnHover(true)}}
+                 onMouseLeave={()=>{setOnHover(false)}}
+            />
+            {onHover? <div className={"default-tooltip"}>{tooltipText.join(" & ")}</div>:null
+            }
         </div>
     );
 };
@@ -56,7 +71,7 @@ export const OutputBottles = ({target1 = [], target2 = [], className, height, wi
                           fl={target2.includes("fl")}
                           width={width}
                           height={height}
-                          collect={collectTarget1}
+                          collect={collectTarget2}
                           empty={scanner}
             />
             <OutputBottle  junk={true} width={width}

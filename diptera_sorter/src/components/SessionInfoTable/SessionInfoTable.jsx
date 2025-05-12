@@ -36,8 +36,8 @@ export const SessionInfoTable = ({className, session_data, machines_data}) => {
                     <td className="table-data col-input-bottle">
                         <p>Input Bottle: </p>
                         <div className="td-widget">
-                            <InputBottle cleanBottleFull={machineData.water_bottle_state === "Full"}
-                                         larvaeBottleFull={machineData.larvae_bottle_state === "Full"}/>
+                            <InputBottle cleanBottleFull={machineData.water_bottle_state }
+                                         larvaeBottleFull={machineData.larvae_bottle_state }/>
                         </div>
                     </td>
 

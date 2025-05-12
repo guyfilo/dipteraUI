@@ -5,6 +5,8 @@ import "./style.css"
 function HandleStopRow({machine_id, setStopRequest}) {
     const {
         sendCommand,
+        liveData,
+        removeMachine
     } = useContext(DataContext);
 
     const [stage, setStage] = useState("confirm"); // "confirm", "normal", "done"
@@ -21,6 +23,10 @@ function HandleStopRow({machine_id, setStopRequest}) {
         setStopRequest(prev => prev.filter(id => id !== machine_id));
         sendCommand("wash_end_session", [machine_id] ,[]);
     };
+    if (Object.keys(liveData).includes(machine_id) && ["Stop", "Killed"].includes(liveData[machine_id].machine_state)){
+        sendCommand("stop", [machine_id], []);
+        return;
+    }
 
     return (
         <>

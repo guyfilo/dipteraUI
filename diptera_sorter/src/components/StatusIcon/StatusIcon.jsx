@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import "./style.css"
 
 function StatusIcon({ status, error=false, width = 24, height = 24, className }) {
@@ -10,18 +10,26 @@ function StatusIcon({ status, error=false, width = 24, height = 24, className })
         Stop: "status_stop.svg",
         Calibrating: "/status_calibrate.svg",
         Connected:"/status_calibrate.svg",
-        Init:"/status_calibrate.svg",
+        Init:"/status_init.svg",
         Sleep:"/status_sleep.svg",
     };
+    const [onHover, setOnHover] = useState(false);
 
     return (
-        <img
-            className={`${className || ""} ${["Calibrating", "Connected", "Init"].includes(status) ? "rotate" : ""}`}
-            src={error ? statusIcons["error"] : statusIcons[status]}
-            alt={status}
-            width={width}
-            height={height}
-        />
+        <div className={className} style={{height:height,width:width, position:"relative"}}>
+            <img
+                className={`${["Calibrating", "Connected", "Init"].includes(status) ? "rotate" : ""}`}
+                src={error ? statusIcons["error"] : statusIcons[status]}
+                alt={status}
+                width={width}
+                height={height}
+                onMouseEnter={()=>{setOnHover(true)}}
+                onMouseLeave={()=>{setOnHover(false)}}
+            />
+            {onHover? <div className={"default-tooltip"}>{status}</div>:null
+            }
+        </div>
+
     ); // Default icon if unknown
 }
 
