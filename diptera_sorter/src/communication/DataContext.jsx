@@ -4,6 +4,7 @@ export const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
     const [data, setData] = useState({});
+    const [taggerData, setTaggerData] = useState({});
     const [availableMachines, setAvailableMachines] = useState([]);
     const socketRef = useRef(null);
 
@@ -47,6 +48,14 @@ export const DataProvider = ({ children }) => {
 
         socket.onmessage = (event) => {
             const update = JSON.parse(event.data);
+            if (update?.machine_id === "tagger") {
+                if (update.remove) {
+                    setTaggerData(null);
+                    return;
+                }
+                setTaggerData(update);
+                return;
+            }
             setData(prev => ({ ...prev, [update.machine_id]: update }));
         };
 
@@ -148,6 +157,7 @@ export const DataProvider = ({ children }) => {
     return (
         <DataContext.Provider value={{
             liveData: data,
+            taggerData,
             availableMachines,
             createSession,
             endSession,

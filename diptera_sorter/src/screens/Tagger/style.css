@@ -1,0 +1,210 @@
+.tagger-container {
+    position: absolute;
+    width: 95%;
+    font-size: 32px;
+    letter-spacing: 0.03em;
+    font-family: var(--font-assistant);
+    color: #000;
+    text-align: left;
+}
+
+.tagger-buttons {
+    position: absolute;
+    right: 10px;
+    display: flex;
+    gap: 30px;
+}
+
+.tagger-btn {
+    width: 200px;
+    height: 43px;
+    position: relative;
+    border-radius: 5px;
+    background-color: var(--Mid-Grey);
+
+    font-size: 20px;
+    letter-spacing: 0.05em;
+    display: flex;
+    font-family: var(--font-assistant);
+    color: var(--Almost-white);
+    text-align: left;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.tagger-btn:hover {
+    background-color: var(--dipteraai-main) !important;
+
+}
+
+
+.tagger-table-container {
+    position: absolute;
+    top: 100px;
+    width: 100%;
+    max-height: 800px;  /* adjust height as needed */
+    overflow-y: auto;
+    padding-right: 6px; /* optional: space for scrollbar */
+}
+
+/* Optional: make scrollbars look nicer (Firefox + WebKit) */
+.tagger-table-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.tagger-table-container::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 3px;
+}
+
+.tagger-table-container {
+    scrollbar-width: thin;
+    scrollbar-color: #ccc transparent;
+}
+.tagger-table {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+}
+
+.tagger-row {
+    display: flex;
+
+    align-items: center;
+    height: 50px;
+
+}
+
+.tagger-row-container {
+    padding: 6px 12px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    align-items: center;
+
+}
+
+.marked-row {
+
+    background-color: var(--dipteraai-light-and-transparent);
+
+
+}
+
+.tagger-cell {
+    font-family: monospace;
+    width: 400px;
+    text-align: center;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 10px;
+    position: relative;
+    font-size: 16px;
+    letter-spacing: 0.03em;
+    font-family: var(--font-assistant);
+    color: var(--Dark-Grey);
+
+}
+
+.tagger-cell img{
+    height: 30px;
+
+}
+
+.func-cell:hover {
+    background-color: var(--dipteraai-light-and-transparent);
+
+}
+/* Column-specific widths */
+.barcode-cell {
+    position: relative;
+    font-size: 24px;
+    letter-spacing: 0.05em;
+    display: inline-block;
+    font-family: var(--font-assistant);
+    color: var(--Dark-Grey);
+    text-align: left;
+    padding-left: 50px;
+}
+
+.edit-cell {
+    width: 800px;
+    display: flex;
+    gap: 10px;
+}
+
+
+
+.error-cell {
+    width: 800px;
+
+}
+
+.fl-cell {
+
+}
+
+.func-cell {
+    width: 100px;
+}
+
+.col-sep {
+    width: 1px;
+    position: relative;
+    background-color: var(--Dark-Grey);
+    box-sizing: border-box;
+    height: 90%;
+}
+
+.tagger-typing-dots {
+    position: absolute;
+    top: 0px;
+    left: 200px;
+    display: flex;
+    align-items: center;
+    gap: 6px;           /* More spacing between dots */
+    padding-top: 12px;
+    margin-left: 8px;
+}
+
+
+
+.already-saved-row {
+    height: 50px;
+    position: relative;
+    font-size: 24px;
+    letter-spacing: 0.05em;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    left:50px;
+    align-items: center;
+    font-family: var(--font-assistant);
+    color: var(--Dark-Grey);
+}
+
+.tagger-row-btn {
+    position: relative;
+    border-radius: 5px;
+    background-color: var(--Mid-Grey);
+    width: max-content;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    color: var(--Almost-white);
+}
+
+.tagger-row-btn:hover {
+
+    background-color: var(--dipteraai-main) !important;
+
+
+}

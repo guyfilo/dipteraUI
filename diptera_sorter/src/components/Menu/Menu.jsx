@@ -39,14 +39,20 @@ export const Menu = ({ className, divClassName, selected, setSelected }) => {
                         className={selected === "Scanner" ? "menu-option-selected" : ""}
                     />
                     <MenuOption
-                        text="Treatments & Warnings"
+                        text="Tagger"
                         style={{ top: "60%" }}
+                        onClick={() => select("Tagger")}
+                        className={selected === "Tagger" ? "menu-option-selected" : ""}
+                    />
+                    <MenuOption
+                        text="Treatments & Warnings"
+                        style={{ top: "70%" }}
                         onClick={() => select("Treatments")}
                         className={selected === "Treatments" ? "menu-option-selected" : ""}
                     />
                     <MenuOption
                         text="Reports"
-                        style={{ top: "70%" }}
+                        style={{ top: "80%" }}
                         onClick={() => select("Reports")}
                         className={selected === "Reports" ? "menu-option-selected" : ""}
                     />

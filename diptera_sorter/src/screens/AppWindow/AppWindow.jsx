@@ -17,6 +17,7 @@ import {
 import {ScannerWindow} from "../ScannerWindow/ScannerWindow.jsx";
 import {Lights} from "../../components/Lights/Lights.jsx";
 import {MasterPage} from "../MasterScreen/MasterScreen.jsx";
+import {Tagger} from "../Tagger/Tagger.jsx";
 
 export const AppWindow = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -31,6 +32,7 @@ export const AppWindow = () => {
         endSession,
         sendCommand,
         fetchAvailableMachines,
+        taggerData,
         sessions,
     } = useContext(DataContext);
 
@@ -48,13 +50,13 @@ export const AppWindow = () => {
     let home_default = <>
         <Button
             className={"butten-instance-start-session"}
-            ButtonClassName={selected === "Scanner" ?"butten-instance-start-scanner-session":null}
+            ButtonClassName={selected === "Scanner" ? "butten-instance-start-scanner-session" : null}
 
-            text={`Start A New ${selected === "Scanner" ? "SCANNER ": "" }Session`}
+            text={`Start A New ${selected === "Scanner" ? "SCANNER " : ""}Session`}
             onClick={() => setIsPopupOpen(true)}
         />
         <p className="no-session-msg" style={{color: selected === "Scanner" ? "#fc4747" : null}}>
-            There are no {`${selected === "Scanner" ? "SCANNING ": "" }`}sessions running. Please start a new session
+            There are no {`${selected === "Scanner" ? "SCANNING " : ""}`}sessions running. Please start a new session
         </p>
     </>;
 
@@ -93,6 +95,10 @@ export const AppWindow = () => {
         }
         if (selected === "Master Mode") {
             return <MasterPage></MasterPage>
+        }
+
+        if (selected === "Tagger") {
+            return <Tagger></Tagger>
         }
 
         if (selected === "Treatments & Warnings") {
@@ -182,7 +188,7 @@ export const AppWindow = () => {
                 <Lights liveData={liveData} sessions={sessions}></Lights>
             </div>
             <PopupModal isOpen={isPopupOpen} onClose={closePopUp}>
-                <StartSession closeWindowCbk={closePopUp} scannerMode={selected==="Scanner"}></StartSession>
+                <StartSession closeWindowCbk={closePopUp} scannerMode={selected === "Scanner"}></StartSession>
             </PopupModal>
         </div>
     );

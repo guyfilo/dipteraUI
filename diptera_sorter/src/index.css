@@ -37,12 +37,12 @@ body {
   --warnning-red: #fc4747;
   --font-assistant: Assistant;
   --caution-orange: #fca447;
+  --dipteraai-light-and-transparent: rgba(92, 178, 244, 0.1);
 
   /* Figma Variables */
   /* Color Variables */
   --Almost-white: #fefefe;
   --Black: #000;
-  --font-assistant: Assistant;
   /* font sizes */
   --font-size-base: 16px;
   /* Colors */
