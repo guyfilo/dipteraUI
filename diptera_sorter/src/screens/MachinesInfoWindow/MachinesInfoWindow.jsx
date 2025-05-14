@@ -85,8 +85,8 @@ export const MachinesInfoWindow = ({data, sessions}) => {
 
                                 <OutputBottles
                                     className="machine-output-bottles-widget"
-                                    target1={inSession ? sessions[machine.session_id].target1:null}
-                                    target2={inSession ? sessions[machine.session_id].target2:null}
+                                    target1={inSession ? sessions[machine.session_id]?.target1:[]}
+                                    target2={inSession ? sessions[machine.session_id]?.target2:[]}
                                     collectTarget1={machine.collect_target1}
                                     collectTarget2={machine.collect_target2}
                                     width={"60px"}
