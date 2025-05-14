@@ -70,7 +70,7 @@ export const AppWindow = () => {
             } else if (selected === "Sessions") {
                 setHomeBody(<SessionInfoWindow data={liveData} sessions={sessions}/>)
             } else if (selected === "Machines") {
-                setHomeBody(<MachinesInfoWindow data={liveData} sessions={sessions}></MachinesInfoWindow>)
+                setHomeBody(<MachinesInfoWindow machines_data={liveData} sessions={sessions}></MachinesInfoWindow>)
             } else if (selected === "Scanner") {
                 setHomeBody(<ScannerWindow data={liveData} sessions={sessions}></ScannerWindow>)
             }
@@ -88,7 +88,7 @@ export const AppWindow = () => {
             } else if (selected === "Sessions") {
                 return <SessionInfoWindow data={liveData} sessions={sessions}/>;
             } else if (selected === "Machines") {
-                return <MachinesInfoWindow data={liveData} sessions={sessions}/>;
+                return <MachinesInfoWindow machines_data={liveData} sessions={sessions}/>;
             } else if (selected === "Scanner") {
                 return <ScannerWindow data={liveData} sessions={sessions}/>;
             }

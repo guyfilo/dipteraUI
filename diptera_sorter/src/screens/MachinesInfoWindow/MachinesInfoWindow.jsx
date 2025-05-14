@@ -12,7 +12,10 @@ import {Gauge} from "../../components/Gauge/Gauge.jsx";
 import {SelectedMachinesContext} from "../../components/SelectedMachinesContext/SelectedMachinesContext.jsx";
 
 
-export const MachinesInfoWindow = ({data, sessions}) => {
+export const MachinesInfoWindow = ({machines_data, sessions}) => {
+    let data = Object.entries(machines_data)
+        .filter(([_, machine]) => machine?.session_id)
+        .map(([_, machine]) => machine);
     const {removeAll, selectMachine} = useContext(SelectedMachinesContext);
     const [machine, setMachine] = React.useState(Object.values(data).at(0));
     useEffect(() => {
