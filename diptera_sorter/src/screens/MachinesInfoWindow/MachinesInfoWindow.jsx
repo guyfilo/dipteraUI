@@ -13,9 +13,9 @@ import {SelectedMachinesContext} from "../../components/SelectedMachinesContext/
 
 
 export const MachinesInfoWindow = ({machines_data, sessions}) => {
-    let data = Object.entries(machines_data)
-        .filter(([_, machine]) => machine?.session_id)
-        .map(([_, machine]) => machine);
+    let data = Object.fromEntries(
+        Object.entries(machines_data).filter(([_, machine]) => machine?.session_id)
+    );
     const {removeAll, selectMachine} = useContext(SelectedMachinesContext);
     const [machine, setMachine] = React.useState(Object.values(data).at(0));
     useEffect(() => {
