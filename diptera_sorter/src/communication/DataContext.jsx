@@ -1,49 +1,68 @@
 import React, { createContext, useState, useEffect, useRef } from "react";
 
+const SERVERS = {
+    israel: {
+        name: "Israel Site",
+        API_BASE: "http://dipt-net.tailb282fd.ts.net:8000",
+        WS_BASE: "ws://dipt-net.tailb282fd.ts.net:8000"
+    },
+    burkina: {
+        name: "Burkina Site",
+        API_BASE: "http://sorter-burkina.tailb282fd.ts.net:8000",
+        WS_BASE: "ws://sorter-burkina.tailb282fd.ts.net:8000"
+    }
+};
+
 export const DataContext = createContext();
 
+const getServerKey = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const key = urlParams.get("site");
+    return key === "burkina" ? "burkina" : "israel";
+};
+
 export const DataProvider = ({ children }) => {
+    const serverKey = getServerKey();
+    const server = SERVERS[serverKey];
+    const { API_BASE, WS_BASE } = server;
+
     const [data, setData] = useState({});
     const [taggerData, setTaggerData] = useState({});
     const [availableMachines, setAvailableMachines] = useState([]);
-    const socketRef = useRef(null);
-
     const [sessions, setSessions] = useState({});
     const [connected, setConnected] = useState(false);
-
+    const socketRef = useRef(null);
 
     const fetchFullState = async () => {
-        const res = await fetch("http://localhost:8000/api/state/full");
+        const res = await fetch(`${API_BASE}/api/state/full`);
         const json = await res.json();
         setData(json.machines);
         setSessions(json.sessions);
     };
 
-    let fetchInterval = null; // Outside the function so you can clear it later
+    let fetchInterval = null;
 
     const connectWebSocket = () => {
-        const socket = new WebSocket("ws://localhost:8000/ws"); // Should be ws:// not http://
+        const socket = new WebSocket(`${WS_BASE}/ws`);
         socketRef.current = socket;
 
         socket.onopen = async () => {
-            console.log("✅ WebSocket connected");
+            console.log(`✅ WebSocket connected to ${WS_BASE}`);
             setConnected(true);
 
-            // Immediately fetch full state once
             try {
                 await fetchFullState();
             } catch (err) {
                 console.error("❌ Failed to fetch full state:", err);
             }
 
-            // Then set interval to fetch every 10 seconds
             fetchInterval = setInterval(async () => {
                 try {
                     await fetchFullState();
                 } catch (err) {
-                    console.error("❌ Failed to fetch full state (periodic):", err);
+                    console.error("❌ Periodic state fetch failed:", err);
                 }
-            }, 10000); // 10,000ms = 10 seconds
+            }, 10000);
         };
 
         socket.onmessage = (event) => {
@@ -61,53 +80,39 @@ export const DataProvider = ({ children }) => {
 
         socket.onerror = (err) => {
             console.warn("⚠️ WebSocket error:", err);
-            socket.close(); // Triggers onclose
+            socket.close();
         };
 
         socket.onclose = () => {
-            console.warn("🔌 WebSocket closed, retrying in 2s...");
+            console.warn("🔌 WebSocket closed, retrying...");
             setConnected(false);
-
-            // Stop the periodic fetching
             if (fetchInterval) {
                 clearInterval(fetchInterval);
                 fetchInterval = null;
             }
-
-            setTimeout(connectWebSocket, 2000); // Reconnect after 2s
+            setTimeout(connectWebSocket, 2000);
         };
     };
 
-
     useEffect(() => {
-        connectWebSocket("ws://localhost:8000/ws");
+        connectWebSocket();
         return () => socketRef.current?.close();
-    }, []);
+    }, [serverKey]);
 
-    // REST API calls (same as before)...
     const createSession = async (sessionData) => {
-        console.log("sessionData:", JSON.stringify(sessionData, null, 2));
-        const res = await fetch("http://localhost:8000/api/session/create", {
+        const res = await fetch(`${API_BASE}/api/session/create`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(sessionData),
         });
-
         const data = await res.json();
-
-        if (!res.ok) {
-            console.error("Failed to create session:", data);
-            throw new Error("Session creation failed");
-        }
-        console.log("sessionData:", JSON.stringify(data, null, 2));
-
-
+        if (!res.ok) throw new Error("Session creation failed");
         setSessions(prev => ({ ...prev, [sessionData.session_id]: sessionData }));
         return data;
     };
 
     const endSession = async (session_id) => {
-        const res = await fetch("http://localhost:8000/api/session/end", {
+        const res = await fetch(`${API_BASE}/api/session/end`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ session_id }),
@@ -116,35 +121,34 @@ export const DataProvider = ({ children }) => {
     };
 
     const removeMachine = async (session_id, machine_id) => {
-        const res = await fetch("http://localhost:8000/api/session/remove_machine", {
+        const res = await fetch(`${API_BASE}/api/session/remove_machine`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ session_id: session_id, machine_id: machine_id }),
+            body: JSON.stringify({ session_id, machine_id }),
         });
         return res.json();
     };
 
     const restart_machines = async (machines) => {
-        const res = await fetch("http://localhost:8000/api/machines/restart", {
+        const res = await fetch(`${API_BASE}/api/machines/restart`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ machines: machines}),
+            body: JSON.stringify({ machines }),
         });
         return res.json();
     };
 
-    const sendCommand = async (command, machines, sessions, kwargs={}) => {
-        console.log(machines);
-        const res = await fetch("http://localhost:8000/api/command", {
+    const sendCommand = async (command, machines, sessions, kwargs = {}) => {
+        const res = await fetch(`${API_BASE}/api/command`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ command, machines , sessions, kwargs}),
+            body: JSON.stringify({ command, machines, sessions, kwargs }),
         });
         return res.json();
     };
 
     const fetchAvailableMachines = async () => {
-        const res = await fetch("http://localhost:8000/api/machines/available");
+        const res = await fetch(`${API_BASE}/api/machines/available`);
         const json = await res.json();
         setAvailableMachines(json.available_machines || []);
         return json;
@@ -152,7 +156,7 @@ export const DataProvider = ({ children }) => {
 
     useEffect(() => {
         fetchAvailableMachines();
-    }, []);
+    }, [serverKey]);
 
     return (
         <DataContext.Provider value={{
@@ -165,7 +169,8 @@ export const DataProvider = ({ children }) => {
             fetchAvailableMachines,
             sessions,
             restart_machines,
-            removeMachine
+            removeMachine,
+            serverName: server.name
         }}>
             {children}
         </DataContext.Provider>
