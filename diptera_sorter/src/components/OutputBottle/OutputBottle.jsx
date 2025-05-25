@@ -66,9 +66,9 @@ export const OutputBottles = ({target1 = [], target2 = [], className, height, wi
     return <div className={`outputBottles ${className}`}>
         <div className="output-bottle">
             <OutputBottle index="2"
-                          male={target2.includes("male")}
-                          female={target2.includes("female")}
-                          fl={target2.includes("fl")}
+                          male={target2?.includes("male")}
+                          female={target2?.includes("female")}
+                          fl={target2?.includes("fl")}
                           width={width}
                           height={height}
                           collect={collectTarget2}
@@ -82,9 +82,9 @@ export const OutputBottles = ({target1 = [], target2 = [], className, height, wi
                            index=""
                            height={height}/>
             <OutputBottle index="1"
-                          male={scanner || target1.includes("male")}
-                          female={scanner || target1.includes("female")}
-                          fl={scanner || target1.includes("fl")}
+                          male={scanner || target1?.includes("male")}
+                          female={scanner || target1?.includes("female")}
+                          fl={scanner || target1?.includes("fl")}
                           width={width}
                           height={height}
                           collect={collectTarget1}
