@@ -1,12 +1,14 @@
 .tagger-container {
     position: absolute;
-    width: 95%;
+    width: 1000px;
+    height: 800px;
     font-size: 32px;
     letter-spacing: 0.03em;
     font-family: var(--font-assistant);
     color: #000;
-    text-align: left;
+
 }
+
 
 .tagger-buttons {
     position: absolute;

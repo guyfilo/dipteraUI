@@ -1,5 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
+import "./style.css";
+
+axios.defaults.baseURL = "http://192.168.0.62:8000";
+
+function Progress({state}) {
+    if (!state || typeof state.cur === "undefined") return null;
+    const percent = state.total > 0 ? Math.round((state.tagged / state.total) * 100) : 0;
+    return (
+        <div style={{marginBottom: 10}}>
+            <p>Progress: <b>{state.cur}</b> / {state.total} | Tagged: {state.tagged}</p>
+            <div className="progress-bar-container">
+                <div className="progress-bar-fill" style={{width: `${percent}%`}}></div>
+            </div>
+        </div>
+    );
+}
 
 export default function TaggerApp() {
     const [subjects, setSubjects] = useState([]);
@@ -9,49 +25,94 @@ export default function TaggerApp() {
     const [imagePath, setImagePath] = useState(null);
     const [tag, setTag] = useState("");
     const [message, setMessage] = useState("");
+    const [state, setState] = useState(null);
+    const [warning, setWarning] = useState(null);
+
 
     useEffect(() => {
         axios.get("/api/subjects").then((res) => setSubjects(res.data));
     }, []);
 
+    useEffect(() => {
+        const handleKeyDown = async (e) => {
+            if (!imagePath || !sessionId) return;
+            const char = e.key;
+
+            if (char === "ArrowRight") {
+                await nextImage(1);
+            } else if (char === "ArrowLeft") {
+                await nextImage(-1);
+            } else if (char.length === 1 && /[a-zA-Z0-9]/.test(char)) {
+                await axios.post("/api/image/tag", {
+                    session_id: sessionId,
+                    image_path: imagePath,
+                    tag: char,
+                });
+                await updateCurrentTag();
+            } else if (char === "Backspace" || char === "Delete") {
+                await axios.post("/api/image/tag", {
+                    session_id: sessionId,
+                    image_path: imagePath,
+                    delete: true,
+                });
+                await updateCurrentTag();
+            }
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [imagePath, sessionId]);
+
     const startSession = async () => {
+        if (!subject || !taggerName) {
+            setWarning("Please fill in all fields");
+            return;
+        }
         const res = await axios.post("/api/session/create", {
             tagger_name: taggerName,
             subject: subject,
             skip_tagged_images: true,
         });
         setSessionId(res.data.session_id);
-        const next = await axios.get("/api/image/next", { params: { session_id: res.data.session_id } });
+        const next = await axios.get("/api/image/next", {params: {session_id: res.data.session_id}});
         setImagePath(next.data.image_path);
+        await updateCurrentTag(res.data.session_id, next.data.image_path);
     };
 
     const nextImage = async (step = 1) => {
         const route = step === 1 ? "next" : "prev";
-        const res = await axios.get(`/api/image/${route}`, { params: { session_id: sessionId } });
+        const res = await axios.get(`/api/image/${route}`, {params: {session_id: sessionId}});
         setImagePath(res.data.image_path);
+        await updateCurrentTag(sessionId, res.data.image_path);
     };
 
-    const sendTag = async () => {
-        await axios.post("/api/image/tag", {
-            session_id: sessionId,
-            image_path: imagePath,
-            tag,
+    const updateCurrentTag = async (sessId = sessionId, imgPath = imagePath) => {
+        const res = await axios.get("/api/image/get_tags", {
+            params: {
+                session_id: sessId,
+                image_path: imgPath,
+            },
         });
-        setTag("");
-        await saveSession(true);
-        nextImage(1);
+        setTag((res.data.tags || []).join(", "));
+        await updateState(sessId);
+    };
+
+    const updateState = async (sessId = sessionId) => {
+        const res = await axios.get("/api/image/get_state", {
+            params: {session_id: sessId}
+        });
+        setState(res.data.state);
     };
 
     const saveSession = async (silent = false) => {
         await axios.post("/api/session/save", sessionId, {
-            headers: { 'Content-Type': 'application/json' }
+            headers: {'Content-Type': 'application/json'}
         });
         if (!silent) setMessage("Session saved");
     };
 
     const endSession = async () => {
         await axios.post("/api/session/exit", sessionId, {
-            headers: { 'Content-Type': 'application/json' }
+            headers: {'Content-Type': 'application/json'}
         });
         setSessionId(null);
         setImagePath(null);
@@ -59,46 +120,47 @@ export default function TaggerApp() {
     };
 
     return (
-        <div style={{ padding: 20 }}>
+        <div className="tagger-container">
+            <img alt={"diptera_logo"} src={"/diptera_logo.svg"} className={"logo"}></img>
             {!sessionId ? (
-                <div>
+                <div className="tagger-content">
                     <h2>Start Tagging Session</h2>
+                    tagger name:
                     <input
                         placeholder="Your Name"
                         value={taggerName}
                         onChange={(e) => setTaggerName(e.target.value)}
                     />
+                    tagging subject:
                     <select value={subject} onChange={(e) => setSubject(e.target.value)}>
                         <option value="">Select Subject</option>
                         {subjects.map((s) => (
                             <option key={s} value={s}>{s}</option>
                         ))}
                     </select>
-                    <button onClick={startSession}>Start</button>
+                    <button className="tagger-button" onClick={startSession}>Start</button>
+                    {warning && <div className="tagger-warning">{warning}</div>}
                 </div>
             ) : (
-                <div>
-                    <h3>Session: {sessionId}</h3>
+                <div className="tagger-content-session">
+                    <h3>Tagger: {taggerName}</h3>
+                    <Progress state={state}/>
                     {imagePath && (
                         <div>
                             <img
-                                src={`/api/image/thumbnail?session_id=${sessionId}&image_path=${encodeURIComponent(imagePath)}&width=512`}
+                                className="tagger-image"
+                                src={`http://192.168.0.62:8000/api/image/view?session_id=${sessionId}&image_path=${encodeURIComponent(imagePath)}`}
                                 alt="current"
-                                style={{ maxWidth: "100%", maxHeight: 400 }}
                             />
-                            <div>
-                                <input
-                                    placeholder="Tag"
-                                    value={tag}
-                                    onChange={(e) => setTag(e.target.value)}
-                                />
-                                <button onClick={sendTag}>Tag</button>
-                                <button onClick={() => nextImage(-1)}>Prev</button>
-                                <button onClick={() => nextImage(1)}>Next</button>
-                                <button onClick={() => saveSession(false)}>Save</button>
-                                <button onClick={endSession}>Exit Session</button>
+                            <p className="tagger-tag">Current tag: <b>{tag}</b></p>
+
+                            <div style={{display: "flex", gap: "20px", marginTop: 10}}>
+                                <button className="tagger-button" onClick={() => nextImage(-1)}>Prev</button>
+                                <button className="tagger-button" onClick={() => nextImage(1)}>Next</button>
+                                <button className="tagger-button" onClick={() => saveSession(false)}>Save</button>
+                                <button className="tagger-button" onClick={endSession}>Exit Session</button>
                             </div>
-                            {message && <div style={{ marginTop: 10, color: "green" }}>{message}</div>}
+                            {message && <div className="tagger-message">{message}</div>}
                         </div>
                     )}
                 </div>
