@@ -10,6 +10,11 @@ const SERVERS = {
         name: "Burkina Site",
         API_BASE: "http://sorter-burkina.tailb282fd.ts.net:8000",
         WS_BASE: "ws://sorter-burkina.tailb282fd.ts.net:8000"
+    },
+    local: {
+        name: "Local Host",
+        API_BASE: "http://localhost:8000",
+        WS_BASE: "ws://localhost:8000"
     }
 };
 
@@ -18,7 +23,12 @@ export const DataContext = createContext();
 const getServerKey = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const key = urlParams.get("site");
-    return key === "burkina" ? "burkina" : "israel";
+    return key === "burkina" ? "burkina" : key === "local" ? "local" : "israel";
+};
+
+const isSudoMode = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get("sudo") === "true";
 };
 
 export const DataProvider = ({ children }) => {
@@ -36,14 +46,26 @@ export const DataProvider = ({ children }) => {
     const fetchFullState = async () => {
         const res = await fetch(`${API_BASE}/api/state/full`);
         const json = await res.json();
-        setData(json.machines);
-        setSessions(json.sessions);
+        setData(prev => {
+            const merged = {};
+
+            for (const [machineId, newMachine] of Object.entries(json.machines)) {
+                const existing = prev[machineId] || {};
+                merged[machineId] = {
+                    ...newMachine,
+                    bg_images: existing.bg_images || {}  // preserve existing bg_images
+                };
+            }
+
+            return merged;
+        });        setSessions(json.sessions);
     };
 
     let fetchInterval = null;
 
     const connectWebSocket = () => {
-        const socket = new WebSocket(`${WS_BASE}/ws`);
+        const sudo = isSudoMode();
+        const socket = new WebSocket(`${WS_BASE}/ws${sudo ? "?sudo=true" : ""}`);
         socketRef.current = socket;
 
         socket.onopen = async () => {
@@ -67,16 +89,68 @@ export const DataProvider = ({ children }) => {
 
         socket.onmessage = (event) => {
             const update = JSON.parse(event.data);
+
             if (update?.machine_id === "tagger") {
                 if (update.remove) {
                     setTaggerData(null);
-                    return;
+                } else {
+                    setTaggerData(update);
                 }
-                setTaggerData(update);
                 return;
             }
-            setData(prev => ({ ...prev, [update.machine_id]: update }));
+
+            // Only update if bg_images exists and is non-empty
+            const bgImages = update.bg_images;
+            if (!bgImages || Object.keys(bgImages).length === 0) {
+                setData(prev => {
+                    const machineId = update.machine_id;
+                    const existingMachine = prev[machineId] || {};
+
+                    return {
+                        ...prev,
+                        [machineId]: {
+                            ...existingMachine,
+                            ...update,
+                        }
+                    };
+                });
+                return;
+            }
+
+
+            setData(prev => {
+                const machineId = update.machine_id;
+                const existingMachine = prev[machineId] || {};
+                const existingBgImages = existingMachine.bg_images || {};
+
+                const mergedBgImages = { ...existingBgImages };
+
+                for (const cam in bgImages) {
+                    const newImage = bgImages[cam];
+
+                    if (!Array.isArray(mergedBgImages[cam])) {
+                        mergedBgImages[cam] = [];
+                    }
+
+                    if (typeof newImage === "string" || (newImage && typeof newImage === "object" && !Array.isArray(newImage))) {
+                        mergedBgImages[cam].push(newImage);
+                    } else {
+                        console.warn(`⚠️ Unexpected image format for cam '${cam}':`, newImage);
+                    }
+                }
+
+                return {
+                    ...prev,
+                    [machineId]: {
+                        ...existingMachine,
+                        ...update,
+                        bg_images: mergedBgImages
+                    }
+                };
+            });
         };
+
+
 
         socket.onerror = (err) => {
             console.warn("⚠️ WebSocket error:", err);
@@ -92,6 +166,19 @@ export const DataProvider = ({ children }) => {
             }
             setTimeout(connectWebSocket, 2000);
         };
+    };
+    const clearBgImages = (machineId) => {
+        setData(prev => {
+            if (!prev[machineId]) return prev;
+
+            return {
+                ...prev,
+                [machineId]: {
+                    ...prev[machineId],
+                    bg_images: {}  // clear all cams
+                }
+            };
+        });
     };
 
     useEffect(() => {
@@ -163,6 +250,7 @@ export const DataProvider = ({ children }) => {
             liveData: data,
             taggerData,
             availableMachines,
+            isSudoMode,
             createSession,
             endSession,
             sendCommand,
