@@ -17,10 +17,6 @@ export const MasterPage = () => {
     const [washTime, setWashTime] = useState(5);
     const [pressure, setPressure] = useState("");
     const [selectedMachine, setSelectedMachine] = React.useState(null);
-
-    useEffect(() => {
-        console.log(selectedMachine);
-    }, [selectedMachine])
     const [sizeMode, setSizeMode] = useState("hidden"); // "hidden", "small", or "full"
 
     const toggleSize = () => {
@@ -61,6 +57,7 @@ export const MasterPage = () => {
             </div>
             {selectedMachine && <div className={`master-tabs-wrapper ${sizeMode}`}>
                 <MasterTabs sizeMode={sizeMode}
+                            setSizeMode={setSizeMode}
                             toggleSize={toggleSize}
                             toggleHide={toggleHide}
                             data={selectedMachine ? liveData[selectedMachine] :{}}

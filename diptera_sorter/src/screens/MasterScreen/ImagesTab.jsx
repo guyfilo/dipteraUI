@@ -1,8 +1,11 @@
-import React, {useState, useRef, useEffect} from "react";
+import React, {useState, useRef, useEffect, useContext} from "react";
 import ReactImageMagnify from "react-image-magnify";
+import "./style.css";
+import {DataContext} from "../../communication/DataContext.jsx";
 
 export const ImagesTab = ({machineData}) => {
     const bg_images = machineData?.bg_images ?? {};
+    const {clearImages, sendCommand} = useContext(DataContext);
 
 
     const camKeys = Object.keys(bg_images);
@@ -21,19 +24,18 @@ export const ImagesTab = ({machineData}) => {
     const [meanRGB, setMeanRGB] = useState(null);
 
     const [index, setIndex] = useState(0);
-    const [roi, setRoi] = useState({ top: null, bottom: null });
-    const [capBounds, setCapBounds] = useState({ top: null, bottom: null });
-
+    const [roi, setRoi] = useState({top: null, bottom: null});
+    const [capBounds, setCapBounds] = useState({top: null, bottom: null});
 
 
     useEffect(() => {
-        const bounds = machineData?.cap_bounds?.[camKey] ?? { top: null, bottom: null };
+        const bounds = machineData?.cap_bounds?.[camKey] ?? {top: null, bottom: null};
         setCapBounds({
             top: bounds.top !== null ? bounds.top / origHeight * displayHeight : null,
             bottom: bounds.bottom !== null ? bounds.bottom / origHeight * displayHeight : null,
         });
         setRoi({
-            top:null,bottom: null
+            top: null, bottom: null
         })
     }, [camKey]);
     const containerRef = useRef(null);
@@ -42,6 +44,21 @@ export const ImagesTab = ({machineData}) => {
     const imageSrc = currentImg?.startsWith("data:image")
         ? currentImg
         : `data:image/jpeg;base64,${currentImg}`;
+
+    const setBoundaries = () => {
+        if (roi.top && roi.bottom) {
+            sendCommand(
+                "set_capillary",
+                [machineData.machine_id],
+                [],
+                {
+                    cam_id: camKey,
+                    lower_bound: Math.round(roi.bottom * scaleFactor),
+                    upper_bound: Math.round(roi.top * scaleFactor)
+                }
+            );
+        }
+    }
 
     const handleClick = (e) => {
         const rect = containerRef.current.getBoundingClientRect();
@@ -74,23 +91,23 @@ export const ImagesTab = ({machineData}) => {
 
         if (capBounds.top !== null) {
             lines.push(
-                <div key="cap-top" className="roi-line" style={{ top: capBounds.top, backgroundColor: "blue" }} />
+                <div key="cap-top" className="roi-line" style={{top: capBounds.top, backgroundColor: "blue"}}/>
             );
         }
         if (capBounds.bottom !== null) {
             lines.push(
-                <div key="cap-bottom" className="roi-line" style={{ top: capBounds.bottom, backgroundColor: "blue" }} />
+                <div key="cap-bottom" className="roi-line" style={{top: capBounds.bottom, backgroundColor: "blue"}}/>
             );
         }
 
         if (roi.top !== null) {
             lines.push(
-                <div key="roi-top" className="roi-line" style={{ top: roi.top, backgroundColor: "red" }} />
+                <div key="roi-top" className="roi-line" style={{top: roi.top, backgroundColor: "red"}}/>
             );
         }
         if (roi.bottom !== null) {
             lines.push(
-                <div key="roi-bottom" className="roi-line" style={{ top: roi.bottom, backgroundColor: "red" }} />
+                <div key="roi-bottom" className="roi-line" style={{top: roi.bottom, backgroundColor: "red"}}/>
             );
         }
 
@@ -152,8 +169,18 @@ export const ImagesTab = ({machineData}) => {
             {imgList.length === 0 ? (
                 <div>No images</div>
             ) : (
-                <div>
+                <div className={"master-images-tab-content"}>
+                    <div className={"master-button master-save-button"}
+                         onClick={setBoundaries}
+                    >Save
+                    </div>
+                    <div className={"master-button master-clear-button"}
+                         onClick={() => clearImages(machineData.machine_id)}
+                    >Clear images
+                    </div>
+
                     <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
+
                         <button onClick={() => setIndex((index - 1 + imgList.length) % imgList.length)}>◀</button>
                         <span>Image {index + 1} / {imgList.length}</span>
                         <button onClick={() => setIndex((index + 1) % imgList.length)}>▶</button>
@@ -170,7 +197,7 @@ export const ImagesTab = ({machineData}) => {
                             </select>
                         )}
                         {meanRGB && (
-                            <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                            <div style={{display: "flex", alignItems: "center", gap: 5}}>
                                 Mean RGB: R={meanRGB.r}, G={meanRGB.g}, B={meanRGB.b}
                                 <div style={{
                                     width: 30,
@@ -183,7 +210,7 @@ export const ImagesTab = ({machineData}) => {
                             </div>
                         )}
                         {hoverColor && (
-                            <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                            <div style={{display: "flex", alignItems: "center", gap: 5}}>
                                 Hover RGB: R={hoverColor.r}, G={hoverColor.g}, B={hoverColor.b}
                                 <div style={{
                                     width: 30,
@@ -192,7 +219,7 @@ export const ImagesTab = ({machineData}) => {
                                     marginLeft: 10,
 
                                     border: "1px solid #ccc"
-                                }} />
+                                }}/>
                             </div>
                         )}
 
@@ -233,7 +260,7 @@ export const ImagesTab = ({machineData}) => {
 
                                     try {
                                         const pixel = ctx.getImageData(px, py, 1, 1).data;
-                                        setHoverColor({ r: pixel[0], g: pixel[1], b: pixel[2] });
+                                        setHoverColor({r: pixel[0], g: pixel[1], b: pixel[2]});
                                     } catch (err) {
                                         setHoverColor(null);
                                     }

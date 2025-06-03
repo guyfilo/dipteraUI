@@ -19,7 +19,6 @@ export const NewSessionForm = ({onNext, setSessionInfo, scannerMode}) => {
     const [selectedSpecies, setSelectedSpecies] = useState("Anopheles PMB1");
     const [customSpecies, setCustomSpecies] = useState("");
     useEffect(() => {
-        console.log(selectedTarget1, selectedTarget2)
         if (!selectedTarget1) {
             setWarning("you must select target1");
         } else if (!selectedTarget2) {

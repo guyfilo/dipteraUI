@@ -1,35 +1,9 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import "./style.css";
 import {ImagesTab} from "./ImagesTab.jsx";
+import {DataContext} from "../../communication/DataContext.jsx";
 
-export const MasterTabs = ({data, toggleHide, toggleSize, sizeMode}) => {
-    let ls_data = {
-        ls_test: {
-            bouncer_ls: {success: true, info_msg: "calibrated to 3.1",},
-            camFL_of: {success: true, info_msg: "calibrated to 3.1",},
-            cam0_of: {success: false, info_msg: "calibrated to 3.1", error_msg: "error in calibration"},
-            cam1_of: {success: false, info_msg: "calibrated to 3.1", error_msg: "error in calibration"},
-            cam3_of: {success: false, info_msg: "calibrated to 3.1", error_msg: "error in calibration"},
-            sorter_ls: {success: true, info_msg: "calibrated to 3.1",},
-        },
-        ls_read: {
-            bouncer_ls: {volt: 3.12,},
-            camFL_of: {volt: 3.12,},
-            cam0_of: {volt: 3.12,},
-            cam1_of: {volt: 3.12,},
-            cam2_of: {volt: 3.12,},
-            sorter_ls: {volt: 3.12,},
-        },
-        cams_test: {
-            cam0: {success: true, info_msg: "calibrate to 3.1",},
-            camFL: {success: true, info_msg: "calibrate to 3.1",},
-            cam1: {success: false, info_msg: "daskmkgsd"},
-            cam2: {success: true, info_msg: "daskmkxcvcxvxcvxgsd"},
-            cam3: {success: true, info_msg: "daskmkgsd"},
-
-        }
-    }
-    data = {...data, ...ls_data}
+export const MasterTabs = ({data, toggleHide, toggleSize, sizeMode, setSizeMode}) => {
     const tabs = ["Light Sensors", "Cameras", "Images", "Errors"];
     const [activeTab, setActiveTab] = useState("Light Sensors");
 
@@ -50,8 +24,7 @@ export const MasterTabs = ({data, toggleHide, toggleSize, sizeMode}) => {
                                     <b className={"ls-name"}>{sensor}</b>
                                     <div
                                         className={`test-result ${testData.success === true ? ' pass' : testData.success === false ? ' fail' : ''}`}></div>
-                                    <b>{readData.volt ?? "N/A"}</b>
-                                </div>
+                                    <b>{typeof readData.volt === 'number' ? readData.volt.toFixed(4) : "N/A"}</b></div>
                                 <p>{testData.info_msg || ""}</p>
                                 <p style={{color: "var(--warnning-red)"}}>{testData.error_msg || ""}</p>
                             </div>
@@ -88,7 +61,6 @@ export const MasterTabs = ({data, toggleHide, toggleSize, sizeMode}) => {
     }
 
 
-
     return (
         <div className={`master-tabs-container`}>
             <div className="master-tabs-header">
@@ -96,7 +68,16 @@ export const MasterTabs = ({data, toggleHide, toggleSize, sizeMode}) => {
                     <div
                         key={tab}
                         className={`master-tab ${activeTab === tab ? "active" : ""}`}
-                        onClick={() => setActiveTab(tab)}
+                        onClick={() => {
+                            setActiveTab(tab);
+                            if (sizeMode === "hidden") {
+                                setSizeMode("small");
+                            }
+                            if (tab === "Images") {
+                                setSizeMode("full")
+                            }
+                        }
+                        }
                     >
                         <b>{tab}</b>
                     </div>
@@ -107,15 +88,15 @@ export const MasterTabs = ({data, toggleHide, toggleSize, sizeMode}) => {
 
             <div className="master-tab-content">
                 <div className=" tabs-controls ">
-                    <span className=" tabs-icon" title="Toggle size" onClick={toggleSize}>🗖</span>
-                    <span className=" tabs-icon" title="Hide/show" onClick={toggleHide}>🗕</span>
+                    <span className=" tabs-icon" title="Toggle size" onClick={toggleSize}>#</span>
+                    <span className=" tabs-icon" title="Hide/show" onClick={toggleHide}>_</span>
                 </div>
                 {sizeMode !== "hidden" && (
                     <div>
-                    {activeTab === "Light Sensors" && lsTab()}
-                    {activeTab === "Cameras" && camTab()}
-                    {activeTab === "Images" && <ImagesTab machineData={data}/>}
-                    {activeTab === "Errors" && <div>Error logs or states</div>}
+                        {activeTab === "Light Sensors" && lsTab()}
+                        {activeTab === "Cameras" && camTab()}
+                        {activeTab === "Images" && <ImagesTab machineData={data}/>}
+                        {activeTab === "Errors" && <div>Error logs or states</div>}
                     </div>
                 )}
 

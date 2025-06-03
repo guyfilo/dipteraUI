@@ -33,7 +33,6 @@ const BarcodeComponent = ({barcode, garbage, duplicate_reported, error_msg}) => 
 export const ScannerWindow = ({data, sessions}) => {
     const scannerMachines = Object.values(data).filter(d => sessions[d.session_id]?.scanner_mode);
     const [scanner, setScanner] = React.useState(scannerMachines.at(0) || null);
-    console.log(scanner);
 
     const {removeAll, selectMachine} = useContext(SelectedMachinesContext);
 

@@ -27,9 +27,7 @@ export const MasterTableRow = ({data, selected, setSelected}) => {
     }
     let jetStates = data?.jetson_states ?? {};  // fallback to empty object
 
-    useEffect(() => {
-        console.log(selected);
-    }, [selected]);
+
 
     return (
         <div className={`master-row-wrapper`}>

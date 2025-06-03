@@ -31,6 +31,10 @@ const isSudoMode = () => {
     return urlParams.get("sudo") === "true";
 };
 
+const getSudoParam = () => {
+    return isSudoMode() ? "true" : "false";
+}
+
 export const DataProvider = ({ children }) => {
     const serverKey = getServerKey();
     const server = SERVERS[serverKey];
@@ -44,7 +48,7 @@ export const DataProvider = ({ children }) => {
     const socketRef = useRef(null);
 
     const fetchFullState = async () => {
-        const res = await fetch(`${API_BASE}/api/state/full`);
+        const res = await fetch(`${API_BASE}/api/state/full?sudo=${getSudoParam()}`);
         const json = await res.json();
         setData(prev => {
             const merged = {};
@@ -58,7 +62,8 @@ export const DataProvider = ({ children }) => {
             }
 
             return merged;
-        });        setSessions(json.sessions);
+        });
+        setSessions(json.sessions);
     };
 
     let fetchInterval = null;
@@ -167,7 +172,7 @@ export const DataProvider = ({ children }) => {
             setTimeout(connectWebSocket, 2000);
         };
     };
-    const clearBgImages = (machineId) => {
+    const clearImages = (machineId) => {
         setData(prev => {
             if (!prev[machineId]) return prev;
 
@@ -258,7 +263,8 @@ export const DataProvider = ({ children }) => {
             sessions,
             restart_machines,
             removeMachine,
-            serverName: server.name
+            serverName: server.name,
+            clearImages
         }}>
             {children}
         </DataContext.Provider>
