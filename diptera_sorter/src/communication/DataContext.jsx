@@ -65,7 +65,10 @@ export const DataProvider = ({ children }) => {
 
     const connectWebSocket = () => {
         const sudo = isSudoMode();
-        const socket = new WebSocket(`${WS_BASE}/ws${sudo ? "?sudo=true" : ""}`);
+        const url = new URL(`${WS_BASE}/ws`, window.location.origin);
+        if (sudo) url.searchParams.set("sudo", "true");
+
+        const socket = new WebSocket(url.toString());
         socketRef.current = socket;
 
         socket.onopen = async () => {

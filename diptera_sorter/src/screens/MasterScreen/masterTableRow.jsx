@@ -25,7 +25,8 @@ export const MasterTableRow = ({data, selected, setSelected}) => {
             </div>
         )
     }
-    let jetStates = data?.jetson_states ?? {};  // fallback to empty object
+    let jetStates = data?.jetson_states ?? {};
+    console.log("jetState", jetStates); // fallback to empty object
 
     useEffect(() => {
         console.log(selected);

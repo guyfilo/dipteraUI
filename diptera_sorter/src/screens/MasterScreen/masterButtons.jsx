@@ -49,16 +49,16 @@ export const MasterButtons = ({selectedMachine}) => {
 
     const handleSetPressure = () => {
         sendCommand("set_pressure", [selectedMachine], [], {
-            pressure: targetPressure
+            target_pressure: targetPressure
         });
     };
 
     const handleCloseAllValves = () => {
-        sendCommand("close_valves", [selectedMachine], [], {});
+        sendCommand("set_flow", [selectedMachine], [], {src: null, dst:null});
     };
 
     const handleLightSensorTest = () => {
-        sendCommand("light_sensor_test", [selectedMachine], [], {});
+        sendCommand("test_ls", [selectedMachine], [], {});
     };
 
     const toggleCamera = (cam) => {
@@ -68,8 +68,12 @@ export const MasterButtons = ({selectedMachine}) => {
     };
 
     const handleCamCommand = (cmd) => {
-        sendCommand(cmd, [selectedMachine], [], { cams: selectedCams });
+        sendCommand(cmd, [selectedMachine], [], {cams: selectedCams});
     };
+
+    function handleExit() {
+        sendCommand("exit", [selectedMachine], [], {});
+    }
 
     return (
         <div className="master-buttons">
@@ -129,10 +133,10 @@ export const MasterButtons = ({selectedMachine}) => {
                             </div>
                         ))}
                     </div>
-                    <div className="master-button master-start-button" onClick={() => handleCamCommand("capture_cam")}>Capture</div>
-                    <div className="master-button master-start-button-1" onClick={() => handleCamCommand("test_cam")}>Test</div>
+                    <div className="master-button master-start-button" onClick={() => handleCamCommand("capture")}>Capture</div>
+                    <div className="master-button master-start-button-1" onClick={() => handleCamCommand("test_cams")}>Test</div>
                 </div>
-                <div className="master-button" onClick={handleLightSensorTest}>Exit Session</div>
+                <div className="master-button" onClick={handleExit}>Exit Session</div>
 
             </>}
         </div>

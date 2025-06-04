@@ -10,7 +10,21 @@ import {MasterButtons} from "./masterButtons.jsx";
 import {MasterTabs} from "./MasterTabs.jsx";
 
 export const MasterPage = () => {
-    const {liveData, availableMachines, createSession, fetchAvailableMachines, sendCommand} = useContext(DataContext);
+    const {
+        liveData,
+        availableMachines,
+        createSession,
+        fetchAvailableMachines,
+        sendCommand
+    } = useContext(DataContext);
+
+    const {
+        selectMachine,
+        selectedMachines,
+        selectSession,
+        selectAll,
+        removeAll,
+    } = useContext(SelectedMachinesContext);
     const [selectedAvailableMachines, setSelectedAvailableMachines] = useState([]);
     const [src, setSrc] = useState("");
     const [dst, setDst] = useState("");
@@ -33,7 +47,9 @@ export const MasterPage = () => {
         setSizeMode(prev => (prev === "hidden" ? "small" : "hidden"));
     };
 
-    const selectMachine = (machineId) => {
+    const masterSelectMachine = (machineId) => {
+        removeAll();
+        selectMachine(machineId);
         setSelectedMachine(machineId);
         setSizeMode("hidden");
     }
@@ -46,13 +62,13 @@ export const MasterPage = () => {
                     sizeMode === "full" ?
                         <MasterTableRow data={liveData[selectedMachine]}
                                         selected={true}
-                                        setSelected={setSelectedMachine}
+                                        setSelected={masterSelectMachine}
                         ></MasterTableRow>
                         :
                     Object.entries(liveData).map(([id, machine]) => (
                     <MasterTableRow data={machine}
                                     selected={selectedMachine===id}
-                                    setSelected={selectMachine}
+                                    setSelected={masterSelectMachine}
                     ></MasterTableRow>
                 ))}
             </div>
