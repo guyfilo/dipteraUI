@@ -33,7 +33,6 @@ export const EndSession = ({onFinishSession, session}) => {
             setStopSessionRequest(prev => prev.filter(id => id !== session.session_id));
         }
     };
-    console.log(session);
 
     return (
         <div className="exit-session-overlay">

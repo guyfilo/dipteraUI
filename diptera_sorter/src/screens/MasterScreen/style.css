@@ -262,6 +262,28 @@
     position: absolute;
 }
 
+.master-images-tab-content {
+
+}
+
+.master-save-button {
+    width: 150px;
+    padding: 5px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.master-clear-button {
+    width: 150px;
+
+    padding: 5px;
+    right: 0;
+    bottom: 40px;
+
+    position: absolute;
+}
+
 .master-cameras-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(60px, 1fr));
@@ -309,7 +331,7 @@
 
 .master-tabs-container {
     width: 100%;
-    height: 90%;
+    height: 98%;
 }
 .master-tabs-header {
     display: flex;

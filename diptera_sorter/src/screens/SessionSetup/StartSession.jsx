@@ -32,9 +32,7 @@ export const StartSession = ({closeWindowCbk, washMode = false, scannerMode= fal
         else if (step === "charge") setStep("choose");
         else if (step === "finish") setStep("charge");
     };
-    useEffect(() => {
-        console.log(sessionInfo)
-    }, [sessionInfo]);
+
 
     let content;
     if (step === "new") {
