@@ -50,6 +50,7 @@ export const MasterPage = () => {
         setSelectedMachine(machineId);
         setSizeMode("hidden");
     }
+    console.log("sudoMode", isSudoMode);
 
 
     return (
