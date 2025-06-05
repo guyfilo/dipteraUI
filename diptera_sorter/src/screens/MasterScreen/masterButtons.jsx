@@ -121,7 +121,7 @@ export const MasterButtons = ({selectedMachine}) => {
                     </div>
                 </div>
 
-                {isSudoMode ? <div>
+                {isSudoMode() ? <div>
                     <div className="master-button" onClick={handleCloseAllValves}>Close All Valves</div>
 
                     <div className="master-button" onClick={handleLightSensorTest}>Light Sensors Test</div>
