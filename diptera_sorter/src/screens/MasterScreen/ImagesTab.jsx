@@ -185,8 +185,8 @@ export const ImagesTab = ({machineData}) => {
                         <span>Image {index + 1} / {imgList.length}</span>
                         <button onClick={() => setIndex((index + 1) % imgList.length)}>▶</button>
                         <div>
-                            {roi.top !== null && Math.round(roi.top * scaleFactor)}px
-                            to {roi.bottom !== null && Math.round(roi.bottom * scaleFactor)}px
+                            {roi.top !== null ? Math.round(roi.top * scaleFactor) : capBounds.top}px
+                            to {roi.bottom !== null ? Math.round(roi.bottom * scaleFactor): capBounds.bottom}px
                         </div>
                         {camKeys.length > 1 && (
                             <select value={camKey} onChange={(e) => {
