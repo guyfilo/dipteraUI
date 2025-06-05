@@ -195,6 +195,7 @@ export const DataProvider = ({ children }) => {
     }, [serverKey]);
 
     const createSession = async (sessionData) => {
+        console.log("session_data", sessionData);
         const res = await fetch(`${API_BASE}/api/session/create`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
