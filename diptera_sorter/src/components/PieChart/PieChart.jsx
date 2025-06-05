@@ -45,12 +45,7 @@ const PieChart = ({ width, height, selected }) => {
         const base =
             labels.length && values.length
                 ? labels.map((label, i) => [label, values[i]])
-                : [
-                    ["Male", 10],
-                    ["Female", 20],
-                    ["Recycle", 30],
-                    ["Junk", 40],
-                ];
+                : [];
         return [["Label", "Value"], ...base];
     }, [dataType, safeSelected]);
 
