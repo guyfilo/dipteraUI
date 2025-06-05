@@ -15,7 +15,8 @@ export const MasterPage = () => {
         availableMachines,
         createSession,
         fetchAvailableMachines,
-        sendCommand
+        sendCommand,
+        isSudoMode
     } = useContext(DataContext);
 
     const {
@@ -61,24 +62,25 @@ export const MasterPage = () => {
                                         setSelected={masterSelectMachine}
                         ></MasterTableRow>
                         :
-                    Object.entries(liveData).map(([id, machine]) => (
-                    <MasterTableRow data={machine}
-                                    selected={selectedMachine===id}
-                                    setSelected={masterSelectMachine}
-                    ></MasterTableRow>
-                ))}
+                        Object.entries(liveData).map(([id, machine]) => (
+                            <MasterTableRow data={machine}
+                                            selected={selectedMachine === id}
+                                            setSelected={masterSelectMachine}
+                            ></MasterTableRow>
+                        ))}
             </div>
             <div className={"master-button-wrapper"}>
                 <MasterButtons selectedMachine={selectedMachine}></MasterButtons>
             </div>
-            {selectedMachine && <div className={`master-tabs-wrapper ${sizeMode}`}>
-                <MasterTabs sizeMode={sizeMode}
-                            setSizeMode={setSizeMode}
-                            toggleSize={toggleSize}
-                            toggleHide={toggleHide}
-                            data={selectedMachine ? liveData[selectedMachine] :{}}
-                ></MasterTabs>
-            </div>}
+            {selectedMachine && isSudoMode &&
+                <div className={`master-tabs-wrapper ${sizeMode}`}>
+                    <MasterTabs sizeMode={sizeMode}
+                                setSizeMode={setSizeMode}
+                                toggleSize={toggleSize}
+                                toggleHide={toggleHide}
+                                data={selectedMachine ? liveData[selectedMachine] : {}}
+                    ></MasterTabs>
+                </div>}
         </div>)
 
 };

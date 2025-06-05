@@ -11,6 +11,7 @@ export const MasterButtons = ({selectedMachine}) => {
         sendCommand,
         fetchAvailableMachines,
         sessions,
+        isSudoMode
     } = useContext(DataContext);
 
     const [flowSrc, setFlowSrc] = useState("clean_w");
@@ -19,7 +20,7 @@ export const MasterButtons = ({selectedMachine}) => {
     const [targetPressure, setTargetPressure] = useState(36);
     const [selectedCams, setSelectedCams] = useState([]);
 
-    const cams = ["0","1","2","3","FL","NAT"];
+    const cams = ["0", "1", "2", "3", "FL", "NAT"];
 
     const isAvailable = availableMachines.includes(selectedMachine);
     let inSession = selectedMachine && typeof liveData[selectedMachine]?.session_id === 'string' &&
@@ -36,7 +37,7 @@ export const MasterButtons = ({selectedMachine}) => {
     };
 
     const handleFlowControl = () => {
-        sendCommand("set_flow", [selectedMachine], [], { src: flowSrc, dst: flowDst });
+        sendCommand("set_flow", [selectedMachine], [], {src: flowSrc, dst: flowDst});
     };
 
     const handleFlowCheck = () => {
@@ -54,7 +55,7 @@ export const MasterButtons = ({selectedMachine}) => {
     };
 
     const handleCloseAllValves = () => {
-        sendCommand("set_flow", [selectedMachine], [], { src: null, dst: null });
+        sendCommand("set_flow", [selectedMachine], [], {src: null, dst: null});
     };
 
     const handleLightSensorTest = () => {
@@ -104,7 +105,7 @@ export const MasterButtons = ({selectedMachine}) => {
                     <h3>Flow Check:</h3>
                     <h4>Time (sec)</h4>
                     <input className="flow-time" type="number" value={flowTime} onChange={e =>
-                        setFlowTime(parseFloat(e.target.value))} />
+                        setFlowTime(parseFloat(e.target.value))}/>
                     <div className="master-button master-start-button" onClick={handleFlowCheck}>
                         Start
                     </div>
@@ -114,33 +115,39 @@ export const MasterButtons = ({selectedMachine}) => {
                     <h3>Set Pressure:</h3>
                     <h4>Target pressure</h4>
                     <input className="target-pressure" type="number" value={targetPressure} onChange={e =>
-                        setTargetPressure(parseFloat(e.target.value))} />
+                        setTargetPressure(parseFloat(e.target.value))}/>
                     <div className="master-button master-start-button" onClick={handleSetPressure}>
                         Start
                     </div>
                 </div>
 
-                <div className="master-button" onClick={handleCloseAllValves}>Close All Valves</div>
-                <div className="master-button" onClick={handleLightSensorTest}>Light Sensors Test</div>
+                {isSudoMode ? <div>
+                    <div className="master-button" onClick={handleCloseAllValves}>Close All Valves</div>
 
-                <div className="expand-button">
-                    <h3>Cameras:</h3>
-                    <div className="master-cameras-grid">
-                        {cams.map(id => (
-                            <div
-                                key={id}
-                                className={`master-cameras-grid-item ${selectedCams.includes(`cam${id}`) ? 'selected' : ''}`}
-                                onClick={() => toggleCamera(id)}
-                            >
-                                {`cam${id}`}
-                            </div>
-                        ))}
+                    <div className="master-button" onClick={handleLightSensorTest}>Light Sensors Test</div>
+
+                    <div className="expand-button">
+                        <h3>Cameras:</h3>
+                        <div className="master-cameras-grid">
+                            {cams.map(id => (
+                                <div
+                                    key={id}
+                                    className={`master-cameras-grid-item ${selectedCams.includes(`cam${id}`) ? 'selected' : ''}`}
+                                    onClick={() => toggleCamera(id)}
+                                >
+                                    {`cam${id}`}
+                                </div>
+                            ))}
+                        </div>
+                        <div className="master-button master-start-button"
+                             onClick={() => handleCamCommand("capture")}>Capture
+                        </div>
+                        <div className="master-button master-start-button-1"
+                             onClick={() => handleCamCommand("test_cams")}>Test
+                        </div>
                     </div>
-                    <div className="master-button master-start-button" onClick={() => handleCamCommand("capture")}>Capture</div>
-                    <div className="master-button master-start-button-1" onClick={() => handleCamCommand("test_cams")}>Test</div>
-                </div>
-                <div className="master-button" onClick={handleExit}>Exit Session</div>
-
+                    <div className="master-button" onClick={handleExit}>Exit Session</div>
+                </div> : null}
             </>}
         </div>
     );
