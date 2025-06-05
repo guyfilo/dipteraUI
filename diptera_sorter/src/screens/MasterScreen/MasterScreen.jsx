@@ -50,7 +50,6 @@ export const MasterPage = () => {
         setSelectedMachine(machineId);
         setSizeMode("hidden");
     }
-    console.log("sudoMode", isSudoMode);
 
 
     return (
@@ -73,7 +72,7 @@ export const MasterPage = () => {
             <div className={"master-button-wrapper"}>
                 <MasterButtons selectedMachine={selectedMachine}></MasterButtons>
             </div>
-            {selectedMachine && isSudoMode &&
+            {selectedMachine && isSudoMode() &&
                 <div className={`master-tabs-wrapper ${sizeMode}`}>
                     <MasterTabs sizeMode={sizeMode}
                                 setSizeMode={setSizeMode}

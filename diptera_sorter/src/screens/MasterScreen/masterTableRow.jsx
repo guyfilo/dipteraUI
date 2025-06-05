@@ -26,8 +26,6 @@ export const MasterTableRow = ({data, selected, setSelected}) => {
         )
     }
     let jetStates = data?.jetson_states ?? {};
-    console.log("jetState", jetStates); // fallback to empty object
-
 
 
     return (
