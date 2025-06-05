@@ -141,7 +141,7 @@ export const NewSessionForm = ({onNext, setSessionInfo, scannerMode}) => {
     const autoDescription = `Line: ${selectedSpecies?.name}, Age: ${age}, Blood Feed: ${bloodFeed}, Generation: ${generation}\n`;
 
     const setSession = () => {
-        const normalSession = !scannerSession && !washSession;
+        const normalSession = !scannerSession && !washSession && !sizerSession;
         const scanner = scannerSession && !washSession;
         const washMode = washSession;
         if (normalSession && warning) return;
