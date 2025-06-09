@@ -93,7 +93,7 @@ export const DataProvider = ({ children }) => {
 
             fetchInterval = setInterval(async () => {
                 try {
-                    await fetchSessionsState();
+                    await fetchFullState();
                 } catch (err) {
                     console.error("❌ Periodic state fetch failed:", err);
                 }
