@@ -65,6 +65,11 @@ export const DataProvider = ({ children }) => {
         });
         setSessions(json.sessions);
     };
+    const fetchSessionsState = async () => {
+        const res = await fetch(`${API_BASE}/api/state/full?sudo=${getSudoParam()}`);
+        const json = await res.json();
+        setSessions(json.sessions);
+    };
 
     let fetchInterval = null;
 
@@ -88,7 +93,7 @@ export const DataProvider = ({ children }) => {
 
             fetchInterval = setInterval(async () => {
                 try {
-                    await fetchFullState();
+                    await fetchSessionsState();
                 } catch (err) {
                     console.error("❌ Periodic state fetch failed:", err);
                 }
