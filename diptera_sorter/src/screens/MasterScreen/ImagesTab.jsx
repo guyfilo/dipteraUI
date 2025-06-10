@@ -37,7 +37,7 @@ export const ImagesTab = ({machineData}) => {
         setRoi({
             top: null, bottom: null
         })
-    }, [camKey]);
+    }, [camKey, machineData]);
     const containerRef = useRef(null);
 
     const currentImg = imgList[index];
@@ -71,7 +71,7 @@ export const ImagesTab = ({machineData}) => {
             // First click → set top
             if (prev.top === null) return {...prev, top: y};
             // Second click → set bottom
-            if (prev.bottom === null) return {...prev, bottom: y};
+            if (prev.bottom === null) return {top: Math.min(y, prev.top), bottom: Math.max(y, prev.top)};
 
             // Both set → replace the closer one
             const distToTop = Math.abs(prev.top - y);
@@ -163,7 +163,7 @@ export const ImagesTab = ({machineData}) => {
             setMeanRGB(null);
         }
     }, [roi, imageSrc]);
-
+    let orgCapBounds = machineData?.cap_bounds?.[camKey]
     return (
         <div>
             {imgList.length === 0 ? (
@@ -185,8 +185,8 @@ export const ImagesTab = ({machineData}) => {
                         <span>Image {index + 1} / {imgList.length}</span>
                         <button onClick={() => setIndex((index + 1) % imgList.length)}>▶</button>
                         <div>
-                            {roi.top !== null ? Math.round(roi.top * scaleFactor) : capBounds.top}px
-                            to {roi.bottom !== null ? Math.round(roi.bottom * scaleFactor): capBounds.bottom}px
+                            {roi.top !== null ? Math.round(roi.top * scaleFactor) : orgCapBounds.top}px
+                            to {roi.bottom !== null ? Math.round(roi.bottom * scaleFactor): orgCapBounds.bottom}px
                         </div>
                         {camKeys.length > 1 && (
                             <select value={camKey} onChange={(e) => {
