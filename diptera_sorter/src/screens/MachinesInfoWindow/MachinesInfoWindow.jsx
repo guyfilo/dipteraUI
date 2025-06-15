@@ -40,7 +40,7 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
                 <ChooseTitle selected={machine} setSelected={setMachine}
                              options={Object.values(data)} title_key={"machine_title"}></ChooseTitle>
             </div>
-            <div className="session-title">{inSession ? sessions[machine.session_id].session_title: null}</div>
+            <div className="machine-session-title">{inSession ? sessions[machine.session_id].session_title: null}</div>
             <div className="machine-table-container">
                 <table className="machine-info-table">
                     <tbody>

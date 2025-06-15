@@ -37,7 +37,7 @@ export const ImagesTab = ({machineData}) => {
         setRoi({
             top: null, bottom: null
         })
-    }, [camKey, machineData]);
+    }, [camKey]);
     const containerRef = useRef(null);
 
     const currentImg = imgList[index];
@@ -63,6 +63,8 @@ export const ImagesTab = ({machineData}) => {
     const handleClick = (e) => {
         const rect = containerRef.current.getBoundingClientRect();
         const y = e.clientY - rect.top;
+        const prevTop = roi.top;
+
 
         // Ignore double clicks
         if (e.detail > 1) return;
@@ -71,7 +73,7 @@ export const ImagesTab = ({machineData}) => {
             // First click → set top
             if (prev.top === null) return {...prev, top: y};
             // Second click → set bottom
-            if (prev.bottom === null) return {top: Math.min(y, prev.top), bottom: Math.max(y, prev.top)};
+            if (prev.bottom === null) return {top: Math.min(y, prevTop), bottom: Math.max(y, prevTop)};
 
             // Both set → replace the closer one
             const distToTop = Math.abs(prev.top - y);
