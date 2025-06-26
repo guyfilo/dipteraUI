@@ -1,4 +1,43 @@
 /* Container styles */
+/* Global dark mode styles */
+body.dark {
+    --bg-color: #121212;
+    --text-color: #eeeeee;
+    --button-bg: #333;
+    --button-hover: #555;
+    --container-bg: rgba(255, 255, 255, 0.05);
+    --border-color: #444;
+}
+
+body.light {
+    --bg-color: #ffffff;
+    --text-color: #121212;
+    --button-bg: #d9d9d9;
+    --button-hover: #9f9f9f;
+    --container-bg: rgba(40, 94, 140, 0.1);
+    --border-color: #ccc;
+}
+
+/* Apply vars */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.tagger-container {
+    background-color: var(--container-bg);
+}
+
+.tagger-button {
+    background-color: var(--button-bg);
+}
+.tagger-button:hover {
+    background-color: var(--button-hover);
+}
+
+.tagger-image {
+    border: 2px solid var(--border-color);
+}
 
 .tagger-content {
     text-align: center;
@@ -24,7 +63,7 @@
 }
 .tagger-container {
     padding: 20px;
-    background-color: #5cb2f41a;
+    background-color: rgba(40, 94, 140, 0.1);
     width: 1000px;
     height: 600px;
     margin: auto;
@@ -76,7 +115,7 @@
 }
 
 .progress-bar-fill {
-    background: #4c95af;
+    background: #174251;
     height: 100%;
     border-radius: 4px;
     transition: width 0.3s ease;
@@ -99,5 +138,4 @@
     font-size: 18px;
     margin-top: 10px;
     font-family: monospace;
-    color: #333;
 }

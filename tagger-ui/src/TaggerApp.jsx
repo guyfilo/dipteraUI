@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import "./style.css";
 
@@ -28,6 +28,16 @@ export default function TaggerApp() {
     const [state, setState] = useState(null);
     const [warning, setWarning] = useState(null);
     const [noImages, setNoImages] = useState(false);
+    const [darkMode, setDarkMode] = useState(true);
+    const [zoomPos, setZoomPos] = useState(null);
+    const zoomFactor = 2; // You can set 2x, 3x, etc.
+    const zoomSize = 200; // Size of the circular lens in pixels
+    const containerRef = useRef(null);
+
+    useEffect(() => {
+        document.body.classList.toggle("dark", darkMode);
+        document.body.classList.toggle("light", !darkMode);
+    }, [darkMode]);
 
 
     useEffect(() => {
@@ -79,6 +89,7 @@ export default function TaggerApp() {
                 {params: {session_id: res.data.session_id}});
             setImagePath(next.data.image_path);
             await updateCurrentTag(res.data.session_id, next.data.image_path);
+            setMessage(null);
             return true;
         } catch (err) {
             // Make sure it's an axios error
@@ -169,11 +180,20 @@ export default function TaggerApp() {
         });
         setSessionId(null);
         setImagePath(null);
-        setMessage("Session ended");
     };
-
+    useEffect(() => {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        setDarkMode(prefersDark);
+    }, []);
     return (
         <div className="tagger-container">
+            <button
+                className="tagger-button"
+                onClick={() => setDarkMode(!darkMode)}
+                style={{position: "absolute", top: 10, left: 10, width: 120}}
+            >
+                {darkMode ? "Light Mode" : "Dark Mode"}
+            </button>
             <img alt={"diptera_logo"} src={"/diptera_logo.svg"} className={"logo"}></img>
             {!sessionId ? (
                 <div className="tagger-content">
@@ -195,37 +215,87 @@ export default function TaggerApp() {
                     {warning && <div className="tagger-warning">{warning}</div>}
                 </div>
             ) : noImages ? (
-                <div className="tagger-content">
-                    <h4>No More Images :)</h4>
-                    <button className="tagger-button" onClick={() => {setSessionId(null)}}>
-                        Finish
-                    </button>
-                </div>
+                    <div className="tagger-content">
+                        <h4>No More Images :)</h4>
+                        <button className="tagger-button" onClick={() => {
+                            setSessionId(null)
+                        }}>
+                            Finish
+                        </button>
+                    </div>
                 ) :
                 (
-                <div className="tagger-content-session">
-                    <h3>Tagger: {taggerName}</h3>
-                    <Progress state={state}/>
-                    {imagePath && (
-                        <div>
-                            <img
-                                className="tagger-image"
-                                src={`http://192.168.0.62:8000/api/image/view?session_id=${sessionId}&image_path=${encodeURIComponent(imagePath)}`}
-                                alt="current"
-                            />
-                            <p className="tagger-tag">Current tag: <b>{tag}</b></p>
+                    <div className="tagger-content-session">
+                        <h3>Tagger: {taggerName}</h3>
+                        <Progress state={state}/>
+                        {imagePath && (
+                            <div
+                                ref={containerRef}
+                                style={{
+                                    position: "relative",
+                                    width: "fit-content",
+                                    marginTop: 10,
+                                    cursor: "crosshair"
+                                }}
+                            >
+                                <div
+                                    ref={containerRef}
+                                    onMouseMove={(e) => {
+                                        const {left, top} = containerRef.current.getBoundingClientRect();
+                                        const x = e.clientX - left;
+                                        const y = e.clientY - top;
+                                        setZoomPos({x, y});
+                                    }}
+                                    onMouseLeave={() => setZoomPos(null)}
 
-                            <div style={{display: "flex", gap: "20px", marginTop: 10}}>
-                                <button className="tagger-button" onClick={() => nextImage(-1)}>Prev</button>
-                                <button className="tagger-button" onClick={() => nextImage(1)}>Next</button>
-                                <button className="tagger-button" onClick={() => saveSession(false)}>Save</button>
-                                <button className="tagger-button" onClick={endSession}>Exit Session</button>
+                                >
+                                    <img
+                                        className="tagger-image"
+                                        src={`http://192.168.0.62:8000/api/image/view?session_id=${sessionId}&image_path=${encodeURIComponent(imagePath)}`}
+                                        alt="current"
+                                    />
+                                    {zoomPos && (
+                                        <div
+                                            style={{
+                                                position: "absolute",
+                                                top: zoomPos.y - zoomSize / 2,
+                                                left: zoomPos.x - zoomSize / 2,
+                                                width: zoomSize,
+                                                height: zoomSize,
+                                                borderRadius: "50%",
+                                                overflow: "hidden",
+                                                boxShadow: "0 0 10px rgba(0,0,0,0.4)",
+                                                pointerEvents: "none",
+                                                border: "2px solid #fff",
+                                                zIndex: 10,
+                                            }}
+                                        >
+                                            <img
+                                                src={`http://192.168.0.62:8000/api/image/view?session_id=${sessionId}&image_path=${encodeURIComponent(imagePath)}`}
+                                                alt="Zoomed area"
+                                                style={{
+                                                    position: "absolute",
+                                                    left: -zoomPos.x * zoomFactor + zoomSize / 2,
+                                                    top: -zoomPos.y * zoomFactor + zoomSize / 2,
+                                                    width: 950 * zoomFactor,
+                                                }}
+                                            />
+                                        </div>)}
+                                    <p className="tagger-tag">Current tag: <b>{tag}</b></p>
+
+                                    <div style={{display: "flex", gap: "20px", marginTop: 10}}>
+                                        <button className="tagger-button" onClick={() => nextImage(-1)}>Prev</button>
+                                        <button className="tagger-button" onClick={() => nextImage(1)}>Next</button>
+                                        <button className="tagger-button" onClick={() => saveSession(false)}>Save
+                                        </button>
+                                        <button className="tagger-button" onClick={endSession}>Exit Session</button>
+                                    </div>
+                                    {message && <div className="tagger-message">{message}</div>}
+                                </div>
                             </div>
-                            {message && <div className="tagger-message">{message}</div>}
-                        </div>
-                    )}
-                </div>
-            )}
+                        )}
+                    </div>
+                )}
         </div>
     );
 }
