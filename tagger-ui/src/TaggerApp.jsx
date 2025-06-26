@@ -27,6 +27,7 @@ export default function TaggerApp() {
     const [message, setMessage] = useState("");
     const [state, setState] = useState(null);
     const [warning, setWarning] = useState(null);
+    const [noImages, setNoImages] = useState(false);
 
 
     useEffect(() => {
@@ -67,22 +68,74 @@ export default function TaggerApp() {
             setWarning("Please fill in all fields");
             return;
         }
-        const res = await axios.post("/api/session/create", {
-            tagger_name: taggerName,
-            subject: subject,
-            skip_tagged_images: true,
-        });
-        setSessionId(res.data.session_id);
-        const next = await axios.get("/api/image/next", {params: {session_id: res.data.session_id}});
-        setImagePath(next.data.image_path);
-        await updateCurrentTag(res.data.session_id, next.data.image_path);
+        try {
+            const res = await axios.post("/api/session/create", {
+                tagger_name: taggerName,
+                subject: subject,
+                skip_tagged_images: true,
+            });
+            setSessionId(res.data.session_id);
+            const next = await axios.get("/api/image/next",
+                {params: {session_id: res.data.session_id}});
+            setImagePath(next.data.image_path);
+            await updateCurrentTag(res.data.session_id, next.data.image_path);
+            return true;
+        } catch (err) {
+            // Make sure it's an axios error
+            if (axios.isAxiosError(err) && err.response) {
+                switch (err.response.status) {
+                    case 410:               // <-- raised by your FastAPI endpoint
+                                            // “No Images To Tag”
+                        console.log("All done – no more images");
+                        // do whatever: set state, navigate away, show a toast, etc.
+                        setNoImages(true);
+                        return null;
+
+                    case 404:
+                        console.error("Session not found");
+                        break;
+
+                    default:
+                        console.error(`Unexpected error (${err.response.status})`, err);
+                }
+            } else {
+                console.error("Network / CORS / unknown error", err);
+            }
+            throw err;                 // re-throw if you want the caller to handle it
+        }
+
     };
 
     const nextImage = async (step = 1) => {
         const route = step === 1 ? "next" : "prev";
-        const res = await axios.get(`/api/image/${route}`, {params: {session_id: sessionId}});
-        setImagePath(res.data.image_path);
-        await updateCurrentTag(sessionId, res.data.image_path);
+        try {
+            const res = await axios.get(`/api/image/${route}`, {params: {session_id: sessionId}});
+            setImagePath(res.data.image_path);
+            await updateCurrentTag(sessionId, res.data.image_path);
+            return true;
+        } catch (err) {
+            // Make sure it's an axios error
+            if (axios.isAxiosError(err) && err.response) {
+                switch (err.response.status) {
+                    case 410:               // <-- raised by your FastAPI endpoint
+                                            // “No Images To Tag”
+                        console.log("All done – no more images");
+                        setNoImages(true);
+                        // do whatever: set state, navigate away, show a toast, etc.
+                        return null;
+
+                    case 404:
+                        console.error("Session not found");
+                        break;
+
+                    default:
+                        console.error(`Unexpected error (${err.response.status})`, err);
+                }
+            } else {
+                console.error("Network / CORS / unknown error", err);
+            }
+            throw err;                 // re-throw if you want the caller to handle it
+        }
     };
 
     const updateCurrentTag = async (sessId = sessionId, imgPath = imagePath) => {
@@ -141,7 +194,15 @@ export default function TaggerApp() {
                     <button className="tagger-button" onClick={startSession}>Start</button>
                     {warning && <div className="tagger-warning">{warning}</div>}
                 </div>
-            ) : (
+            ) : noImages ? (
+                <div className="tagger-content">
+                    <h4>No More Images :)</h4>
+                    <button className="tagger-button" onClick={() => {setSessionId(null)}}>
+                        Finish
+                    </button>
+                </div>
+                ) :
+                (
                 <div className="tagger-content-session">
                     <h3>Tagger: {taggerName}</h3>
                     <Progress state={state}/>

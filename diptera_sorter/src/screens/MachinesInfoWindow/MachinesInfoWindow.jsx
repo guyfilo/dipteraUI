@@ -40,7 +40,7 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
                 <ChooseTitle selected={machine} setSelected={setMachine}
                              options={Object.values(data)} title_key={"machine_title"}></ChooseTitle>
             </div>
-            <div className="machine-session-title">{inSession ? sessions[machine.session_id].session_title: null}</div>
+            <div className="machine-session-title">{inSession ? sessions[machine.session_id].session_title : null}</div>
             <div className="machine-table-container">
                 <table className="machine-info-table">
                     <tbody>
@@ -48,13 +48,13 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
                         <td style={{width: "150px"}}>
                             <div className="td-container machine-target-counter">
                                 <p className="cell-header-machine">Target1</p>
-                                <p className="larva-target-count-text">{machine?.target1_counter }</p>
+                                <p className="larva-target-count-text">{machine?.target1_counter}</p>
                             </div>
                         </td>
                         <td style={{width: "150px"}}>
                             <div className="td-container machine-target-counter">
                                 <p className="cell-header-machine">Target2</p>
-                                <p className="larva-target-count-text">{machine?.target2_counter }</p>
+                                <p className="larva-target-count-text">{machine?.target2_counter}</p>
                             </div>
                         </td>
                         <td rowSpan={2}>
@@ -73,8 +73,8 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
                                 <p className="cell-header-machine">Input Bottles</p>
                                 <InputBottle
                                     className="machine-input-bottles-widget"
-                                    cleanBottleFull={machine.water_bottle_state }
-                                    larvaeBottleFull={machine.larvae_bottle_state }
+                                    cleanBottleFull={machine.water_bottle_state}
+                                    larvaeBottleFull={machine.larvae_bottle_state}
                                     height={100}
                                     width={70}
                                 ></InputBottle>
@@ -88,8 +88,8 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
 
                                 <OutputBottles
                                     className="machine-output-bottles-widget"
-                                    target1={inSession ? sessions[machine.session_id]?.target1:[]}
-                                    target2={inSession ? sessions[machine.session_id]?.target2:[]}
+                                    target1={inSession ? sessions[machine.session_id]?.target1 : []}
+                                    target2={inSession ? sessions[machine.session_id]?.target2 : []}
                                     collectTarget1={machine.collect_target1}
                                     collectTarget2={machine.collect_target2}
                                     width={"60px"}
@@ -100,7 +100,7 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
                         <td rowSpan={3} style={{width: "290px"}}>
                             <div className=" td-container machine-dashboard-gauge">
                                 <InfoContainer info={"pressure inside the tankers"} title={"Pressure"}>
-                                    <Gauge style={{width: "200px", height: "130px"}} val={machine?.pressure?.value}
+                                    <Gauge style={{width: "200px", height: "130px", left: "25px", position: "relative"}}
                                            subArcs={[{limit: 30}, {limit: 40}, {limit: 50}]}
                                            warning={machine?.pressure?.warning}
 
@@ -109,16 +109,16 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
                                     ></Gauge>
                                 </InfoContainer>
                                 <InfoContainer info={"sorts per minute"} title={"Sorting Rate"}>
-                                                        <Gauge style={{width: "200px", height: "130px"}}
-                                                               val={machine?.sorting_rate?.value}
-                                                               warning={machine?.sorting_rate?.warning}
-                                                               subArcs={[{limit: 10}, {limit: 30}, {limit: 50}, {limit: 70}]}
-                                                               maxValue={70}
-                                                               ticks={[{value: 10}, {value: 30}, {value: 50}]}
-                                                        ></Gauge>
-                                                    </InfoContainer>
+                                    <Gauge style={{width: "200px", height: "130px", left: "25px", position: "relative"}}
+                                           val={machine?.sorting_rate?.value}
+                                           warning={machine?.sorting_rate?.warning}
+                                           subArcs={[{limit: 10}, {limit: 30}, {limit: 50}, {limit: 70}]}
+                                           maxValue={70}
+                                           ticks={[{value: 10}, {value: 30}, {value: 50}]}
+                                    ></Gauge>
+                                </InfoContainer>
                                 <InfoContainer info={"time the system wait for new larva"} title={"Waiting Time"}>
-                                    <Gauge style={{width: "200px", height: "130px"}}
+                                    <Gauge style={{width: "200px", height: "130px", left: "25px", position: "relative"}}
                                            val={machine?.waiting_time?.value}
                                            warning={machine?.waiting_time?.warning}
 

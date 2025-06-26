@@ -38,8 +38,8 @@
     position: absolute;
     left: 5%;
     top: 40px;
-    width: max-content;
-    height: max-content;
+    width: 90%;
+    height: 95%;
 }
 
 .info-container .info-tooltip {

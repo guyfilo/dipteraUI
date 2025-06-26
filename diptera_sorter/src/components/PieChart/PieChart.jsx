@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef } from "react";
-import { Chart } from "react-google-charts";
+import Plot from "react-plotly.js";
 
 const interpolateColor = (startHex, endHex, factor) => {
     const hexToRgb = (hex) => {
@@ -17,7 +17,7 @@ const interpolateColor = (startHex, endHex, factor) => {
     return rgbToHex(result);
 };
 
-const generateColorMap = (count, from = "#bababa", to = "#398ccb") =>
+const generateColorMap = (count, from = "#bababa", to = "#373c40") =>
     Array.from({ length: count }, (_, i) =>
         interpolateColor(from, to, i / Math.max(1, count - 1))
     );
@@ -27,7 +27,6 @@ const PieChart = ({ width, height, selected }) => {
     const [isHovered, setIsHovered] = useState(false);
     const latestDataRef = useRef({});
 
-    // Save the latest relevant data to prevent updates during hover
     const safeSelected = useMemo(() => {
         if (!isHovered && selected) {
             latestDataRef.current = selected;
@@ -40,37 +39,13 @@ const PieChart = ({ width, height, selected }) => {
 
     const labels = Object.keys(activeData);
     const values = Object.values(activeData);
-
-    const chartData = useMemo(() => {
-        const base =
-            labels.length && values.length
-                ? labels.map((label, i) => [label, values[i]])
-                : [];
-        return [["Label", "Value"], ...base];
-    }, [dataType, safeSelected]);
-
-    const slices = useMemo(() => {
-        const colors = generateColorMap(chartData.length - 1);
-        return Object.fromEntries(colors.map((color, i) => [i, { color }]));
-    }, [chartData]);
-
-    const options = useMemo(
-        () => ({
-            title: `Pie Chart — ${dataType.replace(/_/g, " ")}`,
-            pieHole: 0,
-            legend: { position: "right", textStyle: { fontSize: 16 } },
-            tooltip: { textStyle: { fontSize: 14 } },
-            chartArea: { width: "90%", height: "80%" },
-            slices,
-        }),
-        [dataType, slices]
-    );
+    const colors = generateColorMap(labels.length);
 
     return (
         <div
             style={{
-                width: "100px",
-                height: "100px",
+                width: width || "400px",
+                height: height || "400px",
                 display: "flex",
                 flexDirection: "column",
             }}
@@ -87,12 +62,26 @@ const PieChart = ({ width, height, selected }) => {
                 <option value="fl_classifications">FL Classification</option>
             </select>
 
-            <Chart
-                chartType="PieChart"
-                data={chartData}
-                options={options}
-                width={width}
-                height={height}
+            <Plot
+                data={[
+                    {
+                        type: "pie",
+                        labels,
+                        values,
+                        marker: { colors },
+                        textinfo: "label+percent",
+                        insidetextorientation: "radial",
+                        hole: 0, // change to >0 for donut
+                    },
+                ]}
+                layout={{
+                    title: `Pie Chart — ${dataType.replace(/_/g, " ")}`,
+                    height: height ? parseInt(height) : 400,
+                    width: width ? parseInt(width) : 400,
+                    margin: { t: 50, l: 20, r: 20, b: 20 },
+                    legend: { font: { size: 14 } },
+                }}
+                config={{ responsive: true }}
             />
         </div>
     );
