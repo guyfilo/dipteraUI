@@ -79,6 +79,11 @@ export const MasterButtons = ({selectedMachine}) => {
 
     return (
         <div className="master-buttons">
+            {isSudoMode() &&
+                <div className={"master-button"} onClick={() => sendCommand('reboot',[selectedMachine], [])}>Reboot</div>
+            }
+
+
             {!inSession && (
                 <div className={"master-button"} onClick={handleStartSession}>Start sudo session</div>
             )}
@@ -121,33 +126,34 @@ export const MasterButtons = ({selectedMachine}) => {
                     </div>
                 </div>
 
-                {isSudoMode() ? <div>
-                    <div className="master-button" onClick={handleCloseAllValves}>Close All Valves</div>
+                {isSudoMode() ?
+                    <div className={"master-buttons"}>
+                        <div className="master-button" onClick={handleCloseAllValves}>Close All Valves</div>
 
-                    <div className="master-button" onClick={handleLightSensorTest}>Light Sensors Test</div>
+                        <div className="master-button" onClick={handleLightSensorTest}>Light Sensors Test</div>
 
-                    <div className="expand-button">
-                        <h3>Cameras:</h3>
-                        <div className="master-cameras-grid">
-                            {cams.map(id => (
-                                <div
-                                    key={id}
-                                    className={`master-cameras-grid-item ${selectedCams.includes(`cam${id}`) ? 'selected' : ''}`}
-                                    onClick={() => toggleCamera(id)}
-                                >
-                                    {`cam${id}`}
-                                </div>
-                            ))}
+                        <div className="expand-button">
+                            <h3>Cameras:</h3>
+                            <div className="master-cameras-grid">
+                                {cams.map(id => (
+                                    <div
+                                        key={id}
+                                        className={`master-cameras-grid-item ${selectedCams.includes(`cam${id}`) ? 'selected' : ''}`}
+                                        onClick={() => toggleCamera(id)}
+                                    >
+                                        {`cam${id}`}
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="master-button master-start-button"
+                                 onClick={() => handleCamCommand("capture")}>Capture
+                            </div>
+                            <div className="master-button master-start-button-1"
+                                 onClick={() => handleCamCommand("test_cams")}>Test
+                            </div>
                         </div>
-                        <div className="master-button master-start-button"
-                             onClick={() => handleCamCommand("capture")}>Capture
-                        </div>
-                        <div className="master-button master-start-button-1"
-                             onClick={() => handleCamCommand("test_cams")}>Test
-                        </div>
-                    </div>
-                    <div className="master-button" onClick={handleExit}>Exit Session</div>
-                </div> : null}
+                        <div className="master-button" onClick={handleExit}>Exit Session</div>
+                    </div> : null}
             </>}
         </div>
     );

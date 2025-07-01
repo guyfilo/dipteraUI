@@ -20,8 +20,10 @@ export const ChooseMachines = ({setSessionInfo, onNext, sessionInfo}) => {
     } = useContext(DataContext);
 
     useEffect(() => {
-        fetchAvailableMachines();
-    })
+        fetchAvailableMachines();                      // first shot
+        const id = setInterval(fetchAvailableMachines, 10_000); // poll every 5 s
+        return () => clearInterval(id);               // cleanup when user leaves “choose”
+    }, []);
 
     const setMachines = async () => {
         if (selectedMachines.length === 0) return;
