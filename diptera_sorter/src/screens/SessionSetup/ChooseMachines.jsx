@@ -72,7 +72,7 @@ export const ChooseMachines = ({setSessionInfo, onNext, sessionInfo}) => {
                 </div>
 
             </div>
-            <Button className={"next-step-button"} text={"Next Step"} onClick={setMachines} once={true}></Button>
+            <Button className={"next-step-button"} text={"Next Step"} onClick={setMachines} once={false}></Button>
 
         </div>
     );
