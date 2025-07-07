@@ -18,10 +18,9 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
     );
     const {removeAll, selectMachine} = useContext(SelectedMachinesContext);
     const [machine, setMachine] = React.useState(Object.values(data).at(0));
-    useEffect(() => {
-        removeAll();
-        setMachine(data[machine.machine_id]);
-    }, [data]);
+    // useEffect(() => {
+    //     setMachine(data[machine.machine_id]);
+    // }, [data]);
     useEffect(() => {
         if (!machine && Object.keys(data).length > 0) {
             setMachine(Object.values(data).at(0));
