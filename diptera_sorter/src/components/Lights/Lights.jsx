@@ -5,7 +5,7 @@ const Light = ({color, tooltip, className, stateGetter})=>{
     const [onHover, setOnHover] = useState(false);
     return (
         <div className={className}>
-            <img alt={"red"} src={stateGetter() ? `${color}-on.svg` : `${color}-off.svg`}
+            <img alt={"red"} className={'light'} src={stateGetter() ? `${color}-on.svg` : `${color}-off.svg`}
                  onMouseEnter={()=>{setOnHover(true)}}
                  onMouseLeave={()=>{setOnHover(false)}}
             />
@@ -42,9 +42,9 @@ export const Lights = ({sessions, liveData}) => {
         <div className={"lights-container"}>
             <div className={"lights-overlap"}>
 
-                <Light className={"red-light light"} color={"red"} stateGetter={error} tooltip={"Machine Stoped"}/>
-                <Light className={"blue-light light"} color={"blue"} stateGetter={bottleMsg} tooltip={"Container Action"}/>
-                <Light className={"green-light light"} color={"green"} stateGetter={isRunning} tooltip={"Machine Running"}/>
+                <Light className={"red-light"} color={"red"} stateGetter={error} tooltip={"Machine Stoped"}/>
+                <Light className={"blue-light"} color={"blue"} stateGetter={bottleMsg} tooltip={"Container Action"}/>
+                <Light className={"green-light"} color={"green"} stateGetter={isRunning} tooltip={"Machine Running"}/>
 
             </div>
         </div>

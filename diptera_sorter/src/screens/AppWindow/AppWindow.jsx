@@ -47,18 +47,20 @@ export const AppWindow = () => {
 
     const [selected, setSelected] = useState("Home");
 
-    let home_default = <>
-        <Button
-            className={"butten-instance-start-session"}
-            ButtonClassName={selected === "Scanner" ? "butten-instance-start-scanner-session" : null}
+    let home_default =
+        <div className={"home-default-container"}>
+            <p style={{color: selected === "Scanner" ? "#fc4747" : null, display: "flex", position: "relative" , width: "max-content" }}>
+                There are no {`${selected === "Scanner" ? "SCANNING " : ""}`}sessions running. Please start a new
+                session
+            </p>
+            <Button
+                className={"butten-instance-start-session"}
+                ButtonClassName={selected === "Scanner" ? "butten-instance-start-scanner-session" : null}
 
-            text={`Start A New ${selected === "Scanner" ? "SCANNER " : ""}Session`}
-            onClick={() => setIsPopupOpen(true)}
-        />
-        <p className="no-session-msg" style={{color: selected === "Scanner" ? "#fc4747" : null}}>
-            There are no {`${selected === "Scanner" ? "SCANNING " : ""}`}sessions running. Please start a new session
-        </p>
-    </>;
+                text={`Start A New ${selected === "Scanner" ? "SCANNER " : ""}Session`}
+                onClick={() => setIsPopupOpen(true)}
+            />
+        </div>;
 
     const [homeBody, setHomeBody] = useState(home_default);
     useEffect(() => {
