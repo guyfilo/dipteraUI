@@ -50,6 +50,13 @@ export const MasterPage = () => {
         setSelectedMachine(machineId);
         setSizeMode("hidden");
     }
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            await fetch("/api/state/refresh_jetson", { method: "POST" });
+        }, 10_000);
+
+        return () => clearInterval(interval);
+    }, []);
 
 
     return (
