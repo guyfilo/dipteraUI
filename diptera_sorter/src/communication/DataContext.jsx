@@ -222,7 +222,8 @@ export const DataProvider = ({ children }) => {
     };
 
     const getErrors = async (machine_id) => {
-        const res = await fetch(`${API_BASE}/api/state/errors`);
+        console.log("errors machine_id", machine_id);
+        const res = await fetch(`${API_BASE}/api/state/errors/?machine_id=${machine_id}`);
         const json = await res.json();
         return json.errors;
     }
@@ -261,6 +262,10 @@ export const DataProvider = ({ children }) => {
         return json;
     };
 
+    const refreshState = async () => {
+        await fetch(`${API_BASE}/api/state/refresh_jetson`, { method: "POST" });
+    }
+
     useEffect(() => {
         fetchAvailableMachines();
     }, [serverKey]);
@@ -268,6 +273,7 @@ export const DataProvider = ({ children }) => {
     return (
         <DataContext.Provider value={{
             liveData: data,
+            refreshState,
             taggerData,
             availableMachines,
             isSudoMode,

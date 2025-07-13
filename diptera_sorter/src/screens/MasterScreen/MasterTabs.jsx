@@ -6,7 +6,9 @@ import {DataContext} from "../../communication/DataContext.jsx";
 export const MasterTabs = ({data, toggleHide, toggleSize, sizeMode, setSizeMode}) => {
     const tabs = ["Light Sensors", "Cameras", "Images", "Errors"];
     const [activeTab, setActiveTab] = useState("Light Sensors");
-    const { getErrors } = useContext(DataContext);
+    const {
+        getErrors
+    } = useContext(DataContext);
     const [errors, setErrors] = useState({});
     const [fetchedFor, setFetchedFor] = useState(null);
     const lightSensors = ["bouncer_ls", "camFL_of", "cam0_of", "cam1_of", "cam2_of", "cam3_of", "sorter_ls"];
@@ -60,23 +62,28 @@ export const MasterTabs = ({data, toggleHide, toggleSize, sizeMode, setSizeMode}
             </div>
         )
     }
+    useEffect(() => {
+        if (activeTab && activeTab === "Errors") {
+            const machineId = data.machine_id;
+
+            const fetchErrors = async () => {
+                try {
+                    const err = await getErrors(machineId);
+                    console.log("errors are", err);
+                    setErrors(err);
+                } catch (e) {
+                    console.error("Failed to get errors:", e);
+                }
+            };
+
+            fetchErrors();
+        }
+    }, [data, activeTab]);
 
     const errorTab = () => {
-        const machineId = data.machine_id;
-
-        // fetch errors only when tab is selected
-        useEffect(() => {
-            if (activeTab === "Errors" && machineId && fetchedFor !== machineId) {
-                getErrors(machineId).then(allErrors => {
-                    const machineErrors = allErrors?.[machineId] || {};
-                    setErrors(machineErrors);
-                    setFetchedFor(machineId);
-                });
-            }
-        }, [activeTab, machineId]);
-
-        const entries = Object.entries(errors || {}).sort(([a], [b]) => a.localeCompare(b)); // sort by ts
-
+        const sortedEntries = errors
+            ? Object.entries(errors).sort((a, b) => new Date(a[0]) - new Date(b[0]))
+            : [];
         return (
             <div style={{
                 maxHeight: "300px",
@@ -86,9 +93,9 @@ export const MasterTabs = ({data, toggleHide, toggleSize, sizeMode, setSizeMode}
                 border: "1px solid #ccc",
                 padding: "10px"
             }}>
-                {entries.map(([ts, msg]) => (
-                    <div key={ts} style={{ padding: "4px 0", borderBottom: "1px solid #eee" }}>
-                        <code style={{ color: "#888", marginRight: 8 }}>{ts}</code>
+                {sortedEntries.map(([ts, msg]) => (
+                    <div key={ts} style={{padding: "4px 0", borderBottom: "1px solid #eee"}}>
+                        <code style={{color: "#888", marginRight: 8}}>{ts}</code>
                         <span>{msg}</span>
                     </div>
                 ))}

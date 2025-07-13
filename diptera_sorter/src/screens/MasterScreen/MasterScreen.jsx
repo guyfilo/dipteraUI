@@ -16,6 +16,7 @@ export const MasterPage = () => {
         createSession,
         fetchAvailableMachines,
         sendCommand,
+        refreshState,
         isSudoMode
     } = useContext(DataContext);
 
@@ -52,7 +53,7 @@ export const MasterPage = () => {
     }
     useEffect(() => {
         const interval = setInterval(async () => {
-            await fetch("/api/state/refresh_jetson", { method: "POST" });
+            refreshState();
         }, 10_000);
 
         return () => clearInterval(interval);
