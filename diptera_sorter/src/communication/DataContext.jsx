@@ -221,6 +221,12 @@ export const DataProvider = ({ children }) => {
         return res.json();
     };
 
+    const getErrors = async (machine_id) => {
+        const res = await fetch(`${API_BASE}/api/state/errors`);
+        const json = await res.json();
+        return json.errors;
+    }
+
     const removeMachine = async (session_id, machine_id) => {
         const res = await fetch(`${API_BASE}/api/session/remove_machine`, {
             method: "POST",
@@ -273,7 +279,8 @@ export const DataProvider = ({ children }) => {
             restart_machines,
             removeMachine,
             serverName: server.name,
-            clearImages
+            clearImages,
+            getErrors
         }}>
             {children}
         </DataContext.Provider>

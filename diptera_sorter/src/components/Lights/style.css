@@ -1,40 +1,40 @@
 .lights-container {
-    width: 22vh;
-    left: 2vw;
-    top: 28vh;
+    width: 10%;
+    left: 5%;
+    top: 30%;
     position: absolute;
-    border-radius: 1vh;
+    border-radius: 1%;
     background-color: var(--Light-Grey);
 
-    height: 8vh;
+    height: 10%;
 }
 
-.lights-overlap {
-    position: relative;
-    height: 100%;
-    width: 100%;
+/*.lights-overlap {*/
+/*    position: relative;*/
+/*    height: 100%;*/
+/*    width: 100%;*/
+/*}*/
+
+.light {
+    width: 5%;
+    height: 5%;
 }
 
 .red-light {
     position: absolute;
-    left: 7%;
-    top: 30%;
-    width: 25%;
-    height: 45%;
+    left: 1vw;
+    top: 2vh;
+
 }
 
 .blue-light {
     position: absolute;
-    left: 37%;
-    top: 30%;
-    width: 25%;
-    height: 45%;
+    left: 5vw;
+    top: 2vh;
 }
 
 .green-light {
     position: absolute;
-    left: 67%;
-    top: 30%;
-    width: 25%;
-    height: 45%;
+    left: 10vw;
+    top: 2vh;
 }

@@ -23,15 +23,16 @@ export const Lights = ({sessions, liveData}) => {
 
     const bottleMsg = () => (
         Object.values(liveData).some(machine => (
-            machine?.collect_target1 ||
+            machine?.session_id &&
+            (machine?.collect_target1 ||
             machine?.collect_target2 ||
             machine?.water_bottle_state === "Empty" ||
-            machine?.larvae_bottle_state === "Empty"
+            machine?.larvae_bottle_state === "Empty")
         ))
     );
 
     const error = () => (
-        Object.values(liveData).some(machine => (machine?.error))
+        Object.values(liveData).some(machine => (machine?.session_id && machine?.error))
     )
 
 
@@ -41,9 +42,9 @@ export const Lights = ({sessions, liveData}) => {
         <div className={"lights-container"}>
             <div className={"lights-overlap"}>
 
-                <Light className={"red-light"} color={"red"} stateGetter={error} tooltip={"Machine Stoped"}/>
-                <Light className={"blue-light"} color={"blue"} stateGetter={bottleMsg} tooltip={"Container Action"}/>
-                <Light className={"green-light"} color={"green"} stateGetter={isRunning} tooltip={"Machine Running"}/>
+                <Light className={"red-light light"} color={"red"} stateGetter={error} tooltip={"Machine Stoped"}/>
+                <Light className={"blue-light light"} color={"blue"} stateGetter={bottleMsg} tooltip={"Container Action"}/>
+                <Light className={"green-light light"} color={"green"} stateGetter={isRunning} tooltip={"Machine Running"}/>
 
             </div>
         </div>

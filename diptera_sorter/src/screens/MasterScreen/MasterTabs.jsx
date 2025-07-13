@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useState, useEffect} from "react";
 import "./style.css";
 import {ImagesTab} from "./ImagesTab.jsx";
 import {DataContext} from "../../communication/DataContext.jsx";
@@ -6,8 +6,9 @@ import {DataContext} from "../../communication/DataContext.jsx";
 export const MasterTabs = ({data, toggleHide, toggleSize, sizeMode, setSizeMode}) => {
     const tabs = ["Light Sensors", "Cameras", "Images", "Errors"];
     const [activeTab, setActiveTab] = useState("Light Sensors");
-
-
+    const { getErrors } = useContext(DataContext);
+    const [errors, setErrors] = useState({});
+    const [fetchedFor, setFetchedFor] = useState(null);
     const lightSensors = ["bouncer_ls", "camFL_of", "cam0_of", "cam1_of", "cam2_of", "cam3_of", "sorter_ls"];
     const cameras = ["camFL", "camNAT", "cam0", "cam1", "cam2", "cam3"];
     const lsTab = () => {
@@ -60,6 +61,40 @@ export const MasterTabs = ({data, toggleHide, toggleSize, sizeMode, setSizeMode}
         )
     }
 
+    const errorTab = () => {
+        const machineId = data.machine_id;
+
+        // fetch errors only when tab is selected
+        useEffect(() => {
+            if (activeTab === "Errors" && machineId && fetchedFor !== machineId) {
+                getErrors(machineId).then(allErrors => {
+                    const machineErrors = allErrors?.[machineId] || {};
+                    setErrors(machineErrors);
+                    setFetchedFor(machineId);
+                });
+            }
+        }, [activeTab, machineId]);
+
+        const entries = Object.entries(errors || {}).sort(([a], [b]) => a.localeCompare(b)); // sort by ts
+
+        return (
+            <div style={{
+                maxHeight: "300px",
+                overflowY: "auto",
+                display: "flex",
+                flexDirection: "column-reverse",
+                border: "1px solid #ccc",
+                padding: "10px"
+            }}>
+                {entries.map(([ts, msg]) => (
+                    <div key={ts} style={{ padding: "4px 0", borderBottom: "1px solid #eee" }}>
+                        <code style={{ color: "#888", marginRight: 8 }}>{ts}</code>
+                        <span>{msg}</span>
+                    </div>
+                ))}
+            </div>
+        );
+    };
 
     return (
         <div className={`master-tabs-container`}>
@@ -96,7 +131,7 @@ export const MasterTabs = ({data, toggleHide, toggleSize, sizeMode, setSizeMode}
                         {activeTab === "Light Sensors" && lsTab()}
                         {activeTab === "Cameras" && camTab()}
                         {activeTab === "Images" && <ImagesTab machineData={data}/>}
-                        {activeTab === "Errors" && <div>Error logs or states</div>}
+                        {activeTab === "Errors" && errorTab()}
                     </div>
                 )}
 
