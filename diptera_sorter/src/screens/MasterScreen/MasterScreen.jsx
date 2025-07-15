@@ -71,10 +71,10 @@ export const MasterPage = () => {
                         ></MasterTableRow>
                         :
                         Object.entries(liveData).map(([id, machine]) => (
-                            <MasterTableRow data={machine}
+                            id.startsWith("M")? <MasterTableRow data={machine}
                                             selected={selectedMachine === id}
                                             setSelected={masterSelectMachine}
-                            ></MasterTableRow>
+                            ></MasterTableRow> : null
                         ))}
             </div>
             <div className={"master-button-wrapper"}>

@@ -16,7 +16,7 @@ export const ImagesTab = ({machineData}) => {
     const zoomSize = 200; // Size of the circular lens in pixels
     const origWidth = 2024;
     const origHeight = 1128;
-    const displayWidth = 950;
+    const displayWidth = 850;
     const displayHeight = (origHeight / origWidth) * displayWidth;
     const [hoverColor, setHoverColor] = useState(null);
 
@@ -172,14 +172,28 @@ export const ImagesTab = ({machineData}) => {
                 <div>No images</div>
             ) : (
                 <div className={"master-images-tab-content"}>
-                    <div className={"master-button master-save-button"}
-                         onClick={setBoundaries}
-                    >Save
+                    <div className={"img-tab-buttons"}>
+                        <div className={"master-button"}
+                             onClick={setBoundaries}
+                        >Save
+                        </div>
+                        <div className={"master-button"}
+                             onClick={() => clearImages(machineData.machine_id)}
+                        >Clear images
+                        </div>
+                        <div className={"master-button"}
+                             onClick={() => {
+                                 const link = document.createElement("a");
+                                 link.href = imageSrc;
+                                 link.download = `image_${index + 1}_${camKey}_${machineData.machine_id}.jpg`;
+                                 document.body.appendChild(link);
+                                 link.click();
+                                 document.body.removeChild(link);
+                             }}
+                        >Download Image
+                        </div>
                     </div>
-                    <div className={"master-button master-clear-button"}
-                         onClick={() => clearImages(machineData.machine_id)}
-                    >Clear images
-                    </div>
+
 
                     <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
 
@@ -281,7 +295,7 @@ export const ImagesTab = ({machineData}) => {
                             <img
                                 src={imageSrc}
                                 alt="Zoom target"
-                                width={950}
+                                width={displayWidth}
                                 style={{display: "block"}}
                             />
 
@@ -308,7 +322,7 @@ export const ImagesTab = ({machineData}) => {
                                             position: "absolute",
                                             left: -zoomPos.x * zoomFactor + zoomSize / 2,
                                             top: -zoomPos.y * zoomFactor + zoomSize / 2,
-                                            width: 950 * zoomFactor,
+                                            width: displayWidth * zoomFactor,
                                         }}
                                     />
                                     {roi.top !== null && (
