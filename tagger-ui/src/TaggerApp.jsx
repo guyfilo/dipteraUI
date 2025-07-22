@@ -251,7 +251,7 @@ export default function TaggerApp() {
                                 >
                                     <img
                                         className="tagger-image"
-                                        src={`http://192.168.0.62:8000/api/image/view?session_id=${sessionId}&image_path=${encodeURIComponent(imagePath)}`}
+                                        src={`http://100.76.177.32:8000/api/image/view?session_id=${sessionId}&image_path=${encodeURIComponent(imagePath)}`}
                                         alt="current"
                                     />
                                     {zoomPos && (
