@@ -105,17 +105,17 @@ export const NewSessionForm = ({onNext, setSessionInfo, scannerMode}) => {
         } else {
             setWarning("");
         }
-        if (selectedTarget2 && selectedTarget1) {
-            const target1 = selectedTarget1.split("_");
-            const target2 = selectedTarget2.split("_");
-            if (target2.every(item => target1.includes(item))) {
-                setWarning("target2 cannot be contained in taget1");
-            } else if (target1.every(item => target2.includes(item))) {
-                setWarning("target1 cannot be contained in taget2");
-            } else {
-                setWarning("");
-            }
-        }
+        // if (selectedTarget2 && selectedTarget1) {
+        //     const target1 = selectedTarget1.split("_");
+        //     const target2 = selectedTarget2.split("_");
+        //     if (target2.every(item => target1.includes(item))) {
+        //         setWarning("target2 cannot be contained in taget1");
+        //     } else if (target1.every(item => target2.includes(item))) {
+        //         setWarning("target1 cannot be contained in taget2");
+        //     } else {
+        //         setWarning("");
+        //     }
+        // }
     }, [selectedTarget1, selectedTarget2]);
 
     useEffect(() => {
