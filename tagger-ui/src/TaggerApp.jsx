@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import "./style.css";
 
-axios.defaults.baseURL = "http://192.168.0.62:8000";
+axios.defaults.baseURL = "http://100.76.177.32:8000";
 
 function Progress({state}) {
     if (!state || typeof state.cur === "undefined") return null;
