@@ -91,9 +91,13 @@ export const AppWindow = () => {
                 return <SessionInfoWindow data={liveData} sessions={sessions}/>;
             } else if (selected === "Machines") {
                 return <MachinesInfoWindow machines_data={liveData} sessions={sessions}/>;
-            } else if (selected === "Scanner") {
-                return <ScannerWindow data={liveData} sessions={sessions}/>;
             }
+        }
+        if (selected === "Scanner") {
+            return <ScannerWindow data={liveData} sessions={sessions}
+                                  newSessionCbk= {() => setIsPopupOpen(true)
+                                  }
+            />;
         }
         if (selected === "Master Mode") {
             return <MasterPage></MasterPage>

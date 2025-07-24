@@ -12,6 +12,7 @@ import {Gauge} from "../../components/Gauge/Gauge.jsx";
 import {CameraImageViewer} from "./CameraImageViewer.jsx";
 import {SelectedMachinesContext} from "../../components/SelectedMachinesContext/SelectedMachinesContext.jsx";
 import {ScannerChat} from "./ScannerChat.jsx";
+import {Button} from "../../components/Button/index.js";
 
 const BarcodeComponent = ({barcode, garbage, duplicate_reported, error_msg}) => {
     // error_msg = "scan_again";
@@ -30,7 +31,7 @@ const BarcodeComponent = ({barcode, garbage, duplicate_reported, error_msg}) => 
     )
 }
 
-export const ScannerWindow = ({data, sessions}) => {
+export const ScannerWindow = ({data, sessions, newSessionCbk}) => {
     const scannerMachines = Object.values(data).filter(d => sessions[d.session_id]?.scanner_mode);
     const [scanner, setScanner] = React.useState(scannerMachines.at(0) || null);
 
@@ -57,27 +58,29 @@ export const ScannerWindow = ({data, sessions}) => {
         }
     }, [scanner]);
 
-    if (!scanner) {
-        return (
-            <div className="machinesInfoWindow">
-                <div className="no-scanner-message">No scanner session</div>
-            </div>
-        );
+    // if (!scanner) {
+    //     return (
+    //         <div className="machinesInfoWindow">
+    //             {noSessionButton()}
+    //         </div>
+    //     );
+    // }
+    if (scanner) {
+        scanner.machine_title = `Scanner ${scanner.machine_id}`;
     }
 
-    scanner.machine_title = `Scanner ${scanner.machine_id}`;
 
     return (
         <div className="machinesInfoWindow">
             <div className="choose-machine">
-                <ChooseTitle
+                {scanner? <ChooseTitle
                     selected={scanner}
                     setSelected={setScanner}
                     options={scannerMachines}
                     title_key={"machine_title"}
-                />
+                /> : "No Scanner"}
             </div>
-            <div className="session-title">{sessions[scanner.session_id].session_title}</div>
+            <div className="session-title">{scanner ? sessions[scanner.session_id].session_title: "No scanner"}</div>
 
             <div className="scanner-table-container">
                 <table className="scanner-info-table">
@@ -87,7 +90,7 @@ export const ScannerWindow = ({data, sessions}) => {
                             <div className="scanner-td-container">
                                 <p className="cell-header">Status</p>
                                 <StatusIcon
-                                    status={scanner.machine_state}
+                                    status={scanner?.machine_state}
                                     width={50} height={50}
                                     className="scanner-status-icon"
                                 />
@@ -105,8 +108,8 @@ export const ScannerWindow = ({data, sessions}) => {
                                 <p className="cell-header">Input Bottles</p>
                                 <InputBottle
                                     className="scanner-input-bottles-widget"
-                                    cleanBottleFull={scanner.water_bottle_state }
-                                    larvaeBottleFull={scanner.larvae_bottle_state }
+                                    cleanBottleFull={scanner ? scanner.water_bottle_state : true }
+                                    larvaeBottleFull={scanner ? scanner.larvae_bottle_state : true}
                                     height={80}
                                     width={50}
                                 />
@@ -117,8 +120,8 @@ export const ScannerWindow = ({data, sessions}) => {
                                 <p className="cell-header">Output Bottles</p>
                                 <OutputBottles
                                     className="scanner-output-bottles-widget"
-                                    target1={sessions[scanner.session_id].target1}
-                                    target2={sessions[scanner.session_id].target2}
+                                    target1={["male", "female", "fl"]}
+                                    target2={["junk"]}
                                     collectTarget1={false}
                                     collectTarget2={false}
                                     scanner={true}
@@ -162,6 +165,24 @@ export const ScannerWindow = ({data, sessions}) => {
                             <div className={"scanner-td-container"}>
                                 <ScannerChat messages={scanner?.scanner_message || []}></ScannerChat>
                             </div>
+
+                                <div className={"scanner-td-container"}>
+                                    {scanner ?
+                                        <ScannerChat messages={scanner?.scanner_message || []}></ScannerChat>
+                                        :
+                                        <Button
+                                            text={"New Scanner Session"}
+                                            onClick={newSessionCbk}
+                                            style={{
+                                                width: "20%",
+                                                position: "relative",
+                                                top: "50%",
+                                            }}
+                                        >
+
+                                        </Button>}
+                                </div>
+
                         </td>
                     </tr>
                     <tr style={{height: "380px"}}>
