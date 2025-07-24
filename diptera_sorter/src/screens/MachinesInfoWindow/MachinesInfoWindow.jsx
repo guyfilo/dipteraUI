@@ -18,9 +18,13 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
     );
     const {removeAll, selectMachine} = useContext(SelectedMachinesContext);
     const [machine, setMachine] = React.useState(Object.values(data).at(0));
-    // useEffect(() => {
-    //     setMachine(data[machine.machine_id]);
-    // }, [data]);
+    useEffect(() => {
+        if (machine && data[machine.machine_id]) {
+            setMachine(data[machine.machine_id]);  // update machine if still exists
+        } else if (Object.keys(data).length > 0) {
+            setMachine(Object.values(data)[0]);  // fallback to another available machine
+        }
+    }, [data]);
     useEffect(() => {
         if (!machine && Object.keys(data).length > 0) {
             setMachine(Object.values(data).at(0));
@@ -32,7 +36,7 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
         removeAll();
         selectMachine(machine.machine_id, true);
     }, [machine]);
-    var inSession = machine?.session_id && Object.keys(sessions).includes(machine.session_id);
+    let inSession = machine?.session_id && Object.keys(sessions).includes(machine.session_id);
     return (
         <div className="machinesInfoWindow">
             <div className="choose-machine">
