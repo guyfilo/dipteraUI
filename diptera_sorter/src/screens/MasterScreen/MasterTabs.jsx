@@ -82,8 +82,7 @@ export const MasterTabs = ({data, toggleHide, toggleSize, sizeMode, setSizeMode}
 
     const errorTab = () => {
         const sortedEntries = errors
-            ? Object.entries(errors).sort((a, b) => new Date(a[0]) - new Date(b[0]))
-            : [];
+            ? Object.entries(errors).sort((a, b) => new Date(b[0]) - new Date(a[0])) : [];
         return (
             <div style={{
                 maxHeight: "300px",
