@@ -106,7 +106,7 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
                                     <Gauge style={{width: "200px", height: "130px", left: "25px", position: "relative"}}
                                            subArcs={[{limit: 30}, {limit: 40}, {limit: 50}]}
                                            warning={machine?.pressure?.warning}
-
+                                           val={machine?.pressure?.value}
                                            ticks={[{value: 30}, {value: 40}, {value: 50}]}
                                            maxValue={60}
                                     ></Gauge>
