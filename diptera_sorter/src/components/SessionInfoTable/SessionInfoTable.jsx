@@ -48,7 +48,9 @@ export const SessionInfoTable = ({className, session_data, machines_data}) => {
                                 target1={session_data.target1}
                                 target2={session_data.target2}
                                 collectTarget1={machineData.collect_target1}
-                                collectTarget2={machineData.collect_target2}/>
+                                collectTarget2={machineData.collect_target2}
+                                machineData={machineData}
+                            />
                         </div>
                     </td>
                     <td className="table-data col-output-bottle">

@@ -133,6 +133,13 @@
 
 }
 
+.machines-table-row.selected {
+    background-color: var(--dipteraai-light-and-transparent);
+}
+
+.session-table-container.selected {
+    background-color: var(--dipteraai-light-and-transparent);
+}
 
 
 .machine-list-in .line-under-row {

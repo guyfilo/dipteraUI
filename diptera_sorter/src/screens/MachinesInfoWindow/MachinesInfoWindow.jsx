@@ -11,6 +11,15 @@ import {AreaHistogram} from "../../components/AreaHistogram/AreaHistogram.jsx";
 import {Gauge} from "../../components/Gauge/Gauge.jsx";
 import {SelectedMachinesContext} from "../../components/SelectedMachinesContext/SelectedMachinesContext.jsx";
 
+const formatTime = (seconds) => {
+    if (!seconds && seconds !== 0) return "--:--:--";
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = Math.floor(seconds % 60);
+    return [hrs, mins, secs]
+        .map(v => v.toString().padStart(2, '0'))
+        .join(':');
+};
 
 export const MachinesInfoWindow = ({machines_data, sessions}) => {
     let data = Object.fromEntries(
@@ -52,12 +61,20 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
                             <div className="td-container machine-target-counter">
                                 <p className="cell-header-machine">Target1</p>
                                 <p className="larva-target-count-text">{machine?.target1_counter}</p>
+                                <span style={{fontSize: "18px"}}>
+                                    {machine?.target1_interval_counter}
+                                    <img src="outBottle.svg" alt="" style={{width: "14px", marginLeft: "3px"}}/>
+                                </span>
                             </div>
                         </td>
                         <td style={{width: "150px"}}>
                             <div className="td-container machine-target-counter">
                                 <p className="cell-header-machine">Target2</p>
                                 <p className="larva-target-count-text">{machine?.target2_counter}</p>
+                                <span style={{fontSize: "18px"}}>
+                                    {machine?.target2_interval_counter}
+                                    <img src="outBottle.svg" alt="" style={{width: "14px", marginLeft: "3px"}}/>
+                                </span>
                             </div>
                         </td>
                         <td rowSpan={2}>
@@ -96,7 +113,7 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
                                     collectTarget1={machine.collect_target1}
                                     collectTarget2={machine.collect_target2}
                                     width={"60px"}
-                                    height={"100%"}
+                                    machineData={machine}
                                 ></OutputBottles>
                             </div>
                         </td>
@@ -134,15 +151,22 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
                     </tr>
 
                     <tr style={{height: "109px"}}>
-                        <td colSpan={2}>
+                        <td colSpan={1}>
                             <div className="td-container machine-larva-counter">
-                                <p className="cell-header-machine">Larva Sorted</p>
-                                <p className="larva-count-text">{machine?.success_counter}</p>
+                                <p className="cell-header-machine">Larvae</p>
+                                <p className="larva-count-text">{machine?.larvae_counter}</p>
                             </div>
                         </td>
 
-
+                        <td colSpan={1}>
+                            <div className="td-container machine-larva-counter">
+                                <p className="cell-header-machine">Run Time</p>
+                                <p className="larva-count-text" style={{fontSize: "30px"}}>
+                                    {formatTime(machine?.running_time)}</p>
+                            </div>
+                        </td>
                     </tr>
+
                     <tr style={{height: "480px"}}>
                         <td className="machine-pie" colSpan={3}>
                             <div className="td-container machine-pie" style={{width: "450px"}}>

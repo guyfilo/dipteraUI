@@ -58,3 +58,22 @@
     display: flex;
 
 }
+
+.bottle-info-popup {
+    position: absolute;
+    top: -50%; /* adjust as needed */
+    left: 0;
+    background: white;
+    border: 1px solid var(--Mid-Grey);
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 14px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    z-index: 10;
+}
+
+.bottle-info-popup h4 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    color: var(--Dark-Grey);
+}

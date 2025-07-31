@@ -14,7 +14,7 @@
     position: relative;
     border-radius: 10px;
     background-color: #fefefe;
-    height: 176px;
+    height: 80px;
     padding: 14px;
     left: 13px;
     top: 92px;
@@ -37,16 +37,34 @@
 .session-info-window .larva-count {
     width: 100%;
     position: relative;
-    font-size: 80px;
-    line-height: 18px;
+    font-size: 40px;
+    line-height: 26px;
     color: #000;
     text-align: center;
-
-    top: 35px;
-
-
+}
+.session-info-window .target-counters {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 5px;
+    padding-top: 5px;
 }
 
+.session-info-window .target-count {
+    width: 100%;
+    position: relative;
+    font-size: 30px;
+    line-height: 26px;
+    color: #000;
+    text-align: center;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+}
 .session-info-window .session-pie {
     position: absolute;
     width: 550px;

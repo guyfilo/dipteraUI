@@ -6,10 +6,10 @@ import {SessionInfoTable} from "../../components/SessionInfoTable/SessionInfoTab
 import {AreaHistogram} from "../../components/AreaHistogram/AreaHistogram.jsx";
 import PieChart from "../../components/PieChart/PieChart.jsx";
 
-import { SelectedMachinesContext } from "../../components/SelectedMachinesContext/SelectedMachinesContext.jsx";
+import {SelectedMachinesContext} from "../../components/SelectedMachinesContext/SelectedMachinesContext.jsx";
 
-export const SessionInfoWindow = ({ data, sessions }) => {
-    const { selectSession, removeAll } = useContext(SelectedMachinesContext);
+export const SessionInfoWindow = ({data, sessions}) => {
+    const {selectSession, removeAll} = useContext(SelectedMachinesContext);
     const [selected, setSelected] = useState(Object.values(sessions).at(0));
 
     useEffect(() => {
@@ -25,6 +25,27 @@ export const SessionInfoWindow = ({ data, sessions }) => {
     );
     const totalSuccess = Object.values(machines_data)
         .map(machine => machine.success_counter || 0)
+        .reduce((a, b) => a + b, 0);
+
+    const totalTarget1 = Object.values(machines_data)
+        .map(machine => machine.target1_counter || 0)
+        .reduce((a, b) => a + b, 0);
+
+    const totalTarget2 = Object.values(machines_data)
+        .map(machine => machine.target2_counter || 0)
+        .reduce((a, b) => a + b, 0);
+
+    const totalTarget1Interval = Object.values(machines_data)
+        .map(machine => machine.target1_interval_counter || 0)
+        .reduce((a, b) => a + b, 0);
+
+    const totalTarget2Interval = Object.values(machines_data)
+        .map(machine => machine.target2_interval_counter || 0)
+        .reduce((a, b) => a + b, 0);
+
+
+    const totalLarvae = Object.values(machines_data)
+        .map(machine => machine.larvae_counter || 0)
         .reduce((a, b) => a + b, 0);
 
     const getCombinedData = (element) => {
@@ -61,9 +82,28 @@ export const SessionInfoWindow = ({ data, sessions }) => {
                          options={Object.values(sessions)}></ChooseTitle>
         </div>
         <div className="larva-counter">
-            <div className="larva-counter-title">Larvae Sorted</div>
-            <div className="larva-count">{totalSuccess}</div>
+            <div className="larva-counter-title">Larvae</div>
+            <div className="larva-count">{totalLarvae}</div>
         </div>
+        <div className="target-counters">
+            <div className="larva-counter target-count">
+                <div className="larva-counter-title">Target1</div>
+                <div>{totalTarget1}</div>
+                <span style={{fontSize: "18px"}}>
+                    {totalTarget1Interval}
+                    <img src="outBottle.svg" alt="" style={{width: "14px", marginLeft: "3px"}}/>
+                </span>
+            </div>
+            <div className="larva-counter target-count">
+                <div className="larva-counter-title">Target2</div>
+                <div>{totalTarget2}</div>
+                <span style={{fontSize: "18px"}}>
+                    {totalTarget2Interval}
+                    <img src="outBottle.svg" alt="" style={{width: "14px", marginLeft: "3px"}}/>
+                </span>
+            </div>
+        </div>
+
         <div className="session-live-table">
             <SessionInfoTable session_data={selected} machines_data={machines_data}></SessionInfoTable>
         </div>
@@ -74,7 +114,8 @@ export const SessionInfoWindow = ({ data, sessions }) => {
         </div>
         <div className="larva-area-histogram-container">
             <InfoContainer info={"Loops Pie"} title={"Lara Area Histogram"}>
-                <AreaHistogram className="area-histogram" width={750} height={400} values={allLarvaAreas}></AreaHistogram>
+                <AreaHistogram className="area-histogram" width={750} height={400}
+                               values={allLarvaAreas}></AreaHistogram>
             </InfoContainer>
         </div>
 

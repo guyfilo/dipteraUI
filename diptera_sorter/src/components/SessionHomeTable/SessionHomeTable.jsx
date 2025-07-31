@@ -27,7 +27,8 @@ export const SessionHomeTable = ({ session_data, machines_data }) => {
         stopRequest,
         setStopRequest,
         stopSessionRequest,
-        setStopSessionRequest
+        setStopSessionRequest,
+        selectedMachines
     } = useContext(SelectedMachinesContext);
 
     const [exitButtonState, setExitButtonState] = useState("default");
@@ -62,11 +63,12 @@ export const SessionHomeTable = ({ session_data, machines_data }) => {
             machine_id,
             machineData
         };
+        let selected = selectedMachines.includes(machine_id) && ! selectedSessions.includes(session_data.session_id);
 
         if (machineData.error) {
             return (
                 <React.Fragment key={machine_id}>
-                    <tr className="machines-table-row">
+                    <tr className={`machines-table-row ${selected ? 'selected':null}`}>
                         <td className="session-table-data col-machine-name"><MachineTableRow machineId={machine_id} /></td>
                         <td className="session-table-data col-status"><StatusIcon status={machineData.machine_state} error={machineData.error} /></td>
                         <td className="session-table-data" colSpan={4}>
@@ -99,7 +101,7 @@ export const SessionHomeTable = ({ session_data, machines_data }) => {
 
         return (
             <React.Fragment key={machine_id}>
-                <tr className="machines-table-row">
+                <tr className={`machines-table-row ${selected ? 'selected':null}`}>
                     <td className="session-table-data col-machine-name"><MachineTableRow machineId={machine_id} /></td>
                     <td className="session-table-data col-status"><StatusIcon status={machineData.machine_state} error={machineData.error} /></td>
                     <td className="session-table-data col-input-bottle">
@@ -114,6 +116,7 @@ export const SessionHomeTable = ({ session_data, machines_data }) => {
                             target2={session_data.target2}
                             collectTarget1={machineData.collect_target1}
                             collectTarget2={machineData.collect_target2}
+                            machineData={machineData}
                         />
                     </td>
                     <td colSpan={1} className="session-table-data ">
@@ -130,10 +133,10 @@ export const SessionHomeTable = ({ session_data, machines_data }) => {
         hover: "/exit_button_hover.svg",
         pressed: "/exit_button_hover.svg"
     }[exitButtonState];
-
+    let selected = selectedSessions.includes(session_data.session_id);
     return (
         <div className="machine-list-in">
-            <div className="session-table-container">
+            <div className={`session-table-container ${selected ? 'selected':null}`}>
                 <img
                     className={exitButtonState === "default" ? "exit-session-button" : "exit-session-button-hover"}
                     alt="exit"
@@ -167,7 +170,7 @@ export const SessionHomeTable = ({ session_data, machines_data }) => {
 
                 <table className="table-session-short">
                     <thead>
-                    <tr style={{ height: "5%" }} className="machines-table-row">
+                    <tr style={{ height: "5%" }} className={`machines-table-row`}>
                         {[
                             { key: "#", label: "", width: "15%" },
                             { key: "status", label: "Status", width: "7%" },

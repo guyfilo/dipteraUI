@@ -127,6 +127,7 @@ export const ScannerWindow = ({data, sessions, newSessionCbk}) => {
                                     scanner={true}
                                     width={"60px"}
                                     height={"100%"}
+                                    machineData={scanner}
                                 />
                             </div>
                         </td>

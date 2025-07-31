@@ -29,13 +29,13 @@ export const RunningStatistics = ({ stats }) => {
         <div className="running-statistics-grid">
             <div className="stat-item">
                 <div className="stat-label">Bottle Target 1</div>
-                <b className="stat-value">{stats?.target1_bottle_counter }</b>
+                <b className="stat-value">{`${stats?.target1_bottle_counter} (${stats?.target1_interval_counter})`}</b>
             </div>
             {renderStat("Larva Size", stats?.mean_larva_area, "mm")}
             {renderStat("Pressure", stats?.pressure)}
             <div className="stat-item">
                 <div className="stat-label">Bottle Target 2</div>
-                <b className="stat-value">{stats?.target2_bottle_counter }</b>
+                <b className="stat-value">{`${stats?.target2_bottle_counter} (${stats?.target2_interval_counter})`}</b>
             </div>
             {renderStat("Waiting Time", stats?.waiting_time, "sec")}
             {renderStat("Sorting Rate", stats?.sorting_rate, "sec")}
