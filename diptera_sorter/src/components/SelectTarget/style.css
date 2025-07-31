@@ -58,6 +58,16 @@
     width: 29px;
     height: 27px;
 }
+.select-target-line .male_fl_nfl_icon {
+    width: 19px;
+    height: 18px;
+    left: 42px;
+}
+.select-target-line .female_fl_nfl_icon {
+    width: 12px;
+    height: 19px;
+    left: 42px;
+}
 .select-target-line .female_nfl_icon {
     width: 12px;
     height: 19px;

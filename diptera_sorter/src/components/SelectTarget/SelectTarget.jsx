@@ -9,11 +9,13 @@ export const SelectTarget = ({selectedTarget, setSelectedTarget}) => {
 
     const targets = {
         "male_fl": "Male Fluorescent",
-        "male_nfl": "Male",
+        "male_nfl": "Male not Fluorescent",
+        "male_fl_nfl": "Male Both",
         "female_fl": "Female Fluorescent",
-        "female_nfl": "Female",
+        "female_nfl": "Female not Fluorescent",
+        "female_fl_nfl": "Female Both",
         "male_female_fl": "Male & Female Fluorescent",
-        "male_female_nfl": "Male & Female",
+        "male_female_nfl": "Male & Female not Fluorescent",
     };
     return (<div className="select-target">
         {Object.entries(targets).map(([target, target_title]) => (
