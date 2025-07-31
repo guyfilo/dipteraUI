@@ -6,7 +6,7 @@ import "./style.css";
 
 import { useState, useEffect } from "react";
 
-export const OutputBottle = ({ index, male, female, fl, recycle, junk, width, height, collect , empty}) => {
+export const OutputBottle = ({ index, male, female, fl, nfl, recycle, junk, width, height, collect , empty}) => {
     const [blink, setBlink] = useState(false);
 
     useEffect(() => {
@@ -28,7 +28,8 @@ export const OutputBottle = ({ index, male, female, fl, recycle, junk, width, he
         if (male) target_icon_path.push("male");
         if (female) target_icon_path.push("female");
         if (target_icon_path.length === 0) target_icon_path.push("male", "female");
-        target_icon_path.push(fl ? "fl" : "nfl");
+        if (fl) target_icon_path.push("fl");
+        if (nfl) target_icon_path.push("nfl");
     }
     if (recycle || junk) {
         recycle ? tooltipText.push("Recycle") : tooltipText.push("Junk");
@@ -36,7 +37,8 @@ export const OutputBottle = ({ index, male, female, fl, recycle, junk, width, he
         if (male) tooltipText.push("Male");
         if (female) tooltipText.push("Female");
         if (tooltipText.length === 0) tooltipText.push("Male", "Female");
-        tooltipText.push(fl ? "Fluorescent" : "Not Fluorescent");
+        if (fl) tooltipText.push("Florescent");
+        if (nfl) tooltipText.push("not Florescent");
     }
 
     const target_icon = `/${target_icon_path.join("_")}.svg`;
@@ -69,6 +71,8 @@ export const OutputBottles = ({target1 = [], target2 = [], className, height, wi
                           male={target2?.includes("male")}
                           female={target2?.includes("female")}
                           fl={target2?.includes("fl")}
+                          nfl={scanner || target1?.includes("nfl")}
+
                           width={width}
                           height={height}
                           collect={collectTarget2}
@@ -85,6 +89,8 @@ export const OutputBottles = ({target1 = [], target2 = [], className, height, wi
                           male={scanner || target1?.includes("male")}
                           female={scanner || target1?.includes("female")}
                           fl={scanner || target1?.includes("fl")}
+                          nfl={scanner || target1?.includes("nfl")}
+
                           width={width}
                           height={height}
                           collect={collectTarget1}
