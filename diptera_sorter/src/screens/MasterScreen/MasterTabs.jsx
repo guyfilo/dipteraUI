@@ -2,9 +2,10 @@ import React, {useContext, useState, useEffect} from "react";
 import "./style.css";
 import {ImagesTab} from "./ImagesTab.jsx";
 import {DataContext} from "../../communication/DataContext.jsx";
+import Plot from 'react-plotly.js';
 
 export const MasterTabs = ({data, toggleHide, toggleSize, sizeMode, setSizeMode}) => {
-    const tabs = ["Light Sensors", "Cameras", "Images", "Errors"];
+    const tabs = ["Light Sensors", "Cameras", "Images", "Errors", "Predictions"];
     const [activeTab, setActiveTab] = useState("Light Sensors");
     const {
         getErrors
@@ -37,6 +38,41 @@ export const MasterTabs = ({data, toggleHide, toggleSize, sizeMode, setSizeMode}
             </div>
         )
     }
+
+    const predTab = () => {
+        const predictions = data?.pred || [];
+
+        // Compute ECDF
+        const sorted = [...predictions].sort((a, b) => a - b);
+        const y = sorted.map((_, i) => (i + 1) / sorted.length);
+
+        return (
+            <div>
+                <Plot
+                    data={[
+                        {
+                            x: sorted,
+                            y: y,
+                            type: 'scatter',
+                            mode: 'lines+markers',
+                            line: { shape: 'hv' }, // step-like ECDF
+                            marker: { size: 4 },
+                            name: 'ECDF',
+                        }
+                    ]}
+                    layout={{
+                        title: 'Empirical CDF of Predictions',
+                        xaxis: { title: 'Prediction Value' },
+                        yaxis: { title: 'ECDF', range: [0, 1] },
+                        autosize: true,
+                        margin: { t: 30, l: 40, r: 10, b: 40 },
+                    }}
+                    style={{ width: "100%", height: "300px" }}
+                    useResizeHandler={true}
+                />
+            </div>
+        );
+    };
 
 
     const camTab = () => {
@@ -138,6 +174,7 @@ export const MasterTabs = ({data, toggleHide, toggleSize, sizeMode, setSizeMode}
                         {activeTab === "Cameras" && camTab()}
                         {activeTab === "Images" && <ImagesTab machineData={data}/>}
                         {activeTab === "Errors" && errorTab()}
+                        {activeTab === "Predictions" && predTab()}
                     </div>
                 )}
 
