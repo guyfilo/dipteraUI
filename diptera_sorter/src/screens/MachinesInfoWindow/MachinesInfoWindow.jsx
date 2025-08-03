@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {ChooseTitle} from "../../components/ChooseTitle/ChooseTitle.jsx";
 import "./style.css";
 import StatusIcon from "../../components/StatusIcon/StatusIcon.jsx";
@@ -45,7 +45,28 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
         removeAll();
         selectMachine(machine.machine_id, true);
     }, [machine]);
+
+    const [displayTime, setDisplayTime] = useState(machine?.running_time ?? 0);
+
     let inSession = machine?.session_id && Object.keys(sessions).includes(machine.session_id);
+
+
+    // --- Sync displayed time when machine data updates ---
+    useEffect(() => {
+        setDisplayTime(machine?.running_time ?? 0);
+    }, [machine?.running_time]);
+
+    // --- Increment every second while machine is running ---
+    useEffect(() => {
+        if (machine?.machine_state === "Running") {
+            const interval = setInterval(() => {
+                setDisplayTime(prev => prev + 1);
+            }, 1000);
+            return () => clearInterval(interval);
+        }
+    }, [machine?.machine_state]);
+
+
     return (
         <div className="machinesInfoWindow">
             <div className="choose-machine">
@@ -162,7 +183,8 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
                             <div className="td-container machine-larva-counter">
                                 <p className="cell-header-machine">Run Time</p>
                                 <p className="larva-count-text" style={{fontSize: "30px"}}>
-                                    {formatTime(machine?.running_time)}</p>
+                                    {formatTime(displayTime)}
+                                </p>
                             </div>
                         </td>
                     </tr>

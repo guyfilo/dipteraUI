@@ -46,6 +46,7 @@ export const MasterTableRow = ({data, selected, setSelected}) => {
                 <div className={"master-row-pressure"}>
                     <p className={"cell-title"}>Pressure</p>
                     {data?.pressure?.value?.toFixed(3) || "null"}
+                    <p className={"cell-title"}>{data?.pump_out_val?.toFixed(3) || "null"}</p>
                 </div>
                 <div className={"master-row-sepline"}></div>
                 <div className={"master-row-jetson"}>
