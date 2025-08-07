@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useRef } from "react";
+import React, {createContext, useEffect, useRef, useState} from "react";
 
 const SERVERS = {
     israel: {
@@ -69,6 +69,13 @@ export const DataProvider = ({ children }) => {
         const res = await fetch(`${API_BASE}/api/state/full?sudo=${getSudoParam()}`);
         const json = await res.json();
         setSessions(json.sessions);
+    };
+
+    const sendEmail = async (formData) => {
+        return await fetch(`${API_BASE}/api/send-email`, {
+            method: "POST",
+            body: formData,
+        });
     };
 
     let fetchInterval = null;
@@ -266,6 +273,15 @@ export const DataProvider = ({ children }) => {
         await fetch(`${API_BASE}/api/state/refresh_jetson`, { method: "POST" });
     }
 
+    const [reports, setReports] = useState([]);
+
+    const fetchReports = async () => {
+        const res = await fetch(`${API_BASE}/api/reports`);
+        const json = await res.json();
+        setReports(json);
+        return json;
+    };
+
     useEffect(() => {
         fetchAvailableMachines();
     }, [serverKey]);
@@ -282,11 +298,14 @@ export const DataProvider = ({ children }) => {
             sendCommand,
             fetchAvailableMachines,
             sessions,
+            sendEmail,
             restart_machines,
             removeMachine,
             serverName: server.name,
             clearImages,
-            getErrors
+            getErrors,
+            reports,
+            fetchReports
         }}>
             {children}
         </DataContext.Provider>

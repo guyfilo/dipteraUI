@@ -9,13 +9,14 @@ export const Checkbox = ({
                              boolVar,
                              setBoolVar,
                              toggle = false,
+                             style = {}
                          }) => {
     const handleToggle = () => {
         setBoolVar(!boolVar);
     };
 
     return (
-        <div className="checkbox-wrapper">
+        <div className="checkbox-wrapper" style={style}>
             <div className={`checkbox-container ${className}`}>
                 {boolVar ? (
                     <img

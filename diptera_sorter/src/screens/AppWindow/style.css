@@ -149,14 +149,14 @@ html, body {
 
 .start-window .home-body {
   position: absolute;
-  top: 7vh;
+  top: 9vh;
   left: 30vh;
   right: 0;
   height: 86%;
-  width: 80%;
+  width: 85%;
   overflow-y: auto;
   overflow-x: visible;
-  padding: 1vh 2vw;
+  padding-right: 2vw;
   box-sizing: border-box;
 }
 

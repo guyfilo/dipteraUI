@@ -18,6 +18,7 @@ import {ScannerWindow} from "../ScannerWindow/ScannerWindow.jsx";
 import {Lights} from "../../components/Lights/Lights.jsx";
 import {MasterPage} from "../MasterScreen/MasterScreen.jsx";
 import {Tagger} from "../Tagger/Tagger.jsx";
+import ReportsScreen from "../Reports/ReportsScreen.jsx";
 
 export const AppWindow = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -109,6 +110,10 @@ export const AppWindow = () => {
 
         if (selected === "Treatments & Warnings") {
             return <div>Treatments & Warnings</div>;
+        }
+
+        if (selected === "Reports") {
+            return <ReportsScreen></ReportsScreen>;
         }
 
         return home_default;

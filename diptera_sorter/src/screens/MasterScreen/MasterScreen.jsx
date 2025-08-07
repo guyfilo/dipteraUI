@@ -49,7 +49,7 @@ export const MasterPage = () => {
         removeAll();
         selectMachine(machineId);
         setSelectedMachine(machineId);
-        setSizeMode("hidden");
+        // setSizeMode("hidden");
     }
     useEffect(() => {
         const interval = setInterval(async () => {
