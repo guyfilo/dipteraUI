@@ -12,9 +12,9 @@ const SERVERS = {
         WS_BASE: "ws://sorter-burkina.tailb282fd.ts.net:8000"
     },
     local: {
-        name: "Local Host",
-        API_BASE: "http://localhost:8000",
-        WS_BASE: "ws://localhost:8000"
+        name: "Local UI Host",
+        API_BASE: `http://${window.location.hostname}:8000`,
+        WS_BASE: `ws://${window.location.hostname}:8000`
     }
 };
 
@@ -23,7 +23,7 @@ export const DataContext = createContext();
 const getServerKey = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const key = urlParams.get("site");
-    return key === "burkina" ? "burkina" : key === "local" ? "local" : "israel";
+    return key === "burkina" ? "burkina" : key === "israel" ? "israel" : "local";
 };
 
 const isSudoMode = () => {

@@ -1,6 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { DataContext } from "../../communication/DataContext.jsx";
-
+import "./style.css"
 const MailIcon = ({ className = "icon", onClick, status }) => {
     let color = "#bababa";
     if (status === "sending") color = "#fca447";   // Orange
@@ -33,18 +33,29 @@ const ReportsMailButton = ({ selected, reports, selectedMachines, className, pre
     const [status, setStatus] = useState(null);
     const { sendEmail } = useContext(DataContext);
 
+    const [modalOpen, setModalOpen] = useState(false);
+    const [email, setEmail] = useState("");
+    const [message, setMessage] = useState("");
+    const [previousEmails, setPreviousEmails] = useState(
+        JSON.parse(localStorage.getItem("previousEmails") || "[]")
+    );    const [subject, setSubject] = useState("Session Reports");
+
     const pretty = (key, value) => {
         if (pretty_func) return pretty_func(key, value);
         return value;
     };
 
+    useEffect(() => {
+        if (!selected?.length) {
+            setMessage("No data selected");
+        } else {
+            setMessage(""); // Clear message if selection is valid
+        }
+    }, [selected]);
+
+
     const sendMail = async () => {
-        const email = prompt("Enter recipient email:");
-        if (!email) return;
-
-        const subject = prompt("Enter mail subject:", "Session Reports");
-        if (!subject) return;
-
+        setModalOpen(false);
         setStatus("sending");
 
         const sessions = selected.map((sessionId) => ({
@@ -88,7 +99,7 @@ const ReportsMailButton = ({ selected, reports, selectedMachines, className, pre
         if (csvRows.length === 0) {
             setStatus("error");
             setTimeout(() => setStatus(null), 10000);
-            return alert("No matching data to send.");
+            setMessage("No matching data to send.");
         }
 
         const csvBlob = new Blob([csvRows.join("\n")], {
@@ -104,6 +115,12 @@ const ReportsMailButton = ({ selected, reports, selectedMachines, className, pre
             const response = await sendEmail(formData);
             if (!response.ok) throw new Error("Failed to send email");
             setStatus("success");
+            // Save email to localStorage if not already stored
+            if (email && !previousEmails.includes(email)) {
+                const updated = [...previousEmails, email].slice(-10); // keep last 10
+                localStorage.setItem("previousEmails", JSON.stringify(updated));
+                setPreviousEmails(updated);
+            }
         } catch (err) {
             setStatus("error");
         } finally {
@@ -113,7 +130,53 @@ const ReportsMailButton = ({ selected, reports, selectedMachines, className, pre
 
     return (
         <div>
-            <MailIcon className={className} onClick={sendMail} status={status} />
+            <MailIcon className={className} onClick={() => setModalOpen(true)} status={status} />
+
+            {modalOpen && (
+                <div className="modal-overlay">
+                    {message ?
+                        <div className="modal-content">
+                            <img className={"exit-modal"} src={"/exit_button.svg"} alt={"X"}
+                            onClick={() => setModalOpen(false)}></img>
+                            {message}
+                        </div> :
+                        <div className="modal-content">
+                            <img className={"exit-modal"} src={"/exit_button.svg"} alt={"X"}
+                                 onClick={() => setModalOpen(false)}></img>                            <h3>Send Reports by Email</h3>
+                            <label>
+                                To:
+                                <input
+                                    type="email"
+                                    list="email-suggestions"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="Enter email"
+                                    required
+                                />
+                                <datalist id="email-suggestions">
+                                    {previousEmails.map((em, i) => (
+                                        <option key={i} value={em} />
+                                    ))}
+                                </datalist>
+                            </label>
+
+                            <label>
+                                Subject:
+                                <input
+                                    type="text"
+                                    value={subject}
+                                    onChange={(e) => setSubject(e.target.value)}
+                                />
+                            </label>
+                            <div style={{ marginTop: "1rem", display: "flex", gap: "1rem" }}>
+                                <button onClick={sendMail}>Send</button>
+                                <button onClick={() => setModalOpen(false)}>Cancel</button>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            )}
         </div>
     );
 };

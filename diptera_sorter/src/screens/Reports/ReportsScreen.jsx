@@ -4,6 +4,8 @@ import "./style.css";
 import {Checkbox} from "../../components/Checkbox/index.jsx";
 import MultiSelectDropdown from "../../components/MultiSelectDropdown/MultiSelectDropdown.jsx";
 import ReportsMailButton from "./ReportsMailButton.jsx";
+import subtract from "../SessionSetup/Subtract.svg";
+import subtractBack from "../SessionSetup/Subtract-back.svg";
 
 
 const DownloadIcon = ({ className = "icon" , onClick}) => (
@@ -44,6 +46,32 @@ const MailIcon = ({ className = "icon" , onClick}) => (
     </svg>
 );
 
+const Charging = () => {
+    const [angle, setAngle] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setAngle(prev => prev + 1);
+        }, 10);
+        return () => clearInterval(interval);
+    }, []);
+
+    return (
+        <div className="session-setup-in">
+            <div
+                className="overlap-group"
+                style={{
+                    transform: `rotate(${angle}deg)`,
+                    transition: "transform 0.1s linear",
+                }}
+            >
+                <img className="subtract" alt="Subtract" src={"/Subtract.svg"} />
+                <img className="subtract" alt="Subtract" src={"Subtract-back.svg"} />
+            </div>
+        </div>
+    );
+};
+
 const ReportsScreen = () => {
     const { reports, fetchReports } = useContext(DataContext);
     const [expanded, setExpanded] = useState({}); // { session_id: true/false }
@@ -64,7 +92,7 @@ const ReportsScreen = () => {
     }, []);
 
     if (!reports || Object.keys(reports).length === 0) {
-        return <div>Loading reports...</div>;
+        return <Charging />;
     }
 
     const toggleExpand = (sessionId) => {
