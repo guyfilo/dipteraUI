@@ -6,6 +6,7 @@ import MultiSelectDropdown from "../../components/MultiSelectDropdown/MultiSelec
 import ReportsMailButton from "./ReportsMailButton.jsx";
 import subtract from "../SessionSetup/Subtract.svg";
 import subtractBack from "../SessionSetup/Subtract-back.svg";
+import * as XLSX from "xlsx"; // at the top
 
 
 const DownloadIcon = ({ className = "icon" , onClick}) => (
@@ -136,10 +137,8 @@ const ReportsScreen = () => {
         const mergedData = sessions.flatMap(({ sessionId, sessionData, sessionInfo }) => {
             return sessionData
                 .filter((row) => {
-                    // If no machine selected → keep all
                     if (!selectedMachines || selectedMachines.length === 0) return true;
 
-                    // Determine machine for this row
                     const rowMachines = Array.isArray(row.machine_ids)
                         ? row.machine_ids
                         : String(row.machine_ids || row.machine_id || "")
@@ -150,8 +149,8 @@ const ReportsScreen = () => {
                 })
                 .map((row) => ({
                     session_id: sessionId,
-                    ...sessionInfo, // Spread info first
-                    ...row,         // Then row data
+                    ...sessionInfo,
+                    ...row,
                 }));
         });
 
@@ -160,33 +159,25 @@ const ReportsScreen = () => {
             return;
         }
 
-        // Collect all unique keys for CSV columns
-        const allKeys = Array.from(
-            mergedData.reduce((keys, row) => {
-                Object.keys(row).forEach((k) => keys.add(k));
-                return keys;
-            }, new Set())
+        // Create a worksheet from JSON
+        const ws = XLSX.utils.json_to_sheet(
+            mergedData.map((row) => {
+                const newRow = {};
+                Object.keys(row).forEach((k) => {
+                    newRow[k] = pretty(k, row[k]);
+                });
+                return newRow;
+            })
         );
 
-        // Build CSV
-        const csvRows = [
-            allKeys.join(","), // Header
-            ...mergedData.map((row) =>
-                allKeys.map((k) => JSON.stringify(pretty(k, row[k]) ?? "")).join(",")
-            ),
-        ];
-        const csvContent = csvRows.join("\n");
+        // Create a workbook and append the worksheet
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Sessions");
 
-        // Trigger download
-        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", `sessions_${Date.now()}.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        // Export to Excel file
+        XLSX.writeFile(wb, `sessions_${Date.now()}.xlsx`);
     };
+
 
     const filteredReports = Object.fromEntries( Object.entries(reports.reports).filter(([sessionId, session]) => {
         const info = session.session_info;

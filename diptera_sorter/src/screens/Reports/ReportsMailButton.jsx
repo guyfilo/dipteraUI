@@ -1,6 +1,8 @@
 import React, {useContext, useEffect, useState} from "react";
 import { DataContext } from "../../communication/DataContext.jsx";
-import "./style.css"
+import "./style.css";
+import * as XLSX from "xlsx";
+
 const MailIcon = ({ className = "icon", onClick, status }) => {
     let color = "#bababa";
     if (status === "sending") color = "#fca447";   // Orange
@@ -38,7 +40,8 @@ const ReportsMailButton = ({ selected, reports, selectedMachines, className, pre
     const [message, setMessage] = useState("");
     const [previousEmails, setPreviousEmails] = useState(
         JSON.parse(localStorage.getItem("previousEmails") || "[]")
-    );    const [subject, setSubject] = useState("Session Reports");
+    );
+    const [subject, setSubject] = useState("Session Reports");
 
     const pretty = (key, value) => {
         if (pretty_func) return pretty_func(key, value);
@@ -49,10 +52,9 @@ const ReportsMailButton = ({ selected, reports, selectedMachines, className, pre
         if (!selected?.length) {
             setMessage("No data selected");
         } else {
-            setMessage(""); // Clear message if selection is valid
+            setMessage("");
         }
     }, [selected]);
-
 
     const sendMail = async () => {
         setModalOpen(false);
@@ -64,12 +66,12 @@ const ReportsMailButton = ({ selected, reports, selectedMachines, className, pre
             sessionInfo: reports.reports[sessionId].session_info,
         }));
 
-        const csvRows = [];
-
+        // ---- build merged rows (respecting machine filter) ----
+        const mergedData = [];
         sessions.forEach(({ sessionId, sessionData, sessionInfo }) => {
-            sessionData
+            (sessionData || [])
                 .filter((row) => {
-                    if (selectedMachines.length === 0) return true;
+                    if (!selectedMachines || selectedMachines.length === 0) return true;
                     const machines = Array.isArray(row.machine_ids)
                         ? row.machine_ids
                         : String(row.machine_ids ?? row.machine_id ?? "")
@@ -78,46 +80,53 @@ const ReportsMailButton = ({ selected, reports, selectedMachines, className, pre
                     return selectedMachines.some((m) => machines.includes(m));
                 })
                 .forEach((row) => {
-                    const combinedRow = {
+                    mergedData.push({
                         session_id: sessionId,
                         ...sessionInfo,
                         ...row,
-                    };
-                    if (csvRows.length === 0) {
-                        csvRows.push(Object.keys(combinedRow).join(","));
-                    }
-                    csvRows.push(
-                        Object.keys(combinedRow)
-                            .map((k) =>
-                                JSON.stringify(pretty(k, combinedRow[k]) ?? "")
-                            )
-                            .join(",")
-                    );
+                    });
                 });
         });
 
-        if (csvRows.length === 0) {
+        if (mergedData.length === 0) {
             setStatus("error");
             setTimeout(() => setStatus(null), 10000);
             setMessage("No matching data to send.");
+            return;
         }
 
-        const csvBlob = new Blob([csvRows.join("\n")], {
-            type: "text/csv;charset=utf-8;",
+        // ---- apply pretty() formatting per cell ----
+        const formatted = mergedData.map((r) => {
+            const o = {};
+            Object.keys(r).forEach((k) => (o[k] = pretty(k, r[k])));
+            return o;
         });
 
+        // ---- create workbook with a single "Sessions" sheet ----
+        const ws = XLSX.utils.json_to_sheet(formatted);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Sessions");
+
+        // Write workbook to ArrayBuffer and wrap in Blob
+        const xlsxArray = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        const xlsxBlob = new Blob([xlsxArray], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+
+        // ---- prepare form data ----
         const formData = new FormData();
         formData.append("email", email);
         formData.append("subject", subject);
-        formData.append("file", csvBlob, "sessions.csv");
+        formData.append("file", xlsxBlob, "sessions.xlsx");
 
         try {
             const response = await sendEmail(formData);
             if (!response.ok) throw new Error("Failed to send email");
             setStatus("success");
+
             // Save email to localStorage if not already stored
             if (email && !previousEmails.includes(email)) {
-                const updated = [...previousEmails, email].slice(-10); // keep last 10
+                const updated = [...previousEmails, email].slice(-10);
                 localStorage.setItem("previousEmails", JSON.stringify(updated));
                 setPreviousEmails(updated);
             }
@@ -134,15 +143,25 @@ const ReportsMailButton = ({ selected, reports, selectedMachines, className, pre
 
             {modalOpen && (
                 <div className="modal-overlay">
-                    {message ?
+                    {message ? (
                         <div className="modal-content">
-                            <img className={"exit-modal"} src={"/exit_button.svg"} alt={"X"}
-                            onClick={() => setModalOpen(false)}></img>
+                            <img
+                                className={"exit-modal"}
+                                src={"/exit_button.svg"}
+                                alt={"X"}
+                                onClick={() => setModalOpen(false)}
+                            />
                             {message}
-                        </div> :
+                        </div>
+                    ) : (
                         <div className="modal-content">
-                            <img className={"exit-modal"} src={"/exit_button.svg"} alt={"X"}
-                                 onClick={() => setModalOpen(false)}></img>                            <h3>Send Reports by Email</h3>
+                            <img
+                                className={"exit-modal"}
+                                src={"/exit_button.svg"}
+                                alt={"X"}
+                                onClick={() => setModalOpen(false)}
+                            />
+                            <h3>Send Reports by Email</h3>
                             <label>
                                 To:
                                 <input
@@ -173,8 +192,7 @@ const ReportsMailButton = ({ selected, reports, selectedMachines, className, pre
                                 <button onClick={() => setModalOpen(false)}>Cancel</button>
                             </div>
                         </div>
-                    }
-
+                    )}
                 </div>
             )}
         </div>

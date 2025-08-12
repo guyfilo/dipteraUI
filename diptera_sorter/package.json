@@ -25,6 +25,7 @@
     "react-plotly.js": "^2.6.0",
     "react-router-dom": "^6.8.1",
     "recharts": "^2.15.1",
+    "xlsx": "^0.18.5",
     "zoom-image": "^0.1.4"
   },
   "devDependencies": {
