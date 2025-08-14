@@ -276,7 +276,7 @@ const ReportsScreen = () => {
                     const data = row["session_data"];
                     if (!data || data.length === 0) return null;
 
-                    const columns = Object.keys(data[0]);
+                    const columns = Object.keys(data[0]).filter((k) => {return !(k === "session_id")});
                     const sessionId = info.session_id;
                     const isExpanded = !!expanded[sessionId];
 
@@ -331,7 +331,7 @@ const ReportsScreen = () => {
                                                 <thead>
                                                 <tr>
                                                     {columns.map((key) => (
-                                                        <th key={key}>{key}</th>
+                                                        <th key={key}>{key.replaceAll("_", " ")}</th>
                                                     ))}
                                                 </tr>
                                                 </thead>
