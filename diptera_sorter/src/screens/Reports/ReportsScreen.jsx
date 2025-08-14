@@ -120,9 +120,11 @@ const ReportsScreen = () => {
     const pretty = (key, val) => {
         if (!val && val !== 0) return "-";
         if (key === "title") return String(val).replaceAll("_", " ");
-        if (key === "larva size") return Number(val).toFixed(2);
+        if (key === "larva size") return `${ Number(val).toFixed(2)}mm²`;
         if (key === "good size rate") return `${ Number(100 * val).toFixed(2)}%`;
         if (key === "machine_ids") return val.join(",");
+        if (key.includes("%")) return `${ Number(100 * val).toFixed(1)}%`;
+
 
         return String(val);
     };
