@@ -93,6 +93,8 @@ function ChartsPane({charts}) {
                 color: "#707070"
             }
         },
+        paper_bgcolor: "rgba(0,0,0,0)", // transparent outer background
+        plot_bgcolor: "rgba(0,0,0,0)",  // transparent inner plot background
 
         margin: {
             l: 30,
@@ -110,7 +112,8 @@ function ChartsPane({charts}) {
             line: {
                 color: colorsMap[key],
                 width: 3,
-            }
+            },
+
         }))
     ), []);
 
@@ -211,7 +214,7 @@ export default function SessionReportLine({
                     );
                 }}
             />
-            <div className="session-summary-window " key={sessionId}>
+            <div className={`session-summary-window ${isSelected && "selected"}`} key={sessionId}>
                 <div className="session-summary-header" onClick={() => setExpanded((v) => !v)}>
                     <img
                         className={"window-arrow"}
