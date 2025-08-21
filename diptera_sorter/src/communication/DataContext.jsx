@@ -274,6 +274,7 @@ export const DataProvider = ({ children }) => {
     }
 
     const [reports, setReports] = useState([]);
+    const [chartsDataMap, setChartsDataMap] = useState({});
 
     const fetchReports = async () => {
         const res = await fetch(`${API_BASE}/api/reports`);
@@ -281,6 +282,23 @@ export const DataProvider = ({ children }) => {
         setReports(json);
         return json;
     };
+
+     const fetchChartsData = async (sessionId) =>{
+        if (chartsDataMap[sessionId]) {
+            return chartsDataMap[sessionId];
+        }
+
+        const response = await fetch(`${API_BASE}/api/charts?session_id=${sessionId}`);
+        if (!response.ok) {
+            throw new Error("Failed to fetch chart data");
+        }
+
+        const data = await response.json();
+        console.log(data);
+
+        setChartsDataMap(prev => ({ ...prev, [sessionId]: data }));
+        return data;
+    }
 
     useEffect(() => {
         fetchAvailableMachines();
@@ -305,7 +323,9 @@ export const DataProvider = ({ children }) => {
             clearImages,
             getErrors,
             reports,
-            fetchReports
+            fetchReports,
+            fetchChartsData,
+            chartsDataMap
         }}>
             {children}
         </DataContext.Provider>

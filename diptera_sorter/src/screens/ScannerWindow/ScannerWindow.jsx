@@ -5,7 +5,7 @@ import StatusIcon from "../../components/StatusIcon/StatusIcon.jsx";
 import {InputBottle} from "../../components/InputBottle/InputBottle.jsx";
 import {OutputBottles} from "../../components/OutputBottle/OutputBottle.jsx";
 import WarningIcon from "../../components/WarningsIcon/WarningIcon.jsx";
-import PieChart from "../../components/PieChart/PieChart.jsx";
+import LivePieChart from "../../components/PieChart/LivePieChart.jsx";
 import {InfoContainer} from "../../components/InfoContainer/InfoContainer.jsx";
 import {AreaHistogram} from "../../components/AreaHistogram/AreaHistogram.jsx";
 import {Gauge} from "../../components/Gauge/Gauge.jsx";

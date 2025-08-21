@@ -4,7 +4,7 @@ import {ChooseTitle} from "../../components/ChooseTitle/ChooseTitle.jsx";
 import "./style.css"
 import {SessionInfoTable} from "../../components/SessionInfoTable/SessionInfoTable.jsx";
 import {AreaHistogram} from "../../components/AreaHistogram/AreaHistogram.jsx";
-import PieChart from "../../components/PieChart/PieChart.jsx";
+import LivePieChart from "../../components/PieChart/LivePieChart.jsx";
 
 import {SelectedMachinesContext} from "../../components/SelectedMachinesContext/SelectedMachinesContext.jsx";
 
@@ -109,7 +109,7 @@ export const SessionInfoWindow = ({data, sessions}) => {
         </div>
         <div className="session-pie">
             <InfoContainer info={"Loops Pie"} title={"Loops Pie"}>
-                <PieChart width={450} height={400} selected={combinedData}></PieChart>
+                <LivePieChart width={450} height={400} selected={combinedData}></LivePieChart>
             </InfoContainer>
         </div>
         <div className="larva-area-histogram-container">

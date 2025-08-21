@@ -5,7 +5,7 @@ import StatusIcon from "../../components/StatusIcon/StatusIcon.jsx";
 import {InputBottle} from "../../components/InputBottle/InputBottle.jsx";
 import {OutputBottles} from "../../components/OutputBottle/OutputBottle.jsx";
 import WarningIcon from "../../components/WarningsIcon/WarningIcon.jsx";
-import PieChart from "../../components/PieChart/PieChart.jsx";
+import LivePieChart from "../../components/PieChart/LivePieChart.jsx";
 import {InfoContainer} from "../../components/InfoContainer/InfoContainer.jsx";
 import {AreaHistogram} from "../../components/AreaHistogram/AreaHistogram.jsx";
 import {Gauge} from "../../components/Gauge/Gauge.jsx";
@@ -194,7 +194,7 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
                             <div className="td-container machine-pie" style={{width: "450px"}}>
 
                                 <InfoContainer info={"Loops Pie"} title={"Loops Pie"}>
-                                    <PieChart
+                                    <LivePieChart
                                         width={400}
                                         height={300}
                                         selected={machine}

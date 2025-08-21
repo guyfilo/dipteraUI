@@ -23,7 +23,7 @@ const MailIcon = ({ className = "icon", onClick, status }) => {
             <path
                 d="M44 12C44 9.8 42.2 8 40 8H8C5.8 8 4 9.8 4 12M44 12V36C44 38.2 42.2 40 40 40H8C5.8 40 4 38.2 4 36V12M44 12L24 26L4 12"
                 stroke="currentColor"
-                strokeWidth="4"
+                strokeWidth="6"
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
@@ -138,7 +138,7 @@ const ReportsMailButton = ({ selected, reports, selectedMachines, className, pre
     };
 
     return (
-        <div>
+        <div className={className}>
             <MailIcon className={className} onClick={() => setModalOpen(true)} status={status} />
 
             {modalOpen && (
