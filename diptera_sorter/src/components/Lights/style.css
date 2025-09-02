@@ -1,6 +1,6 @@
 .lights-container {
     left: 2vw !important;
-    top: 25vh !important;
+    top: 24vh !important;
     position: absolute;
     border-radius: 0.7vw;
     background-color: var(--Light-Grey);

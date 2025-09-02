@@ -183,7 +183,6 @@ const ReportsScreen = () => {
 
         return machineMatch && lineMatch && dateMatch;
     }));
-
     return (
         <div
             style={{
@@ -191,6 +190,7 @@ const ReportsScreen = () => {
                 display: "flex",
                 flexDirection: "column",
                 gap: "10px",
+                height: "100%",
             }}
         >
             <b className={"reports-screen-title"}>Sessions Reports</b>
@@ -257,8 +257,9 @@ const ReportsScreen = () => {
                         const info = row.session_info;
                         const data = row.session_data;
                         if (!data || data.length === 0) return null;
-
-                        const columns = Object.keys(data[0]).filter((k) => k !== "session_id");
+                        const ignore_cols = ["session_id", "_date", "_start_ts"];
+                        const columns = Object.keys(data[0]).filter((k) => !ignore_cols.includes(k));
+                        console.log("columns", columns);
                         const sessionId = info.session_id;
 
                         const onDownload = () =>

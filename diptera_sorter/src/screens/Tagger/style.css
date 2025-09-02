@@ -1,12 +1,12 @@
 .tagger-container {
-    position: absolute;
-    width: 1000px;
-    height: 800px;
+    position: relative;
+    width: 95%;
+    height: 100%;
+    left: 15px;
     font-size: 32px;
     letter-spacing: 0.03em;
     font-family: var(--font-assistant);
     color: #000;
-
 }
 
 
@@ -40,7 +40,6 @@
 
 }
 
-
 .tagger-table-container {
     position: absolute;
     top: 100px;
@@ -57,7 +56,7 @@
 
 .tagger-table-container::-webkit-scrollbar-thumb {
     background-color: #ccc;
-    border-radius: 3px;
+    border-radius: 5px;
 }
 
 .tagger-table-container {
@@ -74,6 +73,7 @@
 
 .tagger-row {
     display: flex;
+    border-radius: 5px;
 
     align-items: center;
     height: 50px;

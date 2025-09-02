@@ -45,14 +45,8 @@ export const Menu = ({ className, divClassName, selected, setSelected }) => {
                         className={selected === "Tagger" ? "menu-option-selected" : ""}
                     />
                     <MenuOption
-                        text="Treatments & Warnings"
-                        style={{ top: "70%" }}
-                        onClick={() => select("Treatments")}
-                        className={selected === "Treatments" ? "menu-option-selected" : ""}
-                    />
-                    <MenuOption
                         text="Reports"
-                        style={{ top: "80%" }}
+                        style={{ top: "70%" }}
                         onClick={() => select("Reports")}
                         className={selected === "Reports" ? "menu-option-selected" : ""}
                     />
@@ -62,14 +56,8 @@ export const Menu = ({ className, divClassName, selected, setSelected }) => {
             <div className="overlap-wrapper">
                 <div className="overlap">
                     <MenuOption
-                        text="Guided Help"
-                        style={{ top: "3vh" }}
-                        onClick={() => select("Guided Help")}
-                        className={selected === "Guided Help" ? "menu-option-selected" : ""}
-                    />
-                    <MenuOption
                         text="Master Mode"
-                        style={{ top: "8vh" }}
+                        style={{ top: "3vh" }}
                         onClick={() => select("Master Mode")}
                         className={selected === "Master Mode" ? "menu-option-selected" : ""}
                     />

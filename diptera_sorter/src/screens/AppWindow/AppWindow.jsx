@@ -50,7 +50,7 @@ export const AppWindow = () => {
 
     let home_default =
         <div className={"home-default-container"}>
-            <p style={{color: selected === "Scanner" ? "#fc4747" : null, display: "flex", position: "relative" , width: "max-content" }}>
+            <p style={{color: selected === "Scanner" ? "#fc4747" : null, display: "flex", position: "relative"  }}>
                 There are no {`${selected === "Scanner" ? "SCANNING " : ""}`}sessions running. Please start a new
                 session
             </p>

@@ -1,187 +1,187 @@
 html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 .start-window {
-  background-color: #f4f4f4;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  position: relative;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
 }
 
 .start-window .div-2 {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    box-sizing: border-box;
 }
 
 .start-window .butten-instance-start-session {
-  width: 40vh;
-  position: relative;
+    width: 40vh;
+    position: relative;
 }
 
 .home-default-container {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  gap: 5vh;
-  flex-flow: column ;
-  align-items: center;
-  font-size: 3vh;
+    position: relative;
+    display: flex;
+    gap: 5vh;
+    flex-flow: column;
+    align-items: center;
+    font-size: 3vh;
+    top:30%;
 }
 
 .start-window .butten-instance-start-scanner-session {
-  border-radius: 5px;
-  height: 43px;
-  position: relative;
-  min-width: 147px;
-  padding: 0 16px;
-  align-items: center;
-  display: flex;
-  align-content: center;
-  justify-content: center;
-  background-color: #fc4747;
+    border-radius: 5px;
+    height: 43px;
+    position: relative;
+    min-width: 147px;
+    padding: 0 16px;
+    align-items: center;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    background-color: #fc4747;
 }
 
 .butten-instance-start-scanner-session:hover {
-  background-color: #d32f2f;
+    background-color: #d32f2f;
 }
 
 .start-window .design-component-instance-node-start-session {
-  height: 3vh !important;
-  width: 14vw !important;
-  position: absolute !important;
-  left: 2vw !important;
-  top: 2.5vh !important;
-  white-space: unset !important;
+    height: 3vh !important;
+    width: 14vw !important;
+    position: absolute !important;
+    left: 2vw !important;
+    top: 2.5vh !important;
+    white-space: unset !important;
 }
 
 .start-window .no-session-msg {
-  color: #000000;
-  font-size: 2vh;
-  font-weight: 400;
-  position: absolute;
-  line-height: 2.2vh;
+    color: #000000;
+    font-size: 2vh;
+    font-weight: 400;
+    position: absolute;
+    line-height: 2.2vh;
 }
 
 .button-grid {
-  display: grid;
-  grid-template-columns: repeat(3,max-content);
-  row-gap: 2vh;
-  column-gap: 4vh;
-  justify-items: left;
-  position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 2fr);
+    row-gap: 2vh;
+    column-gap: 3vh;
+    width: 22vh;
+    justify-items: center;
+    position: relative;
 }
 
 .start-window .group-2 {
-  position: absolute;
-  left: 2vw;
-  top: 10vh;
-  width: 15vh;
-  height: 25vh;
+    position: absolute;
+    left: 2vw;
+    top: 10vh;
+    width: 15vh;
+    height: 25vh;
 }
 
 .start-window .text-wrapper-7 {
-  color: #707070;
-  font-size: 1.5vh;
-  height: 3vh;
-  width: 15vw;
+    color: #707070;
+    font-size: 1.5vh;
+    height: 3vh;
+    width: 15vw;
 }
 
 .start-window .start-window-header {
-  position: absolute;
-  top: 0;
-  left: 2vw;
-  width: 96vw;
-  height: 10vh;
+    position: absolute;
+    top: 0;
+    left: 2vw;
+    width: 96vw;
+    height: 10vh;
 }
 
 .start-window .prog_title {
-  color: #000000;
-  font-size: 3vh;
-  font-weight: 700;
-  position: absolute;
-  top: 2.5vh;
-  left: 0;
-  height: 5vh;
-  width: auto;
+    color: #000000;
+    font-size: 3vh;
+    font-weight: 700;
+    position: absolute;
+    top: 2.5vh;
+    left: 0;
+    height: 5vh;
+    width: auto;
 }
 
 .start-window .diptera_header {
-  color: #000000;
-  font-size: 3vh;
-  font-weight: 700;
-  position: absolute;
-  top: 2.5vh;
-  right: 0;
-  height: 5vh;
-  width: auto;
+    color: #000000;
+    font-size: 3vh;
+    font-weight: 700;
+    position: absolute;
+    top: 2.5vh;
+    right: 0;
+    height: 5vh;
+    width: auto;
 }
 
 .start-window .diptera-ai-logo {
-  height: 8vh;
-  width: auto;
-  position: absolute;
-  top: 1vh;
-  right: 14vh;
-  object-fit: contain;
+    height: 8vh;
+    width: auto;
+    position: absolute;
+    top: 1vh;
+    right: 14vh;
+    object-fit: contain;
+    background-color: transparent;
 }
 
 .start-window .menu-instance {
-  position: absolute !important;
-  left: 2vw !important;
-  top: 36vh !important;
+    position: absolute !important;
+    left: 2vw !important;
+    top: 34vh !important;
 }
 
 .start-window .menu-2 {
-  color: #398ccb !important;
-  font-weight: 700 !important;
+    color: #398ccb !important;
+    font-weight: 700 !important;
 }
 
 .start-window .home-body {
-  position: absolute;
-  top: 9vh;
-  right: 0;
-  height: 86%;
-  width: 85%;
-  overflow-y: auto;
-  overflow-x: visible;
-  padding-right: 2vw;
-  box-sizing: border-box;
+    position: relative;
+    top: 9vh;
+    left: 14vw;
+    height: 87%;
+    width: 85%;
+    overflow-y: auto;
+    overflow-x: visible;
+    padding-right: 1vw;
+    box-sizing: border-box;
 }
 
 html {
-  scrollbar-width: thin;
-  scrollbar-color: #e5e5e5 #fff;
+    scrollbar-width: thin;
+    scrollbar-color: #e5e5e5 #fff;
 }
 
 .default-tooltip {
-  position: absolute;
-  top: 120%;
-  border-radius: 2px;
-  background-color: #707070;
-  height: 27px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 3px;
-  box-sizing: border-box;
-  width: max-content;
-  text-align: left;
-  font-size: 16px;
-  color: #fefefe;
-  left: 50%;
-  z-index: 999;
-  transform: translateX(-50%);
-  font-family: Assistant;
+    position: absolute;
+    top: 120%;
+    border-radius: 2px;
+    background-color: #707070;
+    height: 27px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 3px;
+    box-sizing: border-box;
+    width: max-content;
+    text-align: left;
+    font-size: 16px;
+    color: #fefefe;
+    left: 50%;
+    z-index: 999;
+    transform: translateX(-50%);
+    font-family: Assistant;
 }

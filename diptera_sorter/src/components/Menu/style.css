@@ -18,9 +18,9 @@
   position: relative;
 }
 .menu .rectangle {
-  background-color: #e4e4e4;
+  background-color: var(--Light-Grey);
   border-radius: 0.7vw;
-  height: 40vh;
+  height: 30vh;
   width: 100%;
   position: absolute;
   top: 0;
@@ -69,15 +69,15 @@
 }
 
 .menu .overlap-wrapper {
-  height: 12vh;
+  height: 7vh;
   width: 100%;
   position: absolute;
-  top: 42vh;
+  top: 32vh;
   left: 0;
 }
 
 .menu .overlap {
-  background-color: #e4e4e4;
+  background-color: var(--Light-Grey);
   border-radius: 0.7vw;
   height: 100%;
   width: 100%;

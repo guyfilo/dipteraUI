@@ -294,7 +294,6 @@ export const DataProvider = ({ children }) => {
         }
 
         const data = await response.json();
-        console.log(data);
 
         setChartsDataMap(prev => ({ ...prev, [sessionId]: data }));
         return data;
