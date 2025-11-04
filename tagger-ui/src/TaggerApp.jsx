@@ -20,6 +20,8 @@ function Progress({state}) {
 export default function TaggerApp() {
     const [subjects, setSubjects] = useState([]);
     const [subject, setSubject] = useState("");
+    const [openSessions, setOpenSessions] = useState([]);
+    const [selectedOpen, setSelectedOpen] = useState("");
     const [taggerName, setTaggerName] = useState("");
     const [sessionId, setSessionId] = useState(null);
     const [imagePath, setImagePath] = useState(null);
@@ -42,7 +44,9 @@ export default function TaggerApp() {
 
     useEffect(() => {
         axios.get("/api/subjects").then((res) => setSubjects(res.data));
-    }, []);
+        axios.get("/api/session/open").then((res) => setOpenSessions(res.data.sessions || []));
+
+    }, [sessionId]);
 
     useEffect(() => {
         const handleKeyDown = async (e) => {
@@ -115,6 +119,27 @@ export default function TaggerApp() {
             throw err;                 // re-throw if you want the caller to handle it
         }
 
+    };
+
+    const continueSession = async () => {
+        if (!selectedOpen) {
+            setWarning("Please select a session to continue");
+            return;
+        }
+        try {
+            const res = await axios.post("/api/session/continue",
+                { session_id: selectedOpen });
+            setSessionId(res.data.session_id);
+
+            // Get next image & state for that session
+            const next = await axios.get("/api/image/next", { params: { session_id: res.data.session_id } });
+            setImagePath(next.data.image_path);
+            await updateCurrentTag(res.data.session_id, next.data.image_path);
+            setMessage("Session continued");
+        } catch (err) {
+            console.error(err);
+            setWarning("Failed to continue session");
+        }
     };
 
     const nextImage = async (step = 1) => {
@@ -196,25 +221,41 @@ export default function TaggerApp() {
             </button>
             <img alt={"diptera_logo"} src={"/diptera_logo.svg"} className={"logo"}></img>
             {!sessionId ? (
-                <div className="tagger-content">
-                    <h2>Start Tagging Session</h2>
-                    tagger name:
-                    <input
-                        placeholder="Your Name"
-                        value={taggerName}
-                        onChange={(e) => setTaggerName(e.target.value)}
-                    />
-                    tagging subject:
-                    <select value={subject} onChange={(e) => setSubject(e.target.value)}>
-                        <option value="">Select Subject</option>
-                        {subjects.map((s) => (
-                            <option key={s} value={s}>{s}</option>
-                        ))}
-                    </select>
-                    <button className="tagger-button" onClick={startSession}>Start</button>
-                    {warning && <div className="tagger-warning">{warning}</div>}
-                </div>
-            ) : noImages ? (
+                    <div className="tagger-content">
+                        <h2>Start or Continue Session</h2>
+                        <h4>Start new session</h4>
+                        tagger name:
+                        <input
+                            placeholder="Your Name"
+                            value={taggerName}
+                            onChange={(e) => setTaggerName(e.target.value)}
+                        />
+                        tagging subject:
+                        <select value={subject} onChange={(e) => setSubject(e.target.value)}>
+                            <option value="">Select Subject</option>
+                            {subjects.map((s) => (
+                                <option key={s} value={s}>{s}</option>
+                            ))}
+                        </select>
+                        <button className="tagger-button" onClick={startSession}>Start</button>
+                        <h4>Continue open session</h4>
+                        <select
+                            value={selectedOpen}
+                            onChange={(e) => setSelectedOpen(e.target.value)}
+                            style={{marginBottom: 10}}
+                        >
+                            <option value="">Select an open session</option>
+                            {openSessions.map((s) => (
+                                <option key={s.session_id} value={s.session_id}>
+                                    {s.tagger_name} — {s.subject} ({s.progress.tagged}/{s.progress.total})
+                                </option>
+                            ))}
+                        </select>
+                        <button className="tagger-button" onClick={continueSession}>Continue</button>
+
+                        {warning && <div className="tagger-warning">{warning}</div>}
+                    </div>
+                ) : noImages ? (
                     <div className="tagger-content">
                         <h4>No More Images :)</h4>
                         <button className="tagger-button" onClick={() => {
