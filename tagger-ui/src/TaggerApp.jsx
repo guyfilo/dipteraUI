@@ -41,6 +41,34 @@ export default function TaggerApp() {
         document.body.classList.toggle("light", !darkMode);
     }, [darkMode]);
 
+    // -------------------- AUTO CONTINUE SESSION --------------------
+    useEffect(() => {
+        // On page load, try to resume the last session
+        const savedSession = localStorage.getItem("tagger_session");
+        if (savedSession) {
+            const parsed = JSON.parse(savedSession);
+            if (parsed.sessionId && parsed.taggerName) {
+                // try to continue existing in-memory session
+                axios.post("/api/session/continue", { session_id: parsed.sessionId })
+                    .then(async (res) => {
+                        setSessionId(res.data.session_id);
+                        setTaggerName(parsed.taggerName);
+                        setSubject(res.data.subject);
+                        // get current image
+                        const next = await axios.get("/api/image/next", { params: { session_id: res.data.session_id } });
+                        setImagePath(next.data.image_path);
+                        await updateCurrentTag(res.data.session_id, next.data.image_path);
+                        setMessage("Session auto-continued");
+                    })
+                    .catch((err) => {
+                        console.warn("No session found in memory:", err);
+                        localStorage.removeItem("tagger_session");
+                    });
+            }
+        }
+    }, []);
+
+
 
     useEffect(() => {
         axios.get("/api/subjects").then((res) => setSubjects(res.data));
@@ -94,6 +122,11 @@ export default function TaggerApp() {
             setImagePath(next.data.image_path);
             await updateCurrentTag(res.data.session_id, next.data.image_path);
             setMessage(null);
+            localStorage.setItem("tagger_session", JSON.stringify({
+                sessionId: res.data.session_id,
+                taggerName,
+                subject
+            }));
             return true;
         } catch (err) {
             // Make sure it's an axios error
@@ -135,6 +168,11 @@ export default function TaggerApp() {
             const next = await axios.get("/api/image/next", { params: { session_id: res.data.session_id } });
             setImagePath(next.data.image_path);
             await updateCurrentTag(res.data.session_id, next.data.image_path);
+            localStorage.setItem("tagger_session", JSON.stringify({
+                sessionId: res.data.session_id,
+                taggerName,
+                subject
+            }));
             setMessage("Session continued");
         } catch (err) {
             console.error(err);
@@ -203,6 +241,7 @@ export default function TaggerApp() {
         await axios.post("/api/session/exit", sessionId, {
             headers: {'Content-Type': 'application/json'}
         });
+        localStorage.removeItem("tagger_session");
         setSessionId(null);
         setImagePath(null);
     };
