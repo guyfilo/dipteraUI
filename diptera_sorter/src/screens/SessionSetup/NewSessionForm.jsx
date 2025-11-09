@@ -5,6 +5,14 @@ import {Button} from "../../components/Button/index.js";
 import {SelectTarget} from "../../components/SelectTarget/SelectTarget.jsx";
 
 const SPECIES_KEY = 'saved_species';
+const DEFAULT_SPECIES = [
+    { name: "ANO_YDF", color: "#ff0040" },
+    { name: "ANO_WT", color: "#d6734e" },
+    { name: "ANO_PMB1_FC", color: "#ffbd66" },
+    { name: "ANO_PMB1_MC", color: "#ffb066" },
+    { name: "ALB_DSRED", color: "#00d003" },
+    { name: "ALB_WT", color: "#217e21" },
+];
 const SpeciesDropdown = ({speciesList, setSpeciesList, selectedSpecies, setSelectedSpecies}) => {
     const [open, setOpen] = useState(false);
     const [addingNew, setAddingNew] = useState(false);
@@ -86,15 +94,17 @@ export const NewSessionForm = ({onNext, setSessionInfo, scannerMode}) => {
     const [customSpecies, setCustomSpecies] = useState("");
     const [age, setAge] = useState("");
     const [bloodFeed, setBloodFeed] = useState("");
-    const [generation, setGeneration] = useState("");
+    const [stage, setStage] = useState("");
 
     useEffect(() => {
-        const storedSpecies = JSON.parse(localStorage.getItem(SPECIES_KEY)) || [{
-            name: "Anopheles PMB1",
-            color: "#ffcc00"
-        }, {name: "Anopheles gambiae", color: "#00ccff"}];
-        setSpeciesList(storedSpecies);
-        setSelectedSpecies(storedSpecies[0]);
+        const storedSpecies = JSON.parse(localStorage.getItem(SPECIES_KEY)) || [];
+        // merge local + defaults, keeping unique names
+        const merged = [
+            ...DEFAULT_SPECIES
+        ];
+        setSpeciesList(merged);
+        setSelectedSpecies(merged[0]);
+        localStorage.setItem(SPECIES_KEY, JSON.stringify(merged));
     }, []);
 
     useEffect(() => {
@@ -138,7 +148,7 @@ export const NewSessionForm = ({onNext, setSessionInfo, scannerMode}) => {
         return `${washSession ? "WASH_" : ""}${scannerSession ? "SCAN_" : ""}${sizerSession ? "SIZER" : ""}SESS` + pad(now.getFullYear() % 100) + pad(now.getMonth() + 1) + pad(now.getDate()) + '_' + pad(now.getHours()) + pad(now.getMinutes()) + pad(now.getSeconds());
     };
 
-    const autoDescription = `Line: ${selectedSpecies?.name}, Age: ${age}, Blood Feed: ${bloodFeed}, Generation: ${generation}\n`;
+    const autoDescription = `Line: ${selectedSpecies?.name}, Age: ${age}, Blood Feed: ${bloodFeed}, Stage: ${stage}\n`;
 
     const setSession = () => {
         const normalSession = !scannerSession && !washSession && !sizerSession;
@@ -155,7 +165,7 @@ export const NewSessionForm = ({onNext, setSessionInfo, scannerMode}) => {
             specie: selectedSpecies?.name,
             age: age ? parseInt(age) : null,
             blood_feed: bloodFeed,
-            generation: generation,
+            stage: stage,
         };
         const targetsInfo = normalSession ? {
             target1_quanta: target1Interval ? parseInt(target1Interval) : 0,
@@ -206,8 +216,12 @@ export const NewSessionForm = ({onNext, setSessionInfo, scannerMode}) => {
                     <input type="text" value={bloodFeed} onChange={(e) => setBloodFeed(e.target.value)}/>
                 </div>
                 <div className="form-field">
-                    <label>Generation:</label>
-                    <input type="text" value={generation} onChange={(e) => setGeneration(e.target.value)}/>
+                    <label>Stage:</label>
+                    <select value={stage} onChange={(e) => setStage(e.target.value)}>
+                        <option value="larva">L3</option>
+                        <option value="pupa">Pupa</option>
+                        <option value="adult">L2</option>
+                    </select>
                 </div>
             </div>
 
