@@ -6,7 +6,7 @@ import {SelectTarget} from "../../components/SelectTarget/SelectTarget.jsx";
 
 const SPECIES_KEY = 'saved_species';
 const DEFAULT_SPECIES = [
-    { name: "ANO_YDF", color: "#ff0040" },
+    { name: "ANO_YDF", color: "#e3bac2" },
     { name: "ANO_WT", color: "#d6734e" },
     { name: "ANO_PMB1_FC", color: "#ffbd66" },
     { name: "ANO_PMB1_MC", color: "#ffb066" },
@@ -218,9 +218,10 @@ export const NewSessionForm = ({onNext, setSessionInfo, scannerMode}) => {
                 <div className="form-field">
                     <label>Stage:</label>
                     <select value={stage} onChange={(e) => setStage(e.target.value)}>
-                        <option value="larva">L3</option>
-                        <option value="pupa">Pupa</option>
-                        <option value="adult">L2</option>
+                        <option value="L4">L4</option>
+                        <option value="PUPA">PUPA</option>
+                        <option value="L3">L3</option>
+                        <option value="L2">L2</option>
                     </select>
                 </div>
             </div>
