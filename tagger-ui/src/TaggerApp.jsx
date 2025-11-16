@@ -9,7 +9,7 @@ function Progress({state}) {
     const percent = state.total > 0 ? Math.round((state.tagged / state.total) * 100) : 0;
     return (
         <div style={{marginBottom: 10}}>
-            <p>Progress: <b>{state.cur}</b> / {state.total} | Tagged: {state.tagged}</p>
+            <p>Progress: <b>{state.cur + 1}</b> / {state.total} | Tagged: {state.tagged}</p>
             <div className="progress-bar-container">
                 <div className="progress-bar-fill" style={{width: `${percent}%`}}></div>
             </div>
@@ -121,7 +121,8 @@ export default function TaggerApp() {
                 {params: {session_id: res.data.session_id}});
             setImagePath(next.data.image_path);
             await updateCurrentTag(res.data.session_id, next.data.image_path);
-            setMessage(null);
+            setMessage(next.data.msg);
+            console.log(next);
             localStorage.setItem("tagger_session", JSON.stringify({
                 sessionId: res.data.session_id,
                 taggerName,
@@ -185,6 +186,8 @@ export default function TaggerApp() {
         try {
             const res = await axios.get(`/api/image/${route}`, {params: {session_id: sessionId}});
             setImagePath(res.data.image_path);
+            setMessage(res.data.msg);
+            console.log(res.data);
             await updateCurrentTag(sessionId, res.data.image_path);
             return true;
         } catch (err) {
@@ -294,16 +297,7 @@ export default function TaggerApp() {
 
                         {warning && <div className="tagger-warning">{warning}</div>}
                     </div>
-                ) : noImages ? (
-                    <div className="tagger-content">
-                        <h4>No More Images :)</h4>
-                        <button className="tagger-button" onClick={() => {
-                            setSessionId(null)
-                        }}>
-                            Finish
-                        </button>
-                    </div>
-                ) :
+                )  :
                 (
                     <div className="tagger-content-session">
                         <h3>Tagger: {taggerName}</h3>
