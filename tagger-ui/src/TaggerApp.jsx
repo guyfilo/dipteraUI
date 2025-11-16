@@ -24,6 +24,7 @@ export default function TaggerApp() {
     const [selectedOpen, setSelectedOpen] = useState("");
     const [taggerName, setTaggerName] = useState("");
     const [sessionId, setSessionId] = useState(null);
+    const [sessionInfo, setSessionInfo] = useState(null);
     const [imagePath, setImagePath] = useState(null);
     const [tag, setTag] = useState("");
     const [message, setMessage] = useState("");
@@ -54,6 +55,7 @@ export default function TaggerApp() {
                         setSessionId(res.data.session_id);
                         setTaggerName(parsed.taggerName);
                         setSubject(res.data.subject);
+                        setSessionInfo(res.data.info);
                         // get current image
                         const next = await axios.get("/api/image/next", { params: { session_id: res.data.session_id } });
                         setImagePath(next.data.image_path);
@@ -117,6 +119,7 @@ export default function TaggerApp() {
                 skip_tagged_images: true,
             });
             setSessionId(res.data.session_id);
+            setSessionInfo(res.data.info);
             const next = await axios.get("/api/image/next",
                 {params: {session_id: res.data.session_id}});
             setImagePath(next.data.image_path);
@@ -164,6 +167,7 @@ export default function TaggerApp() {
             const res = await axios.post("/api/session/continue",
                 { session_id: selectedOpen });
             setSessionId(res.data.session_id);
+            setSessionInfo(res.data.info);
 
             // Get next image & state for that session
             const next = await axios.get("/api/image/next", { params: { session_id: res.data.session_id } });
@@ -246,6 +250,7 @@ export default function TaggerApp() {
         });
         localStorage.removeItem("tagger_session");
         setSessionId(null);
+        setSessionInfo(null);
         setImagePath(null);
     };
     useEffect(() => {
@@ -300,6 +305,7 @@ export default function TaggerApp() {
                 )  :
                 (
                     <div className="tagger-content-session">
+
                         <h3>Tagger: {taggerName}</h3>
                         <Progress state={state}/>
                         {imagePath && (
@@ -328,6 +334,7 @@ export default function TaggerApp() {
                                         src={`http://100.76.177.32:8000/api/image/view?session_id=${sessionId}&image_path=${encodeURIComponent(imagePath)}`}
                                         alt="current"
                                     />
+
                                     {zoomPos && (
                                         <div
                                             style={{
@@ -356,6 +363,10 @@ export default function TaggerApp() {
                                             />
                                         </div>)}
                                 </div>
+                                {sessionInfo ? <div className="session_info">
+                                    <h2>instructions:</h2>
+                                    <p style={{paddingLeft: 20}}>{sessionInfo}</p>
+                                </div> : null}
                                 <p className="tagger-tag">Current tag: <b>{tag}</b></p>
 
                                 <div style={{display: "flex", gap: "20px", marginTop: 10}}>
@@ -366,6 +377,8 @@ export default function TaggerApp() {
                                     <button className="tagger-button" onClick={endSession}>Exit Session</button>
                                 </div>
                                 {message && <div className="tagger-message">{message}</div>}
+
+
 
                             </div>
                         )}

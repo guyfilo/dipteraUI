@@ -55,6 +55,33 @@ body {
     position: absolute;
 }
 
+.session_info {
+    position: fixed;             /* always on screen */
+    bottom: 100px;                  /* adjust to avoid logo / header */
+    right: 120px;                 /* distance from right edge */
+    width: 260px;                /* sidebar width */
+    max-height: 50%;
+    overflow-y: auto;            /* scroll if long */
+    overflow-x: auto;
+    backdrop-filter: blur(5px);  /* nice glass effect */
+    color: white;
+    border-radius: 12px;
+    padding: 14px 18px;
+    background-color: rgba(14, 14, 14, 0.3);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    font-size: 18px;
+    line-height: 1.4;
+    z-index: 99;
+    white-space: break-spaces;
+
+}
+
+/* Light mode adaptation */
+body.light .session_info {
+    background: rgba(255,255,255,0.8);
+    color: black;
+}
+
 .logo {
     position: absolute;
     right: 1%;
