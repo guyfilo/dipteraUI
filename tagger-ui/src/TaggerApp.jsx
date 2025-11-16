@@ -357,21 +357,22 @@ export default function TaggerApp() {
                                                     position: "absolute",
                                                     left: -zoomPos.x * zoomFactor + zoomSize / 2,
                                                     top: -zoomPos.y * zoomFactor + zoomSize / 2,
-                                                    width: 950 * zoomFactor,
+                                                    width: 800 * zoomFactor,
                                                 }}
                                             />
                                         </div>)}
-                                    <p className="tagger-tag">Current tag: <b>{tag}</b></p>
-
-                                    <div style={{display: "flex", gap: "20px", marginTop: 10}}>
-                                        <button className="tagger-button" onClick={() => nextImage(-1)}>Prev</button>
-                                        <button className="tagger-button" onClick={() => nextImage(1)}>Next</button>
-                                        <button className="tagger-button" onClick={() => saveSession(false)}>Save
-                                        </button>
-                                        <button className="tagger-button" onClick={endSession}>Exit Session</button>
-                                    </div>
-                                    {message && <div className="tagger-message">{message}</div>}
                                 </div>
+                                <p className="tagger-tag">Current tag: <b>{tag}</b></p>
+
+                                <div style={{display: "flex", gap: "20px", marginTop: 10}}>
+                                    <button className="tagger-button" onClick={() => nextImage(-1)}>Prev</button>
+                                    <button className="tagger-button" onClick={() => nextImage(1)}>Next</button>
+                                    <button className="tagger-button" onClick={() => saveSession(false)}>Save
+                                    </button>
+                                    <button className="tagger-button" onClick={endSession}>Exit Session</button>
+                                </div>
+                                {message && <div className="tagger-message">{message}</div>}
+
                             </div>
                         )}
                     </div>
