@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@400&display=swap');
+
+:root {
+    --font-regular: Assistant, Helvetica;
+    --font-bold: Assistant, Helvetica;
+}
+
+body {
+    font-family: var(--font-regular);
+}
+
+strong, b {
+    font-family: var(--font-bold);
+}
+
+
+/* Usage */
+p {
+    font-weight: 400; /* Regular */
+}
+
+strong, b {
+    font-weight: 700; /* Bold */
+}
+
+
+body {
+    margin: 0; line-height: normal;
+    font-family: var(--font-regular), sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+    /* Figma Variables */
+    /* Color Variables */
+    --warnning-red: #fc4747;
+    --font-assistant: Assistant;
+    --caution-orange: #fca447;
+    --caution-orange-light: #fcf347;
+    --dipteraai-light-and-transparent: rgba(92, 178, 244, 0.1);
+    --color-lightgreen: #5adb80;
+
+
+    /* Figma Variables */
+    /* Color Variables */
+    --Almost-white: #fefefe;
+    --Black: #000;
+    /* font sizes */
+    --font-size-base: 16px;
+    /* Colors */
+    --color-darkgray: #9f9f9f;
+    --color-gainsboro-100: #d9d9d9;
+    /* Paddings */
+    --padding-8xs: 5px;
+    /* Border radiuses */
+    --br-11xs: 2px;
+    --br-8xs: 5px;
+    /* Figma Variables */
+    /* Color Variables */
+    --Almost-white: #fefefe;
+    --Black: #000;
+    --Dark-Grey: #707070;
+    --Mid-Grey: #bababa;
+    --Light-Grey: #e7e7e7;
+    --dipteraai-darker: rgba(36, 88, 128, 1);
+    --dipteraai-main: rgba(57, 140, 203, 1);
+
+}
+
+code {
+    font-family: sans-serif;
+}

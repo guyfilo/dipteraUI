@@ -1,0 +1,37 @@
+.th-container {
+    background-color: rgba(40, 94, 140, 0.1);
+    width: 90%;
+    height: 90%;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #00000033;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: absolute;
+    align-items: center;
+    padding-top: 2%;
+    top:5%;
+    left:5%;
+}
+
+.th-container img {
+    position: absolute;
+    right: 1%;
+    top: 1%;
+    width: 100px;
+}
+
+.th-container h1 {
+    position: absolute;
+    left: 1%;
+    top: 1%;
+    margin: 1px;
+}
+
+.th-container .body {
+    position: relative;
+    align-content: center;
+    align-items: center;
+    width: 70%;
+}
