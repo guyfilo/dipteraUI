@@ -1,0 +1,19 @@
+{
+  "name": "th-frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^7.2.4"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.1.2",
+    "react-datepicker": "^9.0.0",
+    "recharts": "^3.5.1"
+  }
+}
