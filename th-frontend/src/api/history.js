@@ -6,11 +6,18 @@ export async function getAvailableDates(room) {
 }
 
 export async function getDay(room, date) {
-  const res = await fetch(`${NAS}/history/${room}/${date}`);
+  const res = await fetch(`${NAS}/history/data/${room}/${date}`);
   return res.json();
 }
 
 export async function getHourly(room, date) {
   const res = await fetch(`${NAS}/history/hourly/${room}/${date}`);
   return res.json();
+}
+
+export async function getRange(room, fromdate, todate) {
+    const res = await fetch(
+        `${NAS}/history/range/${room}?fromdate=${fromdate}&todate=${todate}`
+    );
+    return res.json();
 }

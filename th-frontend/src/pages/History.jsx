@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 import { useHistoryData } from "../hooks/useHistoryData";
-import DualChartCard from "../components/ChartCard";
+import ChartCard from "../components/ChartCard";
 
-export default function History({ rooms, date }) {
+export default function History({ rooms, range }) {
 
+    const { data } = useHistoryData(rooms, range);
 
-    const { data } = useHistoryData(rooms, date);
+    if (!range) return null;
+
     return (
-        <div>
-            <DualChartCard data={data} selectedRooms={rooms} date={date} />
-        </div>
+        <ChartCard
+            data={data}
+            selectedRooms={rooms}
+            fromdate={range.from}
+            todate={range.to}
+        />
     );
 }

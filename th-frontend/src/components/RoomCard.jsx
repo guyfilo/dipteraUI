@@ -51,8 +51,8 @@ export default function RoomCard({ data, room }) {
         const avgT = slice.reduce((s, x) => s + x.temp, 0) / slice.length;
         const avgH = slice.reduce((s, x) => s + x.hum, 0) / slice.length;
 
-        setAvgTemp(avgT.toFixed(2));
-        setAvgHum(avgH.toFixed(2));
+        setAvgTemp(avgT.toFixed(1));
+        setAvgHum(avgH.toFixed(1));
         setLastUpdateTs(parsed.at(-1).ts);
     }, [data]);
 
@@ -70,7 +70,6 @@ export default function RoomCard({ data, room }) {
     if (!data) return <div>Loading...</div>;
     if (data.error) return <div>🚨 Pi Offline</div>;
     const color = ROOM_COLORS[room];
-    console.log(ROOM_COLORS);
     const tempOut = avgTemp !== null && isOutOfBounds(room, "temp", Number(avgTemp));
     const humOut  = avgHum  !== null && isOutOfBounds(room, "humid", Number(avgHum));
     const warning = tempOut || humOut;
