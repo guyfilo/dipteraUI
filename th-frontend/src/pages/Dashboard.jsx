@@ -9,6 +9,7 @@ export default function Dashboard() {
         larva: "octophi-larva",
         adult_left: "octophi-adult-left",
         adult_right: "octophi-adult-right",
+        temp: "temp-reader",
     };
 
     return (

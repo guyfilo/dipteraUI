@@ -5,7 +5,8 @@ import {LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Brush, Re
 export const ROOM_COLORS = {
     "larva": "#bd4010",
     "adult_left": "#078209",
-    "adult_right": "rgb(97,0,208)"
+    "adult_right": "rgb(97,0,208)",
+    "temp": "#17518f"
 };
 function computeDomain(values, padding = 2) {
     if (!values.length) return ["auto", "auto"];

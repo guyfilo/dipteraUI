@@ -3,8 +3,17 @@ import './style.css';
 import {ROOM_COLORS} from './ChartCard.jsx';
 
 export default function RoomCard({ data, room }) {
-    const TEMP_IDX = 2;
-    const HUM_IDX = 3;
+    const METRICS = room === "temp"
+        ? [
+            { key: "temp1", label: "Temp1", idx: 0, unit: "°C" },
+            { key: "temp2", label: "Temp2", idx: 1, unit: "°C" }
+        ]
+        : [
+            { key: "temp",  label: "Temp",  idx: 2, unit: "°C" },
+            { key: "humid", label: "Humid", idx: 3, unit: "%"  }
+        ];
+    const [avgValues, setAvgValues] = React.useState({});
+
     const BOUNDARIES = {
         larva: {
             temp: { min: 29, max: Infinity },   // temp >= 29
@@ -19,6 +28,10 @@ export default function RoomCard({ data, room }) {
             humid: { min: 55, max: 80 }
         }
     };
+    BOUNDARIES.temp = {
+        temp1: { min: 20, max: 35 },
+        temp2: { min: 20, max: 35 }
+    };
     function isOutOfBounds(room, type, value) {
         const rule = BOUNDARIES[room]?.[type];
         if (!rule) return false; // no rule for this metric
@@ -26,8 +39,6 @@ export default function RoomCard({ data, room }) {
         return value < rule.min || value > rule.max;
     }
 
-    const [avgTemp, setAvgTemp] = React.useState(null);
-    const [avgHum, setAvgHum] = React.useState(null);
     const [lastUpdateTs, setLastUpdateTs] = React.useState(null);
     const [secondsAgo, setSecondsAgo] = React.useState(null);
 
@@ -36,11 +47,24 @@ export default function RoomCard({ data, room }) {
 
         const parsed = data.latest_logs.map(line => {
             const parts = line.split(",");
-            return {
-                ts: new Date(parts[0]),
-                temp: parseFloat(parts[TEMP_IDX]),
-                hum: parseFloat(parts[HUM_IDX])
-            };
+            const row = {}
+            if (room === "temp") {
+                const dateStr =
+                    (parts[2] + "," + parts[3])
+                        .replace(/"/g, "")
+                        .trim();
+
+                row.ts = new Date(dateStr);
+            } else {
+                row.ts = new Date(parts[0]);
+            }
+
+
+            METRICS.forEach(m => {
+                row[m.key] = parseFloat(parts[m.idx]);
+            });
+
+            return row;
         });
 
         if (parsed.length === 0) return;
@@ -48,12 +72,18 @@ export default function RoomCard({ data, room }) {
         const N = 10;
         const slice = parsed.slice(-N);
 
-        const avgT = slice.reduce((s, x) => s + x.temp, 0) / slice.length;
-        const avgH = slice.reduce((s, x) => s + x.hum, 0) / slice.length;
+        const avgs = {};
+        METRICS.forEach(m => {
+            avgs[m.key] =
+                slice.reduce((s, x) => s + x[m.key], 0) / slice.length;
+        });
 
-        setAvgTemp(avgT.toFixed(1));
-        setAvgHum(avgH.toFixed(1));
         setLastUpdateTs(parsed.at(-1).ts);
+        setAvgValues(
+            Object.fromEntries(
+                Object.entries(avgs).map(([k, v]) => [k, v.toFixed(1)])
+            )
+        );
     }, [data]);
 
     React.useEffect(() => {
@@ -70,9 +100,15 @@ export default function RoomCard({ data, room }) {
     if (!data) return <div>Loading...</div>;
     if (data.error) return <div>🚨 Pi Offline</div>;
     const color = ROOM_COLORS[room];
-    const tempOut = avgTemp !== null && isOutOfBounds(room, "temp", Number(avgTemp));
-    const humOut  = avgHum  !== null && isOutOfBounds(room, "humid", Number(avgHum));
-    const warning = tempOut || humOut;
+    const metricOut = {};
+    METRICS.forEach(m => {
+        const v = avgValues[m.key];
+        metricOut[m.key] =
+            v !== undefined &&
+            isOutOfBounds(room, m.key, Number(v));
+    });
+    const warning = Object.values(metricOut).some(Boolean);
+
     return (
         <div className={`room-card ${warning? 'warning-card': ''}`}>
             {/* Info icon with hover popup */}
@@ -89,20 +125,21 @@ export default function RoomCard({ data, room }) {
 
             <h1 style={{color}}>{room.replace("_", " ").toUpperCase()}</h1>
             <div className="data-wrapper">
-                <div className={`room-val ${tempOut ? "warning" : ""}`}>
-                    <span className="label">temp</span>
-                    <div className="value-row">
-                        <h2>{avgTemp}</h2>
-                        <p>{avgTemp ? `°C` : "—"}</p>
-                    </div>
-                </div>
-                <div className={`room-val ${humOut ? "warning" : ""}`}>
-                    <span className="label">humid</span>
-                    <div className="value-row">
-                        <h2>{avgHum}</h2>
-                        <p>{avgTemp ? `%` : "—"}</p>
-                    </div>
-                </div>
+                {METRICS.map(m => {
+                    const value = avgValues[m.key];
+                    const out = value !== undefined &&
+                        isOutOfBounds(room, m.key === "humid" ? "humid" : "temp", Number(value));
+
+                    return (
+                        <div key={m.key} className={`room-val ${out ? "warning" : ""}`}>
+                            <span className="label">{m.label}</span>
+                            <div className="value-row">
+                                <h2>{value ?? "—"}</h2>
+                                <p>{value ? m.unit : "—"}</p>
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
             <p className={"update-dt"}>
                 <strong>Last update:</strong> {secondsAgo !== null ? `${secondsAgo}s ago` : "—"}
