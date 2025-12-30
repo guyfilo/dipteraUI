@@ -1,5 +1,5 @@
 import React from 'react';
-import {useState} from 'react';
+import {useState, useMemo, useEffect} from 'react';
 import {LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, Legend, Brush, ReferenceArea} from "recharts";
 
 export const ROOM_COLORS = {
@@ -52,6 +52,32 @@ function downloadCSV(rows, filename) {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 }
+function downsampleByAverage(rows, maxPoints = 1000) {
+    if (rows.length <= maxPoints) return rows;
+
+    const bucketSize = Math.ceil(rows.length / maxPoints);
+    const keys = Object.keys(rows[0]).filter(k => k !== "ts");
+
+    const out = [];
+
+    for (let i = 0; i < rows.length; i += bucketSize) {
+        const bucket = rows.slice(i, i + bucketSize);
+        const mid = bucket[Math.floor(bucket.length / 2)];
+
+        const row = { ts: mid.ts };
+
+        for (const k of keys) {
+            const vals = bucket.map(r => r[k]).filter(v => v != null);
+            const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
+            row[k] = Number(avg.toFixed(2));
+
+        }
+
+        out.push(row);
+    }
+
+    return out;
+}
 
 
 
@@ -61,34 +87,11 @@ export default function ChartCard({
                                       fromdate,
                                       todate
                                   }) {
-    if (!data) return <div>Loading...</div>;
 
-    // day is an array: [{room, timestamps, temp[], humid[]}, ...]
-    console.log(data);
-    const timestamps = data[0].timestamps;
+    /* ---------- state ---------- */
 
-    // Prepare data rows
-    const chartData = timestamps.map((ts, i) => {
-        const row = { ts: new Date(ts).getTime() }; // ← THIS
-
-        for (const dataset of data) {
-            row[dataset.room + "_temp"] = dataset.temp[i];
-            row[dataset.room + "_humid"] = dataset.humid[i];
-        }
-        return row;
-    });
-
-
-    /* ---------- visibility state ---------- */
-
-    const [hiddenRooms, setHiddenRooms] = React.useState({});
-
-    const toggleRoom = (room) => {
-        setHiddenRooms(h => ({
-            ...h,
-            [room]: !h[room]
-        }));
-    };
+    const [hiddenRooms, setHiddenRooms] = useState({});
+    const [isReady, setIsReady] = useState(false);
 
     const [zoom, setZoom] = useState({
         left: "dataMin",
@@ -96,6 +99,77 @@ export default function ChartCard({
         refLeft: null,
         refRight: null
     });
+
+    /* ---------- build raw data ---------- */
+
+    const rawData = useMemo(() => {
+        if (!data || !data.length) return [];
+
+        const timestamps = data[0].timestamps;
+
+        return timestamps.map((ts, i) => {
+            const row = { ts: new Date(ts).getTime() };
+
+            for (const dataset of data) {
+                row[dataset.room + "_temp"]  = dataset.temp[i];
+                row[dataset.room + "_humid"] = dataset.humid[i];
+            }
+            return row;
+        });
+    }, [data]);
+
+    /* ---------- reset on date change ---------- */
+
+    useEffect(() => {
+        setIsReady(false);
+        setZoom({
+            left: "dataMin",
+            right: "dataMax",
+            refLeft: null,
+            refRight: null
+        });
+    }, [fromdate, todate]);
+
+    /* ---------- mark ready ---------- */
+
+    useEffect(() => {
+        if (rawData.length) {
+            setIsReady(true);
+        }
+    }, [rawData]);
+
+    /* ---------- zoom-aware slicing ---------- */
+
+    const visibleRaw = useMemo(() => {
+        if (zoom.left === "dataMin" || zoom.right === "dataMax") {
+            return rawData;
+        }
+        return rawData.filter(
+            r => r.ts >= zoom.left && r.ts <= zoom.right
+        );
+    }, [rawData, zoom]);
+
+    /* ---------- downsample ---------- */
+
+    const chartData = useMemo(
+        () => downsampleByAverage(visibleRaw, 1200),
+        [visibleRaw]
+    );
+
+    /* ---------- guard LAST ---------- */
+
+    if (!isReady) {
+        return <div style={{ padding: 20 }}>Loading…</div>;
+    }
+
+    /* ---------- visibility state ---------- */
+
+    const toggleRoom = (room) => {
+        setHiddenRooms(h => ({
+            ...h,
+            [room]: !h[room]
+        }));
+    };
 
     const onMouseDown = (e) => {
         if (!e?.activeLabel) return;
@@ -164,10 +238,7 @@ export default function ChartCard({
 
                 <button
                     onClick={() =>
-                        downloadCSV(
-                            chartData,
-                            `${fromdate}__${todate}__th_data.csv`
-                        )
+                        downloadCSV(rawData, `${fromdate}__${todate}__th_data_RAW.csv`)
                     }
                 >
                     ⬇ Download CSV
@@ -220,6 +291,11 @@ export default function ChartCard({
                             minute: "2-digit",
                             second: "2-digit"
                         })
+                    }
+                    formatter={(v, name) =>
+                        typeof v === "number"
+                            ? [v.toFixed(2), name]
+                            : [v, name]
                     }
                 />
 
@@ -282,6 +358,11 @@ export default function ChartCard({
                             minute: "2-digit",
                             second: "2-digit"
                         })
+                    }
+                    formatter={(v, name) =>
+                        typeof v === "number"
+                            ? [v.toFixed(2), name]
+                            : [v, name]
                     }
                 />
 
