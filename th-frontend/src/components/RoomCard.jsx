@@ -69,7 +69,10 @@ export default function RoomCard({ data, room }) {
 
         if (parsed.length === 0) return;
 
-        const N = 10;
+        let N = 10;
+        if (room === "temp") {
+            N = 1;
+        }
         const slice = parsed.slice(-N);
 
         const avgs = {};
