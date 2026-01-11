@@ -36,6 +36,12 @@ export default function TaggerApp() {
     const zoomFactor = 2; // You can set 2x, 3x, etc.
     const zoomSize = 200; // Size of the circular lens in pixels
     const containerRef = useRef(null);
+    const imgRef = useRef(null);
+    const [points, setPoints] = useState([]);
+    useEffect(() => {
+        setPoints([]);
+    }, [imagePath]);
+
 
     useEffect(() => {
         document.body.classList.toggle("dark", darkMode);
@@ -50,14 +56,14 @@ export default function TaggerApp() {
             const parsed = JSON.parse(savedSession);
             if (parsed.sessionId && parsed.taggerName) {
                 // try to continue existing in-memory session
-                axios.post("/api/session/continue", { session_id: parsed.sessionId })
+                axios.post("/api/session/continue", {session_id: parsed.sessionId})
                     .then(async (res) => {
                         setSessionId(res.data.session_id);
                         setTaggerName(parsed.taggerName);
                         setSubject(res.data.subject);
                         setSessionInfo(res.data.info);
                         // get current image
-                        const next = await axios.get("/api/image/next", { params: { session_id: res.data.session_id } });
+                        const next = await axios.get("/api/image/next", {params: {session_id: res.data.session_id}});
                         setImagePath(next.data.image_path);
                         await updateCurrentTag(res.data.session_id, next.data.image_path);
                         setMessage("Session auto-continued");
@@ -69,7 +75,6 @@ export default function TaggerApp() {
             }
         }
     }, []);
-
 
 
     useEffect(() => {
@@ -137,7 +142,7 @@ export default function TaggerApp() {
             if (axios.isAxiosError(err) && err.response) {
                 switch (err.response.status) {
                     case 410:               // <-- raised by your FastAPI endpoint
-                                            // “No Images To Tag”
+                        // “No Images To Tag”
                         console.log("All done – no more images");
                         // do whatever: set state, navigate away, show a toast, etc.
                         setNoImages(true);
@@ -165,12 +170,12 @@ export default function TaggerApp() {
         }
         try {
             const res = await axios.post("/api/session/continue",
-                { session_id: selectedOpen });
+                {session_id: selectedOpen});
             setSessionId(res.data.session_id);
             setSessionInfo(res.data.info);
 
             // Get next image & state for that session
-            const next = await axios.get("/api/image/next", { params: { session_id: res.data.session_id } });
+            const next = await axios.get("/api/image/next", {params: {session_id: res.data.session_id}});
             setImagePath(next.data.image_path);
             await updateCurrentTag(res.data.session_id, next.data.image_path);
             localStorage.setItem("tagger_session", JSON.stringify({
@@ -199,7 +204,7 @@ export default function TaggerApp() {
             if (axios.isAxiosError(err) && err.response) {
                 switch (err.response.status) {
                     case 410:               // <-- raised by your FastAPI endpoint
-                                            // “No Images To Tag”
+                        // “No Images To Tag”
                         console.log("All done – no more images");
                         setNoImages(true);
                         // do whatever: set state, navigate away, show a toast, etc.
@@ -226,8 +231,73 @@ export default function TaggerApp() {
                 image_path: imgPath,
             },
         });
-        setTag((res.data.tags || []).join(", "));
+
+        const tags = res.data.tags || [];
+
+        const textTags = [];
+        const pointTags = [];
+
+        for (const t of tags) {
+            const p = parsePointTag(t);
+            if (p) {
+                pointTags.push(p);
+                // textTags.push(t);
+                textTags.push(`P(${p.nx.toFixed(2)},${p.ny.toFixed(2)})`);
+            } else {
+                textTags.push(t);
+            }
+        }
+
+        setTag(textTags.join(", "));
+        setPoints(pointTags);
+
         await updateState(sessId);
+    };
+
+    const handleImageClick = async (e) => {
+        if (!imgRef.current || !sessionId || !imagePath) return;
+
+        const imgRect = imgRef.current.getBoundingClientRect();
+
+        const x = e.clientX - imgRect.left;
+        const y = e.clientY - imgRect.top;
+
+        // guard: ignore clicks outside image
+        if (x < 0 || y < 0 || x > imgRect.width || y > imgRect.height) return;
+
+        const nx = x / imgRect.width;
+        const ny = y / imgRect.height;
+
+        const pointStr = `(${nx.toFixed(5)}|${ny.toFixed(5)})`;
+
+        try {
+            await axios.post("/api/image/tag", {
+                session_id: sessionId,
+                image_path: imagePath,
+                tag: pointStr,
+            });
+
+            await updateCurrentTag();
+        } catch (err) {
+            console.error("Failed to save point tag", err);
+        }
+    };
+
+
+    const parsePointTag = (s) => {
+        if (typeof s !== "string") return null;
+        if (!s.startsWith("(") || !s.endsWith(")")) return null;
+
+        const inner = s.slice(1, -1);
+        const parts = inner.split("|");
+        if (parts.length !== 2) return null;
+
+        const nx = Number(parts[0]);
+        const ny = Number(parts[1]);
+
+        if (Number.isNaN(nx) || Number.isNaN(ny)) return null;
+
+        return {nx, ny};
     };
 
     const updateState = async (sessId = sessionId) => {
@@ -257,6 +327,9 @@ export default function TaggerApp() {
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         setDarkMode(prefersDark);
     }, []);
+
+    const imgRect = imgRef.current?.getBoundingClientRect();
+
     return (
         <div className="tagger-container">
             <button
@@ -302,7 +375,7 @@ export default function TaggerApp() {
 
                         {warning && <div className="tagger-warning">{warning}</div>}
                     </div>
-                )  :
+                ) :
                 (
                     <div className="tagger-content-session">
 
@@ -313,34 +386,52 @@ export default function TaggerApp() {
                                 ref={containerRef}
                                 style={{
                                     position: "relative",
-                                    width: "fit-content",
-                                    marginTop: 10,
-                                    cursor: "crosshair"
+                                    display: "inline-block"
                                 }}
                             >
-                                <div
-                                    ref={containerRef}
-                                    onMouseMove={(e) => {
-                                        const {left, top} = containerRef.current.getBoundingClientRect();
-                                        const x = e.clientX - left;
-                                        const y = e.clientY - top;
-                                        setZoomPos({x, y});
-                                    }}
-                                    onMouseLeave={() => setZoomPos(null)}
-
-                                >
+                                <div>
                                     <img
+                                        ref={imgRef}
                                         className="tagger-image"
                                         src={`http://100.76.177.32:8000/api/image/view?session_id=${sessionId}&image_path=${encodeURIComponent(imagePath)}`}
                                         alt="current"
+                                        onMouseMove={(e) => {
+                                            const rect = imgRef.current.getBoundingClientRect();
+                                            setZoomPos({
+                                                x: e.clientX - rect.left,
+                                                y: e.clientY - rect.top
+                                            });
+                                        }}
+                                        onMouseLeave={() => setZoomPos(null)}
+                                        onClick={handleImageClick}
+                                        style={{
+                                            display: "block"   // IMPORTANT
+                                        }}
                                     />
+                                    {points.map((p, i) => (
+                                        <div
+                                            key={i}
+                                            style={{
+                                                position: "absolute",
+                                                left: `${p.nx * 100}%`,
+                                                top: `${p.ny * 100}%`,
+                                                width: 4,
+                                                height: 4,
+                                                borderRadius: "50%",
+                                                background: "#ff3b3b",
+                                                border: "1px solid white",
+                                                pointerEvents: "none",
+                                                transform: "translate(-50%, -50%)"
 
+                                            }}
+                                        />
+                                    ))}
                                     {zoomPos && (
                                         <div
                                             style={{
                                                 position: "absolute",
-                                                top: zoomPos.y - zoomSize / 2,
-                                                left: zoomPos.x - zoomSize / 2,
+                                                top: zoomPos?.y - zoomSize / 2,
+                                                left: zoomPos?.x - zoomSize / 2,
                                                 width: zoomSize,
                                                 height: zoomSize,
                                                 borderRadius: "50%",
@@ -358,30 +449,59 @@ export default function TaggerApp() {
                                                     position: "absolute",
                                                     left: -zoomPos.x * zoomFactor + zoomSize / 2,
                                                     top: -zoomPos.y * zoomFactor + zoomSize / 2,
-                                                    width: 800 * zoomFactor,
+                                                    width: imgRect ? imgRect.width * zoomFactor : "auto",
+                                                    height: imgRect ? imgRect.height * zoomFactor : "auto",
                                                 }}
                                             />
+                                            {points.map((p, i) => {
+                                                const px = p.nx * imgRect.width * zoomFactor;
+                                                const py = p.ny * imgRect.height * zoomFactor;
+
+                                                const cx = zoomPos.x * zoomFactor;
+                                                const cy = zoomPos.y * zoomFactor;
+
+                                                return (
+                                                    <div
+                                                        key={i}
+                                                        style={{
+                                                            position: "absolute",
+                                                            left: px - cx + zoomSize / 2,
+                                                            top: py - cy + zoomSize / 2,
+                                                            width: 8,
+                                                            height: 8,
+                                                            borderRadius: "50%",
+                                                            background: "#ff3b3b",
+                                                            border: "1px solid white",
+                                                            pointerEvents: "none",
+                                                            transform: "translate(-50%, -50%)"
+
+                                                        }}
+                                                    />
+                                                );
+                                            })}
+
                                         </div>)}
                                 </div>
-                                {sessionInfo ? <div className="session_info">
-                                    <h2>instructions:</h2>
-                                    <p style={{paddingLeft: 20}}>{sessionInfo}</p>
-                                </div> : null}
-                                <p className="tagger-tag">Current tag: <b>{tag}</b></p>
-
-                                <div style={{display: "flex", gap: "20px", marginTop: 10}}>
-                                    <button className="tagger-button" onClick={() => nextImage(-1)}>Prev</button>
-                                    <button className="tagger-button" onClick={() => nextImage(1)}>Next</button>
-                                    <button className="tagger-button" onClick={() => saveSession(false)}>Save
-                                    </button>
-                                    <button className="tagger-button" onClick={endSession}>Exit Session</button>
-                                </div>
-                                {message && <div className="tagger-message">{message}</div>}
-
 
 
                             </div>
+
                         )}
+                        {sessionInfo ? <div className="session_info">
+                            <h2>instructions:</h2>
+                            <p style={{paddingLeft: 20}}>{sessionInfo}</p>
+                        </div> : null}
+                        <p className="tagger-tag">Current tag: <b>{tag}</b></p>
+
+                        <div style={{display: "flex", gap: "20px", marginTop: 10}}>
+                            <button className="tagger-button" onClick={() => nextImage(-1)}>Prev</button>
+                            <button className="tagger-button" onClick={() => nextImage(1)}>Next</button>
+                            <button className="tagger-button" onClick={() => saveSession(false)}>Save
+                            </button>
+                            <button className="tagger-button" onClick={endSession}>Exit Session</button>
+                        </div>
+                        {message && <div className="tagger-message">{message}</div>}
+
                     </div>
                 )}
         </div>
