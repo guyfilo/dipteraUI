@@ -17,6 +17,23 @@ function Progress({state}) {
     );
 }
 
+const Toggle = ({label, value, onChange}) => (
+    <label className="toggle-container" style={{display: "flex", alignItems: "center", gap:"5px"}}>
+        <label className={"toggle"} style={{ cursor: "pointer"}}>
+            <input
+                type="checkbox"
+                checked={value}
+                onChange={e => onChange(e.target.checked)}
+            />
+            <span className="toggle-slider" />
+
+        </label>
+        <span>{label}</span>
+    </label>
+
+);
+
+
 export default function TaggerApp() {
     const [subjects, setSubjects] = useState([]);
     const [subject, setSubject] = useState("");
@@ -33,6 +50,8 @@ export default function TaggerApp() {
     const [noImages, setNoImages] = useState(false);
     const [darkMode, setDarkMode] = useState(true);
     const [zoomPos, setZoomPos] = useState(null);
+    const [showZoom, setShowZoom] = useState(true);
+    const [showPath, setShowPath] = useState(true);
     const zoomFactor = 2; // You can set 2x, 3x, etc.
     const zoomSize = 200; // Size of the circular lens in pixels
     const containerRef = useRef(null);
@@ -323,6 +342,17 @@ export default function TaggerApp() {
         setSessionInfo(null);
         setImagePath(null);
     };
+
+    const parseImgPath = (path) => {
+        if (typeof path !== "string") return null;
+
+        const marker = "/data/";
+        const idx = path.indexOf(marker);
+
+        if (idx === -1) return path; // data not found
+
+        return path.slice(idx + marker.length);
+    };
     useEffect(() => {
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         setDarkMode(prefersDark);
@@ -332,6 +362,7 @@ export default function TaggerApp() {
 
     return (
         <div className="tagger-container">
+            <img alt={"diptera_logo"} src={"/diptera_logo.svg"} className={"logo"}></img>
             <button
                 className="tagger-button"
                 onClick={() => setDarkMode(!darkMode)}
@@ -339,7 +370,6 @@ export default function TaggerApp() {
             >
                 {darkMode ? "Light Mode" : "Dark Mode"}
             </button>
-            <img alt={"diptera_logo"} src={"/diptera_logo.svg"} className={"logo"}></img>
             {!sessionId ? (
                     <div className="tagger-content">
                         <h2>Start or Continue Session</h2>
@@ -379,13 +409,23 @@ export default function TaggerApp() {
                 (
                     <div className="tagger-content-session">
 
-                        <h3>Tagger: {taggerName}</h3>
+
+                        <div className="tagger-headline">
+                            <h3 className="tagger-title">
+                                Tagger: <span className="tagger-name">{taggerName}</span>
+                            </h3>
+                            <div className="tagger-subtitle">
+                                Subject: <span className="tagger-subject">{subject}</span>
+                            </div>
+                        </div>
+
                         <Progress state={state}/>
                         {imagePath && (
                             <div
                                 ref={containerRef}
                                 style={{
                                     position: "relative",
+                                    width: "100%",
                                     display: "inline-block"
                                 }}
                             >
@@ -405,7 +445,8 @@ export default function TaggerApp() {
                                         onMouseLeave={() => setZoomPos(null)}
                                         onClick={handleImageClick}
                                         style={{
-                                            display: "block"   // IMPORTANT
+                                            width: "100%",
+                                            display: "block"
                                         }}
                                     />
                                     {points.map((p, i) => (
@@ -426,7 +467,7 @@ export default function TaggerApp() {
                                             }}
                                         />
                                     ))}
-                                    {zoomPos && (
+                                    {zoomPos && showZoom && (
                                         <div
                                             style={{
                                                 position: "absolute",
@@ -487,11 +528,28 @@ export default function TaggerApp() {
                             </div>
 
                         )}
-                        {sessionInfo ? <div className="session_info">
-                            <h2>instructions:</h2>
-                            <p style={{paddingLeft: 20}}>{sessionInfo}</p>
-                        </div> : null}
-                        <p className="tagger-tag">Current tag: <b>{tag}</b></p>
+                        {sessionInfo ?
+                            <div className="session_info">
+                                <h2>instructions:</h2>
+                                <p style={{paddingLeft: 20}}>{sessionInfo}</p>
+                            </div> : null}
+
+
+                        <div className="tagger-tag">Current Tag: <b>{tag}</b></div>
+                        {showPath && <div className="tagger-tag">Image Path: <b>{parseImgPath(imagePath)}</b></div>
+                        }
+                        <div style={{display: "flex", gap: "20px", marginTop: 10}}>
+                            <Toggle
+                                label="magnifier 🔍"
+                                value={showZoom}
+                                onChange={setShowZoom}
+                            />
+                            <Toggle
+                                label="image path 🧭"
+                                value={showPath}
+                                onChange={setShowPath}
+                            />
+                        </div>
 
                         <div style={{display: "flex", gap: "20px", marginTop: 10}}>
                             <button className="tagger-button" onClick={() => nextImage(-1)}>Prev</button>
