@@ -98,6 +98,15 @@ body {
     width: 100%;
     height: 100%;
 }
+
+.tagger-content select{
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+.tagger-content input{
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
 .tagger-headline {
     display: flex;
     flex-direction: column;
