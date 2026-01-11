@@ -33,6 +33,29 @@ const Toggle = ({label, value, onChange}) => (
 
 );
 
+function getContainedImageRect(img, container) {
+    const imgRatio = img.naturalWidth / img.naturalHeight;
+    const containerRatio = container.clientWidth / container.clientHeight;
+
+    let width, height;
+
+    if (imgRatio > containerRatio) {
+        // image constrained by width
+        width = container.clientWidth;
+        height = width / imgRatio;
+    } else {
+        // image constrained by height
+        height = container.clientHeight;
+        width = height * imgRatio;
+    }
+
+    const x = (container.clientWidth - width) / 2;
+    const y = (container.clientHeight - height) / 2;
+
+    return { x, y, width, height };
+}
+
+
 
 export default function TaggerApp() {
     const [subjects, setSubjects] = useState([]);
@@ -52,6 +75,8 @@ export default function TaggerApp() {
     const [zoomPos, setZoomPos] = useState(null);
     const [showZoom, setShowZoom] = useState(true);
     const [showPath, setShowPath] = useState(true);
+    const [showInstructions, setShowInstructions] = useState(true);
+
     const zoomFactor = 2; // You can set 2x, 3x, etc.
     const zoomSize = 200; // Size of the circular lens in pixels
     const containerRef = useRef(null);
@@ -130,6 +155,7 @@ export default function TaggerApp() {
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [imagePath, sessionId]);
+
 
     const startSession = async () => {
         if (!subject || !taggerName) {
@@ -425,30 +451,29 @@ export default function TaggerApp() {
                                 ref={containerRef}
                                 style={{
                                     position: "relative",
-                                    width: "100%",
-                                    display: "inline-block"
+                                    width: "max-content",
                                 }}
                             >
                                 <div>
-                                    <img
-                                        ref={imgRef}
-                                        className="tagger-image"
-                                        src={`http://100.76.177.32:8000/api/image/view?session_id=${sessionId}&image_path=${encodeURIComponent(imagePath)}`}
-                                        alt="current"
-                                        onMouseMove={(e) => {
-                                            const rect = imgRef.current.getBoundingClientRect();
-                                            setZoomPos({
-                                                x: e.clientX - rect.left,
-                                                y: e.clientY - rect.top
-                                            });
-                                        }}
-                                        onMouseLeave={() => setZoomPos(null)}
-                                        onClick={handleImageClick}
-                                        style={{
-                                            width: "100%",
-                                            display: "block"
-                                        }}
-                                    />
+                                    <div className="tagger-image-frame">
+                                        <img
+                                            ref={imgRef}
+                                            className="tagger-image"
+                                            src={`http://100.76.177.32:8000/api/image/view?session_id=${sessionId}&image_path=${encodeURIComponent(imagePath)}`}
+                                            alt="current"
+                                            onMouseMove={(e) => {
+                                                const rect = imgRef.current.getBoundingClientRect();
+                                                setZoomPos({
+                                                    x: e.clientX - rect.left,
+                                                    y: e.clientY - rect.top
+                                                });
+                                            }}
+                                            onMouseLeave={() => setZoomPos(null)}
+                                            onClick={handleImageClick}
+
+                                        />
+
+                                    </div>
                                     {points.map((p, i) => (
                                         <div
                                             key={i}
@@ -528,7 +553,7 @@ export default function TaggerApp() {
                             </div>
 
                         )}
-                        {sessionInfo ?
+                        {(sessionInfo && showInstructions) ?
                             <div className="session_info">
                                 <h2>instructions:</h2>
                                 <p style={{paddingLeft: 20}}>{sessionInfo}</p>
@@ -549,6 +574,13 @@ export default function TaggerApp() {
                                 value={showPath}
                                 onChange={setShowPath}
                             />
+                            {sessionInfo ?
+                                <Toggle
+                                    label="instructions 📖"
+                                    value={showInstructions}
+                                    onChange={setShowInstructions}
+                                /> : null
+                            }
                         </div>
 
                         <div style={{display: "flex", gap: "20px", marginTop: 10}}>
