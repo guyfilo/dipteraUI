@@ -14,13 +14,21 @@ export const ImagesTab = ({machineData}) => {
     const [zoomPos, setZoomPos] = useState(null);
     const zoomFactor = 2; // You can set 2x, 3x, etc.
     const zoomSize = 200; // Size of the circular lens in pixels
-    const origWidth = 2024;
-    const origHeight = 1128;
+    const [origSize, setOrigSize] = useState({ width: null, height: null });
+
     const displayWidth = 850;
-    const displayHeight = (origHeight / origWidth) * displayWidth;
+    const origWidth = origSize.width;
+    const origHeight = origSize.height;
+
+    const displayHeight = origWidth
+        ? (origHeight / origWidth) * displayWidth
+        : 0;
+
+    const scaleFactor = origHeight
+        ? origHeight / displayHeight
+        : 1;
     const [hoverColor, setHoverColor] = useState(null);
 
-    const scaleFactor = origHeight / displayHeight;
     const [meanRGB, setMeanRGB] = useState(null);
 
     const [index, setIndex] = useState(0);
@@ -296,8 +304,16 @@ export const ImagesTab = ({machineData}) => {
                                 src={imageSrc}
                                 alt="Zoom target"
                                 width={displayWidth}
-                                style={{display: "block"}}
+                                style={{ display: "block" }}
+                                onLoad={(e) => {
+                                    const img = e.currentTarget;
+                                    setOrigSize({
+                                        width: img.naturalWidth,
+                                        height: img.naturalHeight
+                                    });
+                                }}
                             />
+
 
                             {zoomPos && (
                                 <div
