@@ -45,7 +45,7 @@ export const ImagesTab = ({machineData}) => {
         setRoi({
             top: null, bottom: null
         })
-    }, [camKey]);
+    }, [camKey, origHeight]);
     const containerRef = useRef(null);
 
     const currentImg = imgList[index];
