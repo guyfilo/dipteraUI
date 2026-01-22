@@ -42,6 +42,7 @@ export function useHistoryData(rooms, range) {
             setMerged(
                 rooms.map(r => cache.current[key][r])
             );
+            console.log(merged);
         }
 
         load();

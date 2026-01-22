@@ -11,6 +11,7 @@ const ROOMS = {
     larva: "octophi-larva",
     adult_left: "octophi-adult-left",
     adult_right: "octophi-adult-right",
+    MahaneYehuda: "octophi-mahane",
 };
 import "./style.css";
 

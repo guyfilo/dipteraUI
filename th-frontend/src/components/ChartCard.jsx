@@ -6,7 +6,8 @@ export const ROOM_COLORS = {
     "larva": "#bd4010",
     "adult_left": "#078209",
     "adult_right": "rgb(97,0,208)",
-    "temp": "#17518f"
+    "temp": "#17518f",
+    "MahaneYehuda": "#17518f"
 };
 function computeDomain(values, padding = 2) {
     if (!values.length) return ["auto", "auto"];
@@ -105,18 +106,41 @@ export default function ChartCard({
     const rawData = useMemo(() => {
         if (!data || !data.length) return [];
 
-        const timestamps = data[0].timestamps;
+        // 1. Collect all timestamps
+        const allTs = data.flatMap(d =>
+            d.timestamps.map(ts => new Date(ts).getTime())
+        );
 
-        return timestamps.map((ts, i) => {
-            const row = { ts: new Date(ts).getTime() };
+        // 2. Unique + sorted
+        const timeline = Array.from(new Set(allTs)).sort((a, b) => a - b);
 
-            for (const dataset of data) {
-                row[dataset.room + "_temp"]  = dataset.temp[i];
-                row[dataset.room + "_humid"] = dataset.humid[i];
-            }
+        // 3. Build lookup maps per dataset
+        const indexMaps = data.map(d => {
+            const m = new Map();
+            d.timestamps.forEach((ts, i) => {
+                m.set(new Date(ts).getTime(), i);
+            });
+            return m;
+        });
+
+        // 4. Build rows
+        return timeline.map(ts => {
+            const row = { ts };
+
+            data.forEach((dataset, di) => {
+                const idx = indexMaps[di].get(ts);
+
+                row[dataset.room + "_temp"]  =
+                    idx !== undefined ? dataset.temp[idx] : null;
+
+                row[dataset.room + "_humid"] =
+                    idx !== undefined ? dataset.humid[idx] : null;
+            });
+
             return row;
         });
     }, [data]);
+
 
     /* ---------- reset on date change ---------- */
 
@@ -136,6 +160,7 @@ export default function ChartCard({
         if (rawData.length) {
             setIsReady(true);
         }
+
     }, [rawData]);
 
     /* ---------- zoom-aware slicing ---------- */
@@ -325,6 +350,7 @@ export default function ChartCard({
                 onMouseDown={onMouseDown}
                 onMouseMove={onMouseMove}
                 onMouseUp={onMouseUp}
+                onDoubleClick={onDoubleClick}
             >
                 <CartesianGrid strokeDasharray="3 3" />
 

@@ -26,6 +26,10 @@ export default function RoomCard({ data, room }) {
         adult_right: {
             temp: { min: 25, max: 30 },
             humid: { min: 55, max: 80 }
+        },
+        MahaneYehuda: {
+            temp: { min: 25, max: 30 },
+            humid: { min: 55, max: 80 }
         }
     };
     BOUNDARIES.temp = {
@@ -41,7 +45,7 @@ export default function RoomCard({ data, room }) {
 
     const [lastUpdateTs, setLastUpdateTs] = React.useState(null);
     const [secondsAgo, setSecondsAgo] = React.useState(null);
-
+    const roomName = (room !== "MahaneYehuda") ? room : "mahane_yehuda";
     React.useEffect(() => {
         if (!data || !data.latest_logs) return;
 
@@ -126,7 +130,7 @@ export default function RoomCard({ data, room }) {
                 </div>
             </div>
 
-            <h1 style={{color}}>{room.replace("_", " ").toUpperCase()}</h1>
+            <h1 style={{color}}>{roomName.replace("_", " ").toUpperCase()}</h1>
             <div className="data-wrapper">
                 {METRICS.map(m => {
                     const value = avgValues[m.key];
