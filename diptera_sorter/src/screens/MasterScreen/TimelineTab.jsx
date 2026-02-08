@@ -1,6 +1,40 @@
 import React, {useEffect, useState, useContext} from "react";
 import {DataContext} from "../../communication/DataContext.jsx";
 import "./style.css";
+const EVENT_CONFIG = {
+    note: {
+        label: "Note",
+        color: "#9aa4ff"
+    },
+    session: {
+        label: "Session",
+        color: "#66ccff"
+    },
+    warning: {
+        label: "Warning",
+        color: "#ffb84d"
+    },
+    soft_error: {
+        label: "Soft Error",
+        color: "#ff4d4d"
+    },
+    hard_error: {
+        label: "Hard Error",
+        color: "rgba(197,4,4,0.87)"
+    },
+    hardware_update: {
+        label: "Hardware Update",
+        color: "#7bd389"
+    },
+    software_update: {
+        label: "Software Update",
+        color: "#4da6ff"
+    },
+    other: {
+        label: "Other",
+        color: "#bdbdbd"
+    }
+};
 
 export const TimelineTab = ({machineId}) => {
 
@@ -15,6 +49,8 @@ export const TimelineTab = ({machineId}) => {
     const [collapsedDates, setCollapsedDates] = useState({});
     const feedRef = React.useRef(null);
     const [visibleDate, setVisibleDate] = useState("");
+    const [typeFilter, setTypeFilter] = useState("all");
+    const EVENT_TYPES = Object.keys(EVENT_CONFIG);
 
     // ---------- FETCH ----------
     const collapseAll = () => {
@@ -107,8 +143,12 @@ export const TimelineTab = ({machineId}) => {
 
     const groupedEvents = React.useMemo(() => {
 
-        const sorted = [...events].sort(
-            (a, b) => new Date(b.event_ts) - new Date(a.event_ts)
+        const filtered = typeFilter === "all"
+            ? events
+            : events.filter(e => (e.event_type ?? "other") === typeFilter);
+
+        const sorted = [...filtered].sort(
+            (a,b)=> new Date(b.event_ts) - new Date(a.event_ts)
         );
 
         return sorted.reduce((acc, event) => {
@@ -124,7 +164,7 @@ export const TimelineTab = ({machineId}) => {
 
         }, {});
 
-    }, [events]);
+    }, [events, typeFilter]);
 
 
     return (
@@ -138,15 +178,15 @@ export const TimelineTab = ({machineId}) => {
                     value={eventType}
                     onChange={e => setEventType(e.target.value)}
                 >
-                    <option value="note">Note</option>
-                    <option value="session">Session</option>
-                    <option value="warning">Warning</option>
-                    <option value="soft_error">Soft Error</option>
-                    <option value="hard_error">Hard Error</option>
-                    <option value="hardware_update">Hardware Update</option>
-                    <option value="software_update">Software Update</option>
-                    <option value="other">Other</option>
+
+                    {EVENT_TYPES.map(type => (
+                        <option key={type} value={type}>
+                            {EVENT_CONFIG[type].label}
+                        </option>
+                    ))}
+
                 </select>
+
 
 
                 <input
@@ -200,8 +240,35 @@ export const TimelineTab = ({machineId}) => {
                     Expand All
                 </button>
 
-            </div>
 
+            </div>
+            <div className="timeline-filter">
+
+                <button
+                    className={typeFilter==="all" ? "active-filter":""}
+                    onClick={()=>setTypeFilter("all")}
+                >
+                    All
+                </button>
+
+                {EVENT_TYPES.map(t=>(
+                    <button
+                        key={t}
+                        className={typeFilter===t ? "active-filter":""}
+                        onClick={()=>setTypeFilter(t)}
+                        style={{
+                            background: typeFilter === t
+                                ? EVENT_CONFIG[t].color
+                                : "#eef1f7",
+                            color: typeFilter === t ? "white" : "black"
+                        }}
+
+                    >
+                        {t.replace("_"," ")}
+                    </button>
+                ))}
+
+            </div>
             {/* ---------- EVENTS ---------- */}
 
             <div className="timeline-feed" ref={feedRef}>
@@ -248,17 +315,12 @@ const TimelineCard = ({event, onComment}) => {
 
     const [comment, setComment] = useState("");
     const [open, setOpen] = useState(false);
-    const levelColor = {
-        soft_error: "#ff4d4d",
-        hard_error: "rgba(197,4,4,0.87)",
-        warning: "#ffb84d",
-        session: "#66ccff",
-        note: "#9aa4ff"
-    };
+    const color = EVENT_CONFIG[event.event_type]?.color || "#ccc";
+
 
     return (
         <div className="timeline-card"
-             style={{borderLeft: `6px solid ${levelColor[event.event_type] || "#ccc"}`}}
+             style={{borderLeft:`6px solid ${color}`}}
         >
 
             <div className="timeline-header"

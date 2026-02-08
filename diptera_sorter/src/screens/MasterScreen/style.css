@@ -384,6 +384,30 @@
     font-family: var(--font-assistant);
     height: 100%;
 }
+.timeline-filter{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+    margin-bottom:6px;
+}
+
+.timeline-filter button{
+    border:none;
+    padding:4px 10px;
+    border-radius:12px;
+    background:#eef1f7;
+    cursor:pointer;
+    font-size:12px;
+}
+
+.timeline-filter button:hover{
+    background:#dde3ff;
+}
+
+.active-filter{
+    background:#5b6cff !important;
+    color:white;
+}
 
 .timeline-date-cards {
     display: flex;
