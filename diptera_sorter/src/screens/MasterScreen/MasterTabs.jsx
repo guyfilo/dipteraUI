@@ -3,9 +3,10 @@ import "./style.css";
 import {ImagesTab} from "./ImagesTab.jsx";
 import {DataContext} from "../../communication/DataContext.jsx";
 import Plot from 'react-plotly.js';
+import {TimelineTab} from "./TimelineTab.jsx";
 
 export const MasterTabs = ({data, toggleHide, toggleSize, sizeMode, setSizeMode}) => {
-    const tabs = ["Light Sensors", "Cameras", "Images", "Errors", "Predictions"];
+    const tabs = ["Light Sensors", "Cameras", "Images", "Errors", "Timeline", "Predictions"];
     const [activeTab, setActiveTab] = useState("Light Sensors");
     const {
         getErrors
@@ -175,6 +176,9 @@ export const MasterTabs = ({data, toggleHide, toggleSize, sizeMode, setSizeMode}
                         {activeTab === "Images" && <ImagesTab machineData={data}/>}
                         {activeTab === "Errors" && errorTab()}
                         {activeTab === "Predictions" && predTab()}
+                        {activeTab === "Timeline" && (
+                            <TimelineTab machineId={data.machine_id}/>
+                        )}
                     </div>
                 )}
 

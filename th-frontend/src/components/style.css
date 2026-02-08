@@ -3,6 +3,7 @@
     height: 180px;
     padding: 0px 20px;
     min-width: 240px;
+    width: 100%;
     border-radius: 15px;
     background: var(--Light-Grey);
     color: var(--Dark-Grey);
@@ -21,6 +22,14 @@
     margin: 5px;
     left: 3px;
     font-size: 25px;
+}
+
+.room-card h2 {
+    position: relative;
+    margin: 5px;
+    left: 3px;
+    top: 40%;
+    font-size: 20px;
 }
 
 /* INFO ICON */
@@ -59,6 +68,19 @@
     }
     100% {
         background-color: var(--caution-orange-light); /* lighter or darker shade */
+    }
+}
+
+.loading-card {
+    animation: loadingPulse 2s infinite alternate;
+}
+
+@keyframes loadingPulse {
+    0% {
+        background-color: var(--Light-Grey);     /* your base color */
+    }
+    100% {
+        background-color: var(--Mid-Grey); /* lighter or darker shade */
     }
 }
 
@@ -146,4 +168,12 @@
 
 .chart-card h4{
     margin: 1px;
+}
+
+.room-val h2 {
+    transition: color 0.4s ease;
+}
+
+.room-val {
+    transition: border-color 0.4s ease;
 }

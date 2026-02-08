@@ -20,7 +20,7 @@ export default function App() {
     const [dates, setDates] = useState([]);           // union of all dates
     const [range, setRange] = useState(null);
     const [roomDates, setRoomDates] = useState({});   // room → its date list
-
+    const [tab, setTab] = useState("humid");
     useEffect(() => {
         async function loadAllDates() {
             const entries = await Promise.all(
@@ -54,11 +54,26 @@ export default function App() {
 
     return (
         <div className={"th-container"}>
+            <div
+                className={`tab ${tab !== 'humid' ? 'tab-unselected' : ''}`}
+                onClick={() => setTab("humid")}
+            >
+                <p>💧 Humid Control</p>
+            </div>
+
+            <div
+                className={`tab temp ${tab !== 'temp' ? 'tab-unselected' : ''}`}
+                onClick={() => setTab("temp")}
+            >
+                <p>🌡️ Rack Temperature</p>
+            </div>
+
+
             <h1>Diptera TH Logger Dashboard</h1>
             <img alt={"diptera_logo"} src={"/diptera_logo.svg"} className={"logo"}></img>
 
             <div className={"body"}>
-                <Dashboard/>
+                <Dashboard tab={tab}/>
                 <div className="chart-card" >
                     <DateSelector
                         dates={dates}
@@ -66,11 +81,10 @@ export default function App() {
                         onChange={setRange}
                     />
 
-                    <History
-                        rooms={Object.keys(ROOMS)}
-                        range={range}/>
-                    {/*/>*/}
-                    {/*<History rooms={ROOMS} date={date}/>*/}
+                {/*    <History*/}
+                {/*        rooms={Object.keys(ROOMS)}*/}
+                {/*        range={range}/>*/}
+
                 </div>
             </div>
 

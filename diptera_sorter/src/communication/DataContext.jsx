@@ -299,6 +299,32 @@ export const DataProvider = ({ children }) => {
         return data;
     }
 
+    const getTimeline = async (machine_id) => {
+        const res = await fetch(`${API_BASE}/api/machines/${machine_id}/timeline`);
+        const json = await res.json();
+        return json;
+    };
+
+    const addTimelineEvent = async (event) => {
+        const res = await fetch(`${API_BASE}/api/machines/timeline/event`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(event),
+        });
+
+        return await res.json();
+    };
+
+    const editTimelineEvent = async (payload) => {
+        const res = await fetch(`${API_BASE}/api/machines/timeline/event`, {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(payload),
+        });
+
+        return await res.json();
+    };
+
     useEffect(() => {
         fetchAvailableMachines();
     }, [serverKey]);
@@ -324,7 +350,10 @@ export const DataProvider = ({ children }) => {
             reports,
             fetchReports,
             fetchChartsData,
-            chartsDataMap
+            chartsDataMap,
+            getTimeline,
+            addTimelineEvent,
+            editTimelineEvent,
         }}>
             {children}
         </DataContext.Provider>

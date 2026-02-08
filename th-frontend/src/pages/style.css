@@ -8,3 +8,7 @@
     align-items: center;
     justify-content: center;
 }
+
+.single {
+    width: 100%;
+}

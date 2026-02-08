@@ -1,17 +1,16 @@
 .th-container {
-    background-color: rgba(40, 94, 140, 0.1);
+    background-color: rgb(208, 228, 249);
     width: 90%;
-    height: 90%;
+    height: 80%;
     margin: auto;
-    border-radius: 10px;
-    box-shadow: 0 0 10px #00000033;
+    border-radius: 5px 10px 10px 10px ;
     display: flex;
     flex-direction: column;
     gap: 20px;
     position: absolute;
     align-items: center;
     padding-top: 2%;
-    top:5%;
+    top:10%;
     left:5%;
 }
 
@@ -35,4 +34,36 @@
     align-content: center;
     align-items: center;
     width: 70%;
+}
+
+.tab {
+    cursor: pointer;
+
+    width: 20%;
+    height: 7%;
+    background-color: rgb(208, 228, 249);
+    border-radius: 10px 10px 0 0;
+    position: absolute;
+    top: -6%;
+    left: 0;
+
+    display: flex;
+    /*align-items: center;     !* vertical *!*/
+    justify-content: left; /* horizontal */
+}
+.tab p {
+    user-select: none;
+
+    margin: 10px;
+    font-size: 25px;
+}
+
+.temp {
+    left: 21%;
+}
+
+.tab-unselected {
+    z-index: -1;
+    background-color: var(--Mid-Grey);
+
 }

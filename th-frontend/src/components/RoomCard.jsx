@@ -2,12 +2,16 @@ import React from 'react';
 import './style.css';
 import {ROOM_COLORS} from './ChartCard.jsx';
 
+
+
 export default function RoomCard({ data, room }) {
     const METRICS = room === "temp"
-        ? [
-            { key: "temp1", label: "Temp1", idx: 0, unit: "°C" },
-            { key: "temp2", label: "Temp2", idx: 1, unit: "°C" }
-        ]
+        ? Array.from({ length: 8 }, (_, i) => ({
+            key: `sensor${i + 1}`,
+            label: `Sensor ${i + 1}`,
+            idx: i,
+            unit: "°C"
+        }))
         : [
             { key: "temp",  label: "Temp",  idx: 2, unit: "°C" },
             { key: "humid", label: "Humid", idx: 3, unit: "%"  }
@@ -32,37 +36,69 @@ export default function RoomCard({ data, room }) {
             humid: { min: 55, max: 80 }
         }
     };
-    BOUNDARIES.temp = {
-        temp1: { min: 20, max: 35 },
-        temp2: { min: 20, max: 35 }
-    };
+    BOUNDARIES.temp = Object.fromEntries(
+        Array.from({ length: 8 }, (_, i) => [
+            `sensor${i + 1}`,
+            { min: 27, max: 35 }
+        ])
+    );
     function isOutOfBounds(room, type, value) {
         const rule = BOUNDARIES[room]?.[type];
         if (!rule) return false; // no rule for this metric
 
         return value < rule.min || value > rule.max;
     }
-
     const [lastUpdateTs, setLastUpdateTs] = React.useState(null);
     const [secondsAgo, setSecondsAgo] = React.useState(null);
     const roomName = (room !== "MahaneYehuda") ? room : "mahane_yehuda";
+
+    function tempToColor(value, min = 25, max = 35) {
+        if (value == null || isNaN(value)) return "#999";
+
+        // clamp
+        const t = Math.min(1, Math.max(0, (value - min) / (max - min)));
+
+        // blue → cyan → green → yellow → red
+        const hue = (1 - (t ** 0.5)) * 240 ; // 240=blue, 0=red
+        return `hsl(${hue}, 85%, 55%)`;
+    }
+
     React.useEffect(() => {
-        if (!data || !data.latest_logs) return;
+        if (!data) return;
+
+        // 🌡️ TEMP ROOM — structured sensors dict
+        if (room === "temp") {
+            if (!data.sensors) return;
+
+            const values = {};
+            let latestTs = null;
+
+            Object.entries(data.sensors).forEach(([key, sensor]) => {
+                const idx = key.replace("sensor_", "");
+                const metricKey = `sensor${idx}`;
+
+                const latest = sensor.latest;
+                if (!latest) return;
+
+                values[metricKey] = latest.temperature_c.toFixed(1);
+
+                const ts = new Date(latest.timestamp);
+                if (!latestTs || ts > latestTs) {
+                    latestTs = ts;
+                }
+            });
+
+            setAvgValues(values);
+            setLastUpdateTs(latestTs);
+            return;
+        }
+
+        // 💧 NON-TEMP ROOMS — legacy CSV parsing
+        if (!data.latest_logs) return;
 
         const parsed = data.latest_logs.map(line => {
             const parts = line.split(",");
-            const row = {}
-            if (room === "temp") {
-                const dateStr =
-                    (parts[2] + "," + parts[3])
-                        .replace(/"/g, "")
-                        .trim();
-
-                row.ts = new Date(dateStr);
-            } else {
-                row.ts = new Date(parts[0]);
-            }
-
+            const row = { ts: new Date(parts[0]) };
 
             METRICS.forEach(m => {
                 row[m.key] = parseFloat(parts[m.idx]);
@@ -71,15 +107,11 @@ export default function RoomCard({ data, room }) {
             return row;
         });
 
-        if (parsed.length === 0) return;
+        if (!parsed.length) return;
 
-        let N = 10;
-        if (room === "temp") {
-            N = 1;
-        }
-        const slice = parsed.slice(-N);
-
+        const slice = parsed.slice(-10);
         const avgs = {};
+
         METRICS.forEach(m => {
             avgs[m.key] =
                 slice.reduce((s, x) => s + x[m.key], 0) / slice.length;
@@ -91,7 +123,8 @@ export default function RoomCard({ data, room }) {
                 Object.entries(avgs).map(([k, v]) => [k, v.toFixed(1)])
             )
         );
-    }, [data]);
+    }, [data, room]);
+
 
     React.useEffect(() => {
         if (!lastUpdateTs) return;
@@ -103,10 +136,16 @@ export default function RoomCard({ data, room }) {
 
         return () => clearInterval(interval);
     }, [lastUpdateTs]);
-
-    if (!data) return <div>Loading...</div>;
-    if (data.error) return <div>🚨 Pi Offline</div>;
     const color = ROOM_COLORS[room];
+
+    if (!data) return (    <div className={`room-card loading-card`}>
+        <h1 style={{color}}>{roomName.replace("_", " ").toUpperCase()}</h1>
+        <h2 >Loading...</h2>
+    </div>);
+    if (data.error) return (    <div className={`room-card warning-card`}>
+        <h1 style={{color}}>{roomName.replace("_", " ").toUpperCase()}</h1>
+        <h2 className={"warning"}>{data.error}</h2>
+    </div>)
     const metricOut = {};
     METRICS.forEach(m => {
         const v = avgValues[m.key];
@@ -134,19 +173,36 @@ export default function RoomCard({ data, room }) {
             <div className="data-wrapper">
                 {METRICS.map(m => {
                     const value = avgValues[m.key];
-                    const out = value !== undefined &&
-                        isOutOfBounds(room, m.key === "humid" ? "humid" : "temp", Number(value));
+                    const num = value != null ? Number(value) : null;
+
+                    const out =
+                        num !== null &&
+                        isOutOfBounds(room, m.key, num);
+
+                    const heatColor =
+                        room === "temp" && num !== null
+                            ? tempToColor(num)
+                            : undefined;
 
                     return (
-                        <div key={m.key} className={`room-val ${out ? "warning" : ""}`}>
+                        <div
+                            key={m.key}
+                            className={`room-val ${out ? "warning" : ""}`}
+                        >
                             <span className="label">{m.label}</span>
+
                             <div className="value-row">
-                                <h2>{value ?? "—"}</h2>
+                                <h2
+                                    style={heatColor ? { color: heatColor } : {}}
+                                >
+                                    {value ?? "—"}
+                                </h2>
                                 <p>{value ? m.unit : "—"}</p>
                             </div>
                         </div>
                     );
                 })}
+
             </div>
             <p className={"update-dt"}>
                 <strong>Last update:</strong> {secondsAgo !== null ? `${secondsAgo}s ago` : "—"}

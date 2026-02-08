@@ -10,7 +10,7 @@ export default function DateSelector({ dates, value, onChange }) {
     const endDate   = value?.to   ? new Date(value.to)   : null;
 
     return (
-        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+        <div style={{ display: "flex", gap: 10, alignItems: "center", width: "30%" , position: "relative" }}>
             <strong>select range:</strong>
 
             <DatePicker
