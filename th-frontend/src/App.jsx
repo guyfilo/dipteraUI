@@ -44,7 +44,7 @@ export default function App() {
             // Auto-select the latest date
             if (union.length > 0) {
                 const last = union[union.length - 1];
-                setRange({ from: last, to: last });
+                setRange({from: last, to: last});
             }
 
         }
@@ -74,18 +74,22 @@ export default function App() {
 
             <div className={"body"}>
                 <Dashboard tab={tab}/>
-                <div className="chart-card" >
-                    <DateSelector
-                        dates={dates}
-                        value={range}
-                        onChange={setRange}
-                    />
+                {tab == "humid" && (
+                    <div className="chart-card">
+                        <DateSelector
+                            dates={dates}
+                            value={range}
+                            onChange={setRange}
+                        />
 
-                {/*    <History*/}
-                {/*        rooms={Object.keys(ROOMS)}*/}
-                {/*        range={range}/>*/}
+                        <History
+                            rooms={Object.keys(ROOMS)}
+                            range={range}/>
 
-                </div>
+                    </div>
+
+                )
+                }
             </div>
 
         </div>

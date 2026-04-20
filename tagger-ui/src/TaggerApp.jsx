@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import "./style.css";
 
-axios.defaults.baseURL = "http://100.76.177.32:8000";
+axios.defaults.baseURL = "http://100.76.177.32:5555";
 
 function Progress({state}) {
     if (!state || typeof state.cur === "undefined") return null;
@@ -459,7 +459,7 @@ export default function TaggerApp() {
                                         <img
                                             ref={imgRef}
                                             className="tagger-image"
-                                            src={`http://100.76.177.32:8000/api/image/view?session_id=${sessionId}&image_path=${encodeURIComponent(imagePath)}`}
+                                            src={`http://100.76.177.32:5555/api/image/view?session_id=${sessionId}&image_path=${encodeURIComponent(imagePath)}`}
                                             alt="current"
                                             onMouseMove={(e) => {
                                                 const rect = imgRef.current.getBoundingClientRect();
@@ -509,7 +509,7 @@ export default function TaggerApp() {
                                             }}
                                         >
                                             <img
-                                                src={`http://192.168.0.62:8000/api/image/view?session_id=${sessionId}&image_path=${encodeURIComponent(imagePath)}`}
+                                                src={`http://100.76.177.32:5555/api/image/view?session_id=${sessionId}&image_path=${encodeURIComponent(imagePath)}`}
                                                 alt="Zoomed area"
                                                 style={{
                                                     position: "absolute",
