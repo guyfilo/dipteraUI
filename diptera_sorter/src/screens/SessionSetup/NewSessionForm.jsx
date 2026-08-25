@@ -10,8 +10,10 @@ const DEFAULT_SPECIES = [
     { name: "ANO_WT", color: "#d6734e" },
     { name: "ANO_PMB1_FC", color: "#ffbd66" },
     { name: "ANO_PMB1_MC", color: "#ffb066" },
+    { name: "ANO_3AI", color: "#ff0040" },
     { name: "ALB_DSRED", color: "#00d003" },
     { name: "ALB_WT", color: "#217e21" },
+    { name: "DIRT", color: "#373c40" },
 ];
 const SpeciesDropdown = ({speciesList, setSpeciesList, selectedSpecies, setSelectedSpecies}) => {
     const [open, setOpen] = useState(false);
@@ -20,11 +22,26 @@ const SpeciesDropdown = ({speciesList, setSpeciesList, selectedSpecies, setSelec
     const [newColor, setNewColor] = useState("#000000");
 
     const saveNewSpecies = () => {
-        const newSpecies = {name: newName.trim(), color: newColor};
+        const trimmedName = newName.trim();
+        if (!trimmedName) return;
+
+        const existingSpecies = speciesList.find(
+            ({name}) => name.toLowerCase() === trimmedName.toLowerCase()
+        );
+        if (existingSpecies) {
+            setSelectedSpecies(existingSpecies);
+            setAddingNew(false);
+            setNewName("");
+            setNewColor("#000000");
+            setOpen(false);
+            return;
+        }
+
+        const newSpecies = {name: trimmedName, color: newColor};
         const updatedList = [...speciesList, newSpecies];
         setSpeciesList(updatedList);
         setSelectedSpecies(newSpecies);
-        localStorage.setItem("saved_species", JSON.stringify(updatedList));
+        localStorage.setItem(SPECIES_KEY, JSON.stringify(updatedList));
         setAddingNew(false);
         setNewName("");
         setNewColor("#000000");
@@ -69,7 +86,7 @@ const SpeciesDropdown = ({speciesList, setSpeciesList, selectedSpecies, setSelec
                     onChange={(e) => setNewColor(e.target.value)}
                 />
                 <div className="custom-dropdown-add-actions">
-                    <button onClick={saveNewSpecies}>Save</button>
+                    <button onClick={saveNewSpecies} disabled={!newName.trim()}>Save</button>
                     <button onClick={() => setAddingNew(false)}>Cancel</button>
                 </div>
             </div>)}
@@ -97,11 +114,20 @@ export const NewSessionForm = ({onNext, setSessionInfo, scannerMode}) => {
     const [stage, setStage] = useState("");
 
     useEffect(() => {
-        const storedSpecies = JSON.parse(localStorage.getItem(SPECIES_KEY)) || [];
-        // merge local + defaults, keeping unique names
-        const merged = [
-            ...DEFAULT_SPECIES
-        ];
+        let storedSpecies = [];
+        try {
+            const savedSpecies = JSON.parse(localStorage.getItem(SPECIES_KEY));
+            storedSpecies = Array.isArray(savedSpecies) ? savedSpecies : [];
+        } catch {
+            storedSpecies = [];
+        }
+
+        const merged = [...DEFAULT_SPECIES];
+        storedSpecies.forEach((species) => {
+            if (species?.name && !merged.some(({name}) => name.toLowerCase() === species.name.toLowerCase())) {
+                merged.push(species);
+            }
+        });
         setSpeciesList(merged);
         setSelectedSpecies(merged[0]);
         localStorage.setItem(SPECIES_KEY, JSON.stringify(merged));

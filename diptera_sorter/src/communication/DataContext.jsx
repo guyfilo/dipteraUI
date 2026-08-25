@@ -78,37 +78,57 @@ export const DataProvider = ({ children }) => {
         });
     };
 
-    let fetchInterval = null;
+    useEffect(() => {
+        let isDisposed = false;
+        let fetchInterval = null;
+        let reconnectTimer = null;
 
-    const connectWebSocket = () => {
-        const sudo = isSudoMode();
-        const url = new URL(`${WS_BASE}/ws`, window.location.origin);
-        if (sudo) url.searchParams.set("sudo", "true");
-
-        const socket = new WebSocket(url.toString());
-        socketRef.current = socket;
-
-        socket.onopen = async () => {
-            console.log(`✅ WebSocket connected to ${WS_BASE}`);
-            setConnected(true);
-
-            try {
-                await fetchFullState();
-            } catch (err) {
-                console.error("❌ Failed to fetch full state:", err);
+        const clearFetchInterval = () => {
+            if (fetchInterval !== null) {
+                clearInterval(fetchInterval);
+                fetchInterval = null;
             }
-
-            fetchInterval = setInterval(async () => {
-                try {
-                    await fetchSessionsState();
-                } catch (err) {
-                    console.error("❌ Periodic state fetch failed:", err);
-                }
-            }, 10000);
         };
 
-        socket.onmessage = (event) => {
-            const update = JSON.parse(event.data);
+        const connectWebSocket = () => {
+            if (isDisposed) return;
+
+            const sudo = isSudoMode();
+            const url = new URL(`${WS_BASE}/ws`, window.location.origin);
+            if (sudo) url.searchParams.set("sudo", "true");
+
+            const socket = new WebSocket(url.toString());
+            socketRef.current = socket;
+
+            socket.onopen = async () => {
+                if (isDisposed) return;
+
+                console.log(`✅ WebSocket connected to ${WS_BASE}`);
+                setConnected(true);
+
+                try {
+                    await fetchFullState();
+                } catch (err) {
+                    console.error("❌ Failed to fetch full state:", err);
+                }
+
+                if (isDisposed || socketRef.current !== socket) return;
+
+                clearFetchInterval();
+                fetchInterval = setInterval(async () => {
+                    if (isDisposed) return;
+                    try {
+                        await fetchSessionsState();
+                    } catch (err) {
+                        console.error("❌ Periodic state fetch failed:", err);
+                    }
+                }, 10000);
+            };
+
+            socket.onmessage = (event) => {
+                if (isDisposed) return;
+
+                const update = JSON.parse(event.data);
 
             if (update?.machine_id === "tagger") {
                 if (update.remove) {
@@ -168,25 +188,39 @@ export const DataProvider = ({ children }) => {
                     }
                 };
             });
+            };
+
+            socket.onerror = (err) => {
+                if (isDisposed) return;
+                console.warn("⚠️ WebSocket error:", err);
+                socket.close();
+            };
+
+            socket.onclose = () => {
+                clearFetchInterval();
+                if (isDisposed) return;
+
+                console.warn("🔌 WebSocket closed, retrying...");
+                setConnected(false);
+                reconnectTimer = setTimeout(connectWebSocket, 2000);
+            };
         };
 
+        connectWebSocket();
 
-
-        socket.onerror = (err) => {
-            console.warn("⚠️ WebSocket error:", err);
-            socket.close();
-        };
-
-        socket.onclose = () => {
-            console.warn("🔌 WebSocket closed, retrying...");
-            setConnected(false);
-            if (fetchInterval) {
-                clearInterval(fetchInterval);
-                fetchInterval = null;
+        return () => {
+            isDisposed = true;
+            clearFetchInterval();
+            if (reconnectTimer !== null) {
+                clearTimeout(reconnectTimer);
+                reconnectTimer = null;
             }
-            setTimeout(connectWebSocket, 2000);
+
+            const socket = socketRef.current;
+            socketRef.current = null;
+            socket?.close();
         };
-    };
+    }, [serverKey]);
     const clearImages = (machineId) => {
         setData(prev => {
             if (!prev[machineId]) return prev;
@@ -200,11 +234,6 @@ export const DataProvider = ({ children }) => {
             };
         });
     };
-
-    useEffect(() => {
-        connectWebSocket();
-        return () => socketRef.current?.close();
-    }, [serverKey]);
 
     const createSession = async (sessionData) => {
         console.log("session_data", sessionData);
