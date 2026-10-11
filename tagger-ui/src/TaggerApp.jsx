@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import axios from "axios";
+import {getKeyboardTag} from "./keyboardTag.js";
 import "./style.css";
 
 axios.defaults.baseURL = "http://100.76.177.32:5555";
@@ -131,16 +132,17 @@ export default function TaggerApp() {
         const handleKeyDown = async (e) => {
             if (!imagePath || !sessionId) return;
             const char = e.key;
+            const keyboardTag = getKeyboardTag(e);
 
             if (char === "ArrowRight") {
                 await nextImage(1);
             } else if (char === "ArrowLeft") {
                 await nextImage(-1);
-            } else if (char.length === 1 && /[a-zA-Z0-9]/.test(char)) {
+            } else if (keyboardTag !== null) {
                 await axios.post("/api/image/tag", {
                     session_id: sessionId,
                     image_path: imagePath,
-                    tag: char,
+                    tag: keyboardTag,
                 });
                 await updateCurrentTag();
             } else if (char === "Backspace" || char === "Delete") {
