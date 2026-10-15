@@ -1,0 +1,22 @@
+[Unit]
+Description=Diptera Workspace internal tools page
+After=network.target
+
+[Service]
+Type=simple
+User=dipt-net
+Group=dipt-net
+RuntimeDirectory=diptera-workspace
+ExecStartPre=/usr/sbin/nginx -t -c /etc/diptera-workspace/nginx.conf
+ExecStart=/usr/sbin/nginx -c /etc/diptera-workspace/nginx.conf -g "daemon off;"
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGQUIT
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target
