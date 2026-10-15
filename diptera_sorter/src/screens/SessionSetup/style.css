@@ -813,6 +813,67 @@
     gap: 10px;
 }
 
+.ydf-fixed-target {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 42px;
+    font-family: Assistant;
+    font-size: 18px;
+    text-align: left;
+}
+
+.ydf-target-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+}
+
+.ydf-target-icon img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+
+.ydf-junk-target {
+    position: absolute;
+    top: 410px;
+    left: 40px;
+    right: 40px;
+    padding-top: 18px;
+    border-top: 1px solid var(--Light-Grey, #ddd);
+    text-align: left;
+}
+
+.ydf-junk-label {
+    letter-spacing: 0.03em;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.ydf-recycle-note {
+    margin: 12px 0 0 48px;
+    color: var(--Dark-Grey);
+    font-size: 16px;
+}
+
+.ydf-session .setLimit,
+.ydf-session .start-new-session-target1 {
+    left: 40px;
+}
+
+.ydf-session .setLimit1,
+.ydf-session .start-new-session-target2 {
+    left: 467px;
+}
+
+.ydf-session .vertical-sep-line {
+    height: 120px;
+}
+
 .vertical-sep-line {
     position: relative;
     border-right: 1px solid var(--Light-Grey);

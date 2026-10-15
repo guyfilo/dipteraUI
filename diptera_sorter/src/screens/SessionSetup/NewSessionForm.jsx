@@ -15,6 +15,16 @@ const DEFAULT_SPECIES = [
     { name: "ALB_WT", color: "#217e21" },
     { name: "DIRT", color: "#373c40" },
 ];
+
+const FixedTarget = ({target, label}) => (
+    <div className="ydf-fixed-target">
+        <span className="ydf-target-icon">
+            <img src={`/${target}.svg`} alt=""/>
+        </span>
+        <span>{label}</span>
+    </div>
+);
+
 const SpeciesDropdown = ({speciesList, setSpeciesList, selectedSpecies, setSelectedSpecies}) => {
     const [open, setOpen] = useState(false);
     const [addingNew, setAddingNew] = useState(false);
@@ -105,6 +115,7 @@ export const NewSessionForm = ({onNext, setSessionInfo, scannerMode}) => {
     const [scannerSession, setScannerSession] = useState(scannerMode);
     const [washSession, setWashSession] = useState(false);
     const [sizerSession, setSizerSession] = useState(false);
+    const [ydfSession, setYdfSession] = useState(false);
     const [warning, setWarning] = useState("");
     const [speciesList, setSpeciesList] = useState([]);
     const [selectedSpecies, setSelectedSpecies] = useState(null);
@@ -188,6 +199,10 @@ export const NewSessionForm = ({onNext, setSessionInfo, scannerMode}) => {
             wash_mode: washMode,
             scanner_mode: scanner,
             sizer_mode: sizerSession,
+            sorting_policy: normalSession && ydfSession ? {
+                junk: [["female", "nfl"]],
+                default: "recycle",
+            } : null,
             specie: selectedSpecies?.name,
             age: age ? parseInt(age) : null,
             blood_feed: bloodFeed,
@@ -211,7 +226,7 @@ export const NewSessionForm = ({onNext, setSessionInfo, scannerMode}) => {
         onNext();
     };
 
-    return (<div className="start-new-session">
+    return (<div className={`start-new-session${ydfSession ? " ydf-session" : ""}`}>
         <div className="div">
             <div className="sessionTittle">Session Title:</div>
             <input type="text" placeholder="Type here.." className="startNewSessionChild"
@@ -227,7 +242,10 @@ export const NewSessionForm = ({onNext, setSessionInfo, scannerMode}) => {
                     speciesList={speciesList}
                     setSpeciesList={setSpeciesList}
                     selectedSpecies={selectedSpecies}
-                    setSelectedSpecies={setSelectedSpecies}
+                    setSelectedSpecies={(species) => {
+                        setSelectedSpecies(species);
+                        if (species?.name !== "ANO_YDF") setYdfSession(false);
+                    }}
                 />
 
             </div>
@@ -252,7 +270,6 @@ export const NewSessionForm = ({onNext, setSessionInfo, scannerMode}) => {
                 </div>
             </div>
 
-            <Button className={"next-step-button button"} text={"Next Step"} onClick={setSession} once={false}/>
             {scannerSession || washSession || sizerSession ? null : <>
                 <div className={"sortingTarget1"}>
                     Sorting target 1:
@@ -263,6 +280,7 @@ export const NewSessionForm = ({onNext, setSessionInfo, scannerMode}) => {
                 <div className={"setLimit"}>
                     <div className={"limitLarvaInterval"}>Limit larva interval:</div>
                     <input className={"setLimitChild"}
+                           aria-label="Target 1 interval"
                            onChange={(e) => setTarget1Interval(e.target.value)}
                            type="number"
                            value={target1Interval}
@@ -271,6 +289,7 @@ export const NewSessionForm = ({onNext, setSessionInfo, scannerMode}) => {
                 <div className={"setLimit1"}>
                     <div className={"limitLarvaInterval"}>Limit larva interval:</div>
                     <input className={"setLimitChild"}
+                           aria-label="Target 2 interval"
                            onChange={(e) => setTarget2Interval(e.target.value)}
                            type="number"
                            value={target2Interval}
@@ -278,17 +297,24 @@ export const NewSessionForm = ({onNext, setSessionInfo, scannerMode}) => {
                 </div>
                 <div className={"start-new-session-target2"}>
                     <div className={"select-target2"}>
-                        <SelectTarget selectedTarget={selectedTarget2}
-                                      setSelectedTarget={setSelectedTarget2}></SelectTarget>
+                        {ydfSession ? <FixedTarget target="male_nfl" label="Male not Fluorescent"/> :
+                            <SelectTarget selectedTarget={selectedTarget2}
+                                          setSelectedTarget={setSelectedTarget2}/>}
                     </div>
                 </div>
                 <div className={"vertical-sep-line"}></div>
                 <div className={"start-new-session-target1"}>
                     <div className={"select-target1"}>
-                        <SelectTarget selectedTarget={selectedTarget1}
-                                      setSelectedTarget={setSelectedTarget1}></SelectTarget>
+                        {ydfSession ? <FixedTarget target="male_fl" label="Male Fluorescent"/> :
+                            <SelectTarget selectedTarget={selectedTarget1}
+                                          setSelectedTarget={setSelectedTarget1}/>}
                     </div>
                 </div>
+                {ydfSession && <div className="ydf-junk-target">
+                    <div className="ydf-junk-label">Junk:</div>
+                    <FixedTarget target="female_nfl" label="Female not Fluorescent"/>
+                    <p className="ydf-recycle-note">Everything else goes to recycle.</p>
+                </div>}
                 <div className={"select-target-warning"}>{warning}</div>
             </>}
             <Button className={"next-step-button button"}
@@ -303,6 +329,8 @@ export const NewSessionForm = ({onNext, setSessionInfo, scannerMode}) => {
                                 setScannerSession(false);
                                 setWashSession(false);
                                 setSizerSession(false);
+                                setYdfSession(false);
+                                if (sessionTitle === "YDF_sorting") setSessionTitle("");
                                 setSelectedSpecies(speciesList.at(0));
                                 setSelectedTarget1("male_fl");
                                 setSelectedTarget2("female_nfl");
@@ -312,11 +340,27 @@ export const NewSessionForm = ({onNext, setSessionInfo, scannerMode}) => {
 
                     </Button>
 
+                    <Button className={"startSetup1"} text={"YDF_sorting"}
+                            ButtonClassName={ydfSession ? "bwButten2-pressed" : "bwButten2"}
+                            onClick={() => {
+                                setScannerSession(false);
+                                setWashSession(false);
+                                setSizerSession(false);
+                                setYdfSession(true);
+                                setSessionTitle("YDF_sorting");
+                                setSelectedSpecies(speciesList.find(({name}) => name === "ANO_YDF") || DEFAULT_SPECIES[0]);
+                                setSelectedTarget1("male_fl");
+                                setSelectedTarget2("male_nfl");
+                                setTarget1Interval("");
+                                setTarget2Interval("");
+                            }}/>
+
                     <Button className={"startSetup1"} text={"wash session"}
                             ButtonClassName={washSession ? "bwButten1-pressed" : "bwButten1"}
                             onClick={() => {
                                 setWashSession(!washSession);
                                 setSizerSession(false);
+                                setYdfSession(false);
                             }}
                     >
                     </Button>
@@ -325,6 +369,7 @@ export const NewSessionForm = ({onNext, setSessionInfo, scannerMode}) => {
                             onClick={() => {
                                 setSizerSession(!sizerSession);
                                 setWashSession(false);
+                                setYdfSession(false);
                             }}>
                     </Button>
                 </div> : null}
