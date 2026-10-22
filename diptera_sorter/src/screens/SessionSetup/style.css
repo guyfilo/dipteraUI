@@ -1114,3 +1114,56 @@
     width: 100px;
     height: 32px;
 }
+
+/* Keep progress and completion centered in the dialog's content area. */
+.start-session-window > .div {
+    max-width: calc(100vw - 32px);
+}
+
+.session-charging,
+.start-session-window .session-setup {
+    position: absolute;
+    inset: 0 0 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    background: transparent;
+}
+
+.session-charging .overlap-group {
+    position: relative;
+    top: auto;
+    left: auto;
+    flex-shrink: 0;
+}
+
+.session-charging .charging-machine-messages {
+    position: static;
+    width: calc(100% - 80px);
+    height: auto;
+    max-height: 150px;
+    overflow-y: auto;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.start-session-window .session-setup .text-wrapper {
+    position: static;
+    width: auto;
+    height: auto;
+    line-height: 1.3;
+}
+
+.start-session-window .session-setup .butten-instance {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: 147px !important;
+}
+
+.start-session-window .session-setup .design-component-instance-node {
+    left: auto !important;
+    width: auto !important;
+}

@@ -28,7 +28,7 @@ export const SessionInfoTable = ({className, session_data, machines_data}) => {
 
                     <td className="table-data col-status">
                         <p>Status: </p>
-                        <div className="td-widget" style={{top: "3px"}}>
+                        <div className="td-widget">
                             <StatusIcon status={machineData.machine_state} error={machineData.error}/>
                         </div>
                     </td>

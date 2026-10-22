@@ -124,3 +124,19 @@ html {
 
 }
 
+
+.session-info-table .col-status {
+    align-items: center;
+    align-self: flex-end;
+    height: 28px;
+    padding-bottom: 0;
+}
+
+.session-info-table .col-status p {
+    margin: 0;
+}
+
+.session-info-table .col-status .td-widget {
+    display: flex;
+    align-items: center;
+}

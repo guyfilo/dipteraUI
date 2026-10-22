@@ -44,8 +44,10 @@ const LivePieChart = ({width, height, selected}) => {
     return (
         <div
             style={{
-                width: width || "400px",
-                height: height || "400px",
+                width: width || "100%",
+                maxWidth: "100%",
+                height: height || 400,
+                minHeight: 0,
                 display: "flex",
                 flexDirection: "column",
             }}
@@ -64,7 +66,7 @@ const LivePieChart = ({width, height, selected}) => {
 
             <PieChart
                 width={width || 400}
-                height={height || 400}
+                height={(height || 400) - 36}
                 labels={labels}
                 values={values}
                 colors={colors}
@@ -87,6 +89,8 @@ export const PieChart = ({
     return (
         <Plot
             className={className}
+            style={{width: width || "100%", maxWidth: "100%", height: height || 400, minHeight: 0, flex: 1}}
+            useResizeHandler
             data={[
                 {
                     type: "pie",
@@ -108,9 +112,8 @@ export const PieChart = ({
                         color: "#707070"
                     },
                 },
-                // height: height ? parseInt(height) : 400,
-                // width: width ? parseInt(width) : 400,
-                margin: {t: 50, l: 5, r: 5, b: 0},
+                autosize: true,
+                margin: {t: 50, l: 5, r: 5, b: 12},
                 legend: {font: {size: 14}},
                 showlegend: false,
                 paper_bgcolor: "rgba(0,0,0,0)", // transparent outer background

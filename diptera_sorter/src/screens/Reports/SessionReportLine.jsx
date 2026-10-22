@@ -36,7 +36,8 @@ const ViewSwitch = ({mode, setMode, disabled}) => (
 
 function ChartsPane({charts}) {
     if (!charts) return null;
-    const machines = Object.keys(charts.loop_case_pie);
+    const machines = [...new Set([charts.loop_case_pie, charts.sex_pie, charts.fl_pie, charts.area_histogram]
+        .flatMap(data => Object.keys(data || {})))];
     const [selectedMachine, setSelectedMachine] = useState(machines.at(0));
 
 
@@ -132,24 +133,24 @@ function ChartsPane({charts}) {
                     }
                 </select>
                 <div className={"pies-overlay"} >
-                    <PieChart title={"Targets"}
+                    {loop[selectedMachine] ? <PieChart title={"Targets"}
                               labels={loop[selectedMachine].labels}
                               values={loop[selectedMachine].values}
                               width={250} height={250}
                               className={"report-pie"}
-                    />
-                    <PieChart title={"Sex"}
+                    /> : <p>Output counts unavailable.</p>}
+                    {sex[selectedMachine] ? <PieChart title={"Sex"}
                               labels={sex[selectedMachine].labels}
                               values={sex[selectedMachine].values}
                               width={250} height={250}
                               className={"report-pie"}
-                    />
-                    <PieChart title={"Fluorescent"}
+                    /> : <p>Sex data unavailable.</p>}
+                    {fl[selectedMachine] ? <PieChart title={"Fluorescent"}
                               labels={fl[selectedMachine].labels}
                               values={fl[selectedMachine].values}
                               width={250} height={250}
                               className={"report-pie"}
-                    />
+                    /> : <p>Fluorescent data unavailable.</p>}
 
                 </div>
             </div>
@@ -223,6 +224,7 @@ export default function SessionReportLine({
                         style={{marginRight: 8}}
                     />
                     <b className={"title"}>{pretty("title", info["session_title"])}</b>
+                    {info.report_status === "partial" && <small>Partial report</small>}
                     {["date", "target1", "target2", "specie", "machine_ids"].map((key) => (
                         <div className="header-val" key={key}>
                             <div className="sep"></div>
@@ -242,6 +244,7 @@ export default function SessionReportLine({
                         </div>
                         <div className="session-summary-description">
                             <p>{info["session_description"] || ""}</p>
+                            {info.report_note && <p role="status">{info.report_note}</p>}
                         </div>
 
                         {mode === "table" && (

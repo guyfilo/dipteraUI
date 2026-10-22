@@ -83,7 +83,7 @@ export const ChargeSession = ({onNext, sessionInfo}) => {
     }, [liveData, sessionInfo, onNext]);
 
     const charging = () => {
-        return (<div className="session-setup-in">
+        return (<div className="session-setup-in session-charging">
             <div
                 className="overlap-group"
                 style={{

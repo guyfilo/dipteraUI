@@ -8,7 +8,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 20px;
+    z-index: 1000;
 
 }
 
@@ -16,5 +16,8 @@
 
     border-radius: 20px;
     text-align: center;
+    max-width: calc(100vw - 32px);
+    max-height: calc(100vh - 32px);
+    overflow: auto;
 }
 

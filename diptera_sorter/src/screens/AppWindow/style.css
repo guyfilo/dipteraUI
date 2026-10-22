@@ -150,9 +150,9 @@ html, body {
 .start-window .home-body {
     position: relative;
     top: 9vh;
-    left: 14vw;
+    left: calc(4vw + 22vh);
     height: 87%;
-    width: 85%;
+    width: calc(94vw - 22vh);
     overflow-y: auto;
     overflow-x: visible;
     padding-right: 1vw;
