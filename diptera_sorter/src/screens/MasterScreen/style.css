@@ -640,3 +640,4 @@
     gap:8px;
     margin-bottom:6px;
 }
+.timeline-session-note-context { display: flex; gap: 8px 18px; flex-wrap: wrap; font-size: 13px; color: #707070; margin-top: 10px; }

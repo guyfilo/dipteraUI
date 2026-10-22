@@ -21,8 +21,12 @@ export const AreaHistogram = ({className, width, height, values}) => {
     return (
         <div className={className}>
             <Plot
+                style={{width: width || "100%", height}}
+                useResizeHandler
+                config={{responsive: true}}
                 data={[trace]}
                 layout={{
+                    autosize: true,
                     width: width,
                     height: height,
                     margin: {

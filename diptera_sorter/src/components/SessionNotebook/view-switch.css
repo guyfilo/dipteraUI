@@ -1,0 +1,18 @@
+.session-view-switch { display: inline-flex; align-items: center; gap: 8px; }
+.session-view-switch .session-view-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 27px;
+    height: 25px;
+    padding: 2px;
+    border: 0;
+    border-radius: 5px;
+    background: var(--Mid-Grey, #bdbdbd);
+    color: #fefefe;
+    cursor: pointer;
+}
+.session-view-switch .session-view-button img { display: block; width: 23px; height: 21px; }
+.session-view-switch .session-view-button[aria-pressed="true"] { background: var(--Dark-Grey, #707070); }
+.session-view-switch .session-view-button:hover { background: var(--dipteraai-main, #8c8c8c); }
+.session-view-switch .session-view-button:focus-visible { outline: 2px solid #707070; outline-offset: 3px; }

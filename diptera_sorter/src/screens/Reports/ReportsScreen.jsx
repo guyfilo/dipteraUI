@@ -6,8 +6,6 @@ import {Checkbox} from "../../components/Checkbox/index.jsx";
 import MultiSelectDropdown from "../../components/MultiSelectDropdown/MultiSelectDropdown.jsx";
 import ReportsDateFilter from "./ReportsDateFilter.jsx";
 import ReportsMailButton from "./ReportsMailButton.jsx";
-import subtract from "../SessionSetup/Subtract.svg";
-import subtractBack from "../SessionSetup/Subtract-back.svg";
 import * as XLSX from "xlsx"; // at the top
 
 
@@ -30,31 +28,32 @@ const DownloadIcon = ({ className = "icon" , onClick}) => (
 );
 
 
-const Charging = () => {
-    const [angle, setAngle] = useState(0);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setAngle(prev => prev + 1);
-        }, 10);
-        return () => clearInterval(interval);
-    }, []);
-
-    return (
-        <div className="session-setup-in">
-            <div
-                className="overlap-group"
-                style={{
-                    transform: `rotate(${angle}deg)`,
-                    transition: "transform 0.1s linear",
-                }}
-            >
-                <img className="subtract" alt="Subtract" src={"/Subtract.svg"} />
-                <img className="subtract" alt="Subtract" src={"Subtract-back.svg"} />
+const ReportsLoading = ({progress = {}, initial = false}) => {
+    const loaded = progress.loaded || 0;
+    const total = progress.total || 0;
+    const percent = total > 0 ? Math.min(100, Math.round(100 * loaded / total)) : null;
+    return <div className={`reports-loading-panel ${initial ? "is-initial" : ""}`}>
+        <div className="reports-loading-heading">
+            <span className="reports-loading-spinner" aria-hidden="true"/>
+            <div role="status">
+                <strong>{initial ? "Loading session reports" : "Loading reports"}</strong>
+                <p>{total > 0 ? `${loaded} of ${total} sessions ready` : "Finding available sessions…"}</p>
             </div>
+            {percent !== null && <span className="reports-loading-percent" aria-hidden="true">{percent}%</span>}
         </div>
-    );
+        <div className={`reports-loading-track ${percent === null ? "is-indeterminate" : ""}`}
+             role="progressbar" aria-label="Reports loaded" aria-valuemin={0} aria-valuemax={100}
+             aria-valuenow={percent ?? undefined}>
+            <div style={percent !== null ? {width: `${percent}%`} : undefined}/>
+        </div>
+    </div>;
 };
+
+const ReportsSkeleton = () => <div className="reports-loading-skeletons" aria-hidden="true">
+    {[0, 1, 2].map(index => <div className="reports-loading-skeleton" key={index}>
+        <span/><span/><span/><span/>
+    </div>)}
+</div>;
 
 const ReportsScreen = () => {
     const { reports, fetchReports, reportsLoading, reportsError, reportsProgress} = useContext(DataContext);
@@ -76,9 +75,12 @@ const ReportsScreen = () => {
     }, []);
 
     if (!reports || Object.keys(reports).length === 0) {
-        return reportsError
-            ? <div role="alert">{reportsError} <button onClick={fetchReports}>Retry</button></div>
-            : <Charging />;
+        return <div className="reports-screen">
+            <b className="reports-screen-title">Sessions Reports</b>
+            {reportsError
+                ? <div className="reports-loading-error" role="alert">{reportsError} <button onClick={fetchReports}>Retry</button></div>
+                : <><ReportsLoading progress={reportsProgress} initial/><ReportsSkeleton/></>}
+        </div>;
     }
 
     const toggleExpand = (sessionId) => {
@@ -186,21 +188,27 @@ const ReportsScreen = () => {
 
         return machineMatch && lineMatch && dateMatch;
     }));
+    const reportsByDate = Object.entries(filteredReports)
+        .filter(([, row]) => row.session_data?.length > 0)
+        .sort(([, a], [, b]) => new Date(b.session_info.start_ts) - new Date(a.session_info.start_ts))
+        .reduce((groups, entry) => {
+            const date = entry[1].session_info.date || "unknown";
+            (groups[date] ||= []).push(entry);
+            return groups;
+        }, {});
+    const formatReportDate = date => {
+        if (date === "unknown") return "Date unavailable";
+        const parsed = new Date(`${date}T12:00:00`);
+        return Number.isNaN(parsed.getTime()) ? date : parsed.toLocaleDateString("en-GB", {
+            weekday: "long", day: "numeric", month: "long", year: "numeric"
+        });
+    };
+
     return (
-        <div
-            style={{
-                padding: "1rem",
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px",
-                height: "100%",
-            }}
-        >
+        <div className="reports-screen">
             <b className={"reports-screen-title"}>Sessions Reports</b>
-            <div role="status">
-                {reportsLoading && `Loading reports: ${reportsProgress.loaded} / ${reportsProgress.total}`}
-                {!reportsLoading && !reportsError && Object.keys(reports.reports).length === 0 && 'No reports available.'}
-            </div>
+            {reportsLoading && <ReportsLoading progress={reportsProgress} initial={Object.keys(reports.reports).length === 0}/>}
+            {!reportsLoading && !reportsError && Object.keys(reports.reports).length === 0 && <div role="status">No reports available.</div>}
             {reportsError && <div role="alert">{reportsError} <button onClick={fetchReports}>Retry</button></div>}
 
             <div className={"reports-control"}
@@ -257,10 +265,17 @@ const ReportsScreen = () => {
 
             </div>
 
-            <div className={"reports-data-display"}>
-                {Object.entries(filteredReports)
-                    .sort(([, a], [, b]) => new Date(b.session_info.start_ts) - new Date(a.session_info.start_ts))
-                    .map(([sid, row]) => {
+            <div className={"reports-data-display"} aria-busy={reportsLoading}>
+                {reportsLoading && Object.keys(reports.reports).length === 0 && <ReportsSkeleton/>}
+                {Object.entries(reportsByDate)
+                    .sort(([a], [b]) => b.localeCompare(a))
+                    .map(([date, entries]) => <section className="reports-date-group" key={date}
+                                                      aria-labelledby={`reports-day-${date}`}>
+                        <h2 className="reports-date-separator" id={`reports-day-${date}`}>
+                            {date === "unknown" ? <span>Date unavailable</span> : <time dateTime={date}>{formatReportDate(date)}</time>}
+                            <span className="reports-date-count">{entries.length} {entries.length === 1 ? "session" : "sessions"}</span>
+                        </h2>
+                        {entries.map(([sid, row]) => {
                         const info = row.session_info;
                         const data = row.session_data;
                         if (!data || data.length === 0) return null;
@@ -300,7 +315,8 @@ const ReportsScreen = () => {
                                 )}
                             />
                         );
-                    })}
+                        })}
+                    </section>)}
             </div>
 
         </div>

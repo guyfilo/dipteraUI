@@ -97,3 +97,41 @@
     top: 66px;
     left: 222px;
     position: absolute;}
+
+.session-info-window .session-second-row {
+    position: absolute;
+    top: 279px;
+    left: 13px;
+    width: min(1407px, calc(93vw - 22vh - 26px));
+    padding-bottom: 24px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 27px;
+    column-gap: 12px;
+    align-items: start;
+}
+.session-detail-toolbar {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 17px;
+}
+.session-detail-toolbar .session-view-switch { flex-direction: column; }
+.session-detail-charts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 16px; }
+.session-info-window .session-second-row .session-pie,
+.session-info-window .session-second-row .larva-area-histogram-container {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    min-width: 0;
+    height: 480px;
+}
+.session-detail-notebook { border-radius: 10px; min-width: 0; }
+.session-detail-notebook > .session-notebook { margin: 0; min-height: 100%; }
+@media (max-width: 1200px) {
+    .session-detail-charts { grid-template-columns: minmax(0, 1fr); }
+}
+.session-info-window .session-second-row .area-histogram { position: relative; width: 100%; }
+
+.session-detail-charts, .session-detail-notebook { grid-column: 1; grid-row: 1; min-width: 0; }

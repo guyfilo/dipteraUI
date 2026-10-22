@@ -2,6 +2,8 @@ import React, {useEffect, useState, useContext} from "react";
 import {DataContext} from "../../communication/DataContext.jsx";
 import "./style.css";
 const EVENT_CONFIG = {
+    issue: {label: "Issue", color: "#d4a243"},
+    error: {label: "Error", color: "#c8574b"},
     note: {
         label: "Note",
         color: "#9aa4ff"
@@ -79,16 +81,19 @@ export const TimelineTab = ({machineId}) => {
     useEffect(() => {
         if (!machineId) return;
 
+        let active = true;
         const fetchTimeline = async () => {
             try {
                 const res = await getTimeline(machineId);
-                setEvents(res.events ?? []);
+                if (active) setEvents(res.events ?? []);
             } catch (err) {
                 console.error("Failed to fetch timeline", err);
             }
         };
 
         fetchTimeline();
+        const interval = setInterval(fetchTimeline, 15000);
+        return () => { active = false; clearInterval(interval); };
     }, [machineId]);
 
 
@@ -333,12 +338,17 @@ const TimelineCard = ({event, onComment}) => {
                 </span>
             </div>
             {open && <div className={"cad-body"}>
+                {event.source === 'session_notebook' && <div className="timeline-session-note-context">
+                    <span>Session: {event.session_id}</span>
+                    {event.author && <span>Written by {event.author}</span>}
+                    <span>{event.scope === 'session' ? 'Entire session' : 'Selected machines'}: {event.machine_ids?.join(', ')}</span>
+                </div>}
                 <p>{event.description}</p>
 
                 {/* comments */}
                 <div className="timeline-comments">
                     {(event.comments ?? []).map((c, i) => (
-                        <div key={i} className="timeline-comment">
+                        <div key={i} className="timeline-comment" style={{whiteSpace: 'pre-wrap'}}>
                             {c}
                         </div>
                     ))}

@@ -1,3 +1,5 @@
+import SessionViewSwitch from "../../components/SessionNotebook/SessionViewSwitch.jsx";
+import SessionNotebook from "../../components/SessionNotebook/SessionNotebook.jsx";
 import React, {useContext, useEffect, useMemo, useState, useRef} from "react";
 import {DataContext} from "../../communication/DataContext.jsx";
 import ReportsMailButton from "./ReportsMailButton.jsx";
@@ -36,26 +38,6 @@ const DownloadIcon = ({className = "icon", onClick}) => (
             stroke="currentColor" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
 );
-
-const ViewSwitch = ({mode, setMode, disabled}) => (
-    <div style={{display: "flex", gap: 8, alignItems: "center"}}>
-        <img
-            src={"status=table.svg"}
-            alt={"table"}
-            className={`btn ${mode === "table" ? "btn-primary" : ""}`}
-            onClick={() => setMode("table")}
-        >
-        </img>
-        <img
-            alt={"charts"}
-            src={"status=graph.svg"}
-            className={`btn ${mode === "charts" ? "btn-primary" : ""}`}
-            onClick={() => setMode("charts")}
-        >
-        </img>
-    </div>
-);
-
 
 function ChartsPane({charts}) {
     if (!charts) return null;
@@ -214,7 +196,7 @@ export default function SessionReportLine({
                                           }) {
     const sessionId = info.session_id;
     const [expanded, setExpanded] = useState(false);
-    const [mode, setMode] = useState("table"); // "table" | "charts"
+    const [mode, setMode] = useState("table"); // "table" | "charts" | "notebook"
 
     const {fetchChartsData, chartsDataMap} = useContext(DataContext);
     const charts = chartsDataMap?.[sessionId];
@@ -249,8 +231,17 @@ export default function SessionReportLine({
                         src={`/arrow-${expanded ? "hide" : "expand"}.svg`}
                         style={{marginRight: 8}}
                     />
-                    <ReportTitle title={pretty("title", info["session_title"])}/>
-                    {info.report_status === "partial" && <small>Partial report</small>}
+                    <div className="report-title-container">
+                        <ReportTitle title={pretty("title", info["session_title"])}/>
+                        <span className="report-session-id">{sessionId}</span>
+                    {info.report_status === "partial" && (
+                        <span className="report-partial-badge"
+                              title={info.report_note || "Some session data is unavailable."}>
+                            <span className="report-partial-dot" aria-hidden="true"/>
+                            Partial report
+                        </span>
+                    )}
+                    </div>
                     {["date", "target1", "target2", "specie", "machine_ids"].map((key) => (
                         <div className="header-val" key={key}>
                             <div className="sep"></div>
@@ -265,12 +256,12 @@ export default function SessionReportLine({
                     <div className={"expand-report"}>
                         <div className={"chart-switch"}>
                             {showChartsSwitch && (
-                                <ViewSwitch mode={mode} setMode={setMode} disabled={!charts}/>
+                                <SessionViewSwitch mode={mode} onChange={setMode} label="Report view"/>
                             )}
                         </div>
                         <div className="session-summary-description">
                             <p>{info["session_description"] || ""}</p>
-                            {info.report_note && <p role="status">{info.report_note}</p>}
+                            {info.report_note && <p className="report-data-note" role="status">{info.report_note}</p>}
                         </div>
 
                         {mode === "table" && (
@@ -299,7 +290,8 @@ export default function SessionReportLine({
                             </div>
                         )}
 
-                        {mode === "charts" && <ChartsPane charts={charts}/>}
+                        {mode === "charts" && (charts ? <ChartsPane charts={charts}/> : <p role="status">Loading charts…</p>)}
+                        {mode === "notebook" && <SessionNotebook key={sessionId} sessionId={sessionId} machineIds={info.machine_ids}/>}
                         <div className="reports-icons">
                             <DownloadIcon className={"download-icon reports-icon"} onClick={onDownload}/>
                             <ReportsMailBtn/>

@@ -1,3 +1,5 @@
+import SessionViewSwitch from "../../components/SessionNotebook/SessionViewSwitch.jsx";
+import SessionNotebook from "../../components/SessionNotebook/SessionNotebook.jsx";
 import React, {useContext, useEffect, useState} from "react";
 import {EndSession} from "../../components/EndSession/EndSession.jsx";
 import HandleStop from "../../components/HandleStop/HandleStop.jsx";
@@ -12,6 +14,7 @@ import {SelectedMachinesContext} from "../../components/SelectedMachinesContext/
 
 export const SessionInfoWindow = ({data, sessions}) => {
     const {selectSession, removeAll, stopSessionRequest, stopRequest, setStopRequest} = useContext(SelectedMachinesContext);
+    const [detailView, setDetailView] = useState("charts");
     const [selected, setSelected] = useState(Object.values(sessions).at(0));
 
     useEffect(() => {
@@ -117,17 +120,25 @@ export const SessionInfoWindow = ({data, sessions}) => {
         <div className="session-live-table">
             <SessionInfoTable session_data={selected} machines_data={machines_data}></SessionInfoTable>
         </div>
-        <div className="session-pie">
-            <InfoContainer info={"Loops Pie"} title={"Loops Pie"}>
-                <LivePieChart width={450} height={400} selected={combinedData}></LivePieChart>
-            </InfoContainer>
+        <div className="session-second-row" data-view={detailView}>
+            <div className="session-detail-toolbar">
+                <SessionViewSwitch mode={detailView} onChange={setDetailView}
+                                   options={['charts', 'notebook']} label="Session detail view"/>
+            </div>
+            {detailView === "charts" ? <div className="session-detail-charts">
+                <div className="session-pie">
+                    <InfoContainer info="Loops Pie" title="Loops Pie">
+                        <LivePieChart width="100%" height={400} selected={combinedData}/>
+                    </InfoContainer>
+                </div>
+                <div className="larva-area-histogram-container">
+                    <InfoContainer info="Larva Area Histogram" title="Larva Area Histogram">
+                        <AreaHistogram className="area-histogram" height={400} values={allLarvaAreas}/>
+                    </InfoContainer>
+                </div>
+            </div> : <div className="session-detail-notebook">
+                <SessionNotebook key={selected.session_id} sessionId={selected.session_id} machineIds={selected.machine_ids}/>
+            </div>}
         </div>
-        <div className="larva-area-histogram-container">
-            <InfoContainer info={"Loops Pie"} title={"Lara Area Histogram"}>
-                <AreaHistogram className="area-histogram" width={750} height={400}
-                               values={allLarvaAreas}></AreaHistogram>
-            </InfoContainer>
-        </div>
-
     </div>
 }

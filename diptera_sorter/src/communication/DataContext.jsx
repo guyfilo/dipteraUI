@@ -1,4 +1,4 @@
-import React, {createContext, useEffect, useRef, useState} from "react";
+import React, {createContext, useCallback, useEffect, useRef, useState} from "react";
 
 const SERVERS = {
     israel: {
@@ -384,6 +384,28 @@ export const DataProvider = ({ children }) => {
         return data;
     }
 
+    const fetchSessionNotebooks = useCallback(async (signal) => {
+        const response = await fetch(`${API_BASE}/api/session-notebooks`, {signal});
+        if (!response.ok) throw new Error('Could not load session notebooks. Please retry.');
+        return response.json();
+    }, [API_BASE]);
+
+    const fetchSessionNotebook = useCallback(async (sessionId, signal) => {
+        const response = await fetch(`${API_BASE}/api/sessions/${encodeURIComponent(sessionId)}/notebook`, {signal});
+        if (!response.ok) throw new Error('Could not load session notes. Please retry.');
+        return response.json();
+    }, [API_BASE]);
+
+    const addSessionComment = useCallback(async (sessionId, text, author, options = {}) => {
+        const response = await fetch(`${API_BASE}/api/sessions/${encodeURIComponent(sessionId)}/notes`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({text, author, ...options}),
+        });
+        if (!response.ok) throw new Error('Note could not be saved. Your text is still here; please retry.');
+        return response.json();
+    }, [API_BASE]);
+
     const getTimeline = async (machine_id) => {
         const res = await fetch(`${API_BASE}/api/machines/${machine_id}/timeline`);
         const json = await res.json();
@@ -439,6 +461,9 @@ export const DataProvider = ({ children }) => {
             reportsProgress,
             fetchChartsData,
             chartsDataMap,
+            fetchSessionNotebooks,
+            fetchSessionNotebook,
+            addSessionComment,
             getTimeline,
             addTimelineEvent,
             editTimelineEvent,

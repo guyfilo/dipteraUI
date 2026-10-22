@@ -1,3 +1,5 @@
+import {NotebookIcon} from "../SessionNotebook/SessionViewSwitch.jsx";
+import SessionNotebook from "../SessionNotebook/SessionNotebook.jsx";
 import React, { useContext, useState } from "react";
 import "./style.css";
 import { Checkbox } from "../Checkbox/index.jsx";
@@ -31,6 +33,7 @@ export const SessionHomeTable = ({ session_data, machines_data }) => {
         selectedMachines
     } = useContext(SelectedMachinesContext);
 
+    const [notebookOpen, setNotebookOpen] = useState(false);
     const [exitButtonState, setExitButtonState] = useState("default");
     let showExit = stopSessionRequest.includes(session_data.session_id);
     const isSelected = selectedSessions.includes(session_data.session_id);
@@ -191,6 +194,20 @@ export const SessionHomeTable = ({ session_data, machines_data }) => {
                     </tr>
                     </tbody>
                 </table>
+
+            </div>
+            <div className="home-notebook-frame">
+                <button type="button" className="home-notebook-button" aria-expanded={notebookOpen}
+                        aria-label={notebookOpen ? 'Hide notebook' : 'Notebook'}
+                        aria-controls={`home-notebook-${session_data.session_id}`}
+                        onClick={() => setNotebookOpen(open => !open)}>
+                    <span className="home-notebook-label"><NotebookIcon size={20}/>{notebookOpen ? 'Hide notebook' : 'Notebook'}</span>
+                </button>
+                <div className="home-session-notebook" id={`home-notebook-${session_data.session_id}`} hidden={!notebookOpen}>
+                    {notebookOpen &&
+                        <SessionNotebook key={session_data.session_id} sessionId={session_data.session_id} machineIds={session_data.machine_ids}/>
+                    }
+                </div>
             </div>
         </div>
     );

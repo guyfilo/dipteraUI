@@ -1,0 +1,130 @@
+.session-notebook {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    padding: 20px 24px 20px 28px;
+    margin-top: 12px;
+    border: 1px solid #e4e4de;
+    border-radius: 8px;
+    box-shadow: inset 3px 0 0 #deded6;
+    color: #333b40;
+    font-family: var(--font-assistant, inherit);
+    font-size: 16px;
+    background-color: #fafaf7;
+    background-image:
+        linear-gradient(rgba(112, 112, 112, .04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(112, 112, 112, .04) 1px, transparent 1px);
+    background-size: 24px 24px;
+}
+.session-notebook-header,
+.session-notebook-entry-meta,
+.session-notebook-submit {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.session-notebook h3 { margin: 0; font-size: 18px; font-weight: 600; }
+.session-notebook button {
+    cursor: pointer;
+    padding: 6px 0;
+    background: transparent;
+    border: 0;
+    color: #495158;
+    font: inherit;
+    font-size: 16px;
+}
+.session-notebook button:hover { color: #333; }
+.session-notebook button:disabled { cursor: default; opacity: .5; }
+.session-notebook button[type="submit"] {
+    min-width: 147px;
+    height: 43px;
+    padding: 0 16px;
+    border-radius: 5px;
+    background: #8c8c8c;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+}
+.session-notebook button[type="submit"]:hover:not(:disabled) { background: #707070; }
+.session-notebook .session-notebook-toggle { padding-left: 0; }
+.session-notebook-hint,
+.session-notebook-empty { color: #626b70; font-size: 16px; }
+.session-notebook-form {
+    display: grid;
+    gap: 18px;
+    margin: 18px 0 24px;
+    padding: 24px;
+    border: 1px solid #d9dcd8;
+    border-radius: 8px;
+    background: rgba(57, 140, 203, 0.2);
+}
+.session-notebook-form h4 { margin: 0; font-size: 18px; font-weight: 600; color: #293238; }
+.session-notebook-form .session-notebook-submit { padding-top: 8px; border-top: 1px solid #eeeeea; }
+.session-notebook-form textarea { font-size: 18px; line-height: 1.5; }
+@media (max-width: 700px) {
+    .session-notebook-form { padding: 16px; }
+}
+.session-notebook label { display: grid; gap: 7px; font-size: 16px; }
+.session-notebook input,
+.session-notebook textarea {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    padding: 10px 12px;
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
+    color: #333;
+    background: #fefefe;
+    font: inherit;
+}
+.session-notebook input { max-width: 300px; }
+.session-notebook textarea { min-height: 90px; resize: vertical; }
+.session-notebook :focus-visible { outline: 2px solid #8c8c8c; outline-offset: 2px; }
+.session-notebook-entries { margin: 0; padding: 0; list-style: none; max-height: 360px; overflow-y: auto; }
+.session-notebook-entries li { border-top: 1px solid #e5e5e5; padding: 24px 0; }
+.session-notebook-entry-meta { justify-content: flex-start; font-size: 15px; color: #495158; }
+.session-notebook-entry-meta time { color: #626b70; }
+.session-notebook-entries li p { white-space: pre-wrap; overflow-wrap: anywhere; margin: 10px 0 0; font-size: 18px; line-height: 1.65; color: #293238; }
+.session-notebook .session-notebook-error { color: #a22e23; font-size: 14px; margin: 0; }
+
+.session-notebook-list { margin-top: 0; }
+.session-notebook-list article { padding: 16px 0; border-top: 1px solid #e5e5e5; }
+.session-notebook-list h4 { margin: 0 0 6px; }
+
+.session-notebook-actions,
+.session-notebook-form-buttons { display: flex; align-items: center; gap: 16px; }
+.session-notebook .session-notebook-new {
+    box-sizing: border-box;
+    min-width: 96px;
+    padding: 8px 14px;
+    border-radius: 5px;
+    background: #8c8c8c;
+    color: #fff;
+    font-weight: 600;
+}
+.session-notebook .session-notebook-refresh {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+    border-radius: 5px;
+}
+.session-notebook .session-notebook-refresh:hover:not(:disabled) { background: #eeeeea; }
+.session-notebook .session-notebook-new:hover:not(:disabled) { background: #707070; }
+.session-notebook-header + .session-notebook-entries { margin-top: 16px; }
+.session-notebook-fields { display: flex; align-items: flex-end; gap: 18px; flex-wrap: wrap; }
+.session-notebook-fields > label { flex: 1 1 160px; max-width: 300px; }
+.session-notebook select { padding: 10px 12px; border: 1px solid #d9d9d9; border-radius: 5px; color: #333; background: #fefefe; font: inherit; width: 100%; }
+.session-notebook-scope-hint { font-size: 15px; color: #626b70; margin: 0; }
+.session-notebook-machine-picker { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; border: 1px solid #eeeeee; border-radius: 5px; padding: 10px 12px; }
+.session-notebook-machine-picker legend { padding: 0 6px; font-size: 16px; }
+.session-notebook-machine-picker label { display: inline-flex; align-items: center; gap: 6px; }
+.session-notebook .session-notebook-machine-picker input { width: 16px; height: 16px; margin: 0; }
+.session-note-kind { padding: 2px 7px; border-radius: 4px; background: #eeeeee; color: #495158; font-size: 13px; font-weight: 600; }
+.session-note-kind[data-kind="issue"] { background: #fff2d9; color: #8d641b; }
+.session-note-kind[data-kind="error"] { background: #fde8e5; color: #ac3f35; }
+.session-note-scope { font-size: 15px; color: #495158; }

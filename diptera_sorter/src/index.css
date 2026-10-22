@@ -9,6 +9,13 @@ body {
   font-family: var(--font-regular);
 }
 
+/* Keep content widths steady when a scrollable panel starts overflowing. */
+:where(.home-body, .reports-data-display, .session-notebook-entries,
+       .scroll-table, .tagger-table-container, .timeline-feed, .master-table,
+       .scanner-chat, .charging-machine-messages, .master-stop-dialog, .popup-content) {
+  scrollbar-gutter: stable;
+}
+
 strong, b {
   font-family: var(--font-bold);
 }
