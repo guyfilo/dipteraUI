@@ -13,6 +13,11 @@ export const SelectedMachinesProvider = ({ children }) => {
     const {sessions, liveData} = useContext(DataContext);
 
 
+    const selectOnlyMachine = (machineId) => {
+        setSelectedMachines([machineId]);
+        setSelectedSessions([]);
+    };
+
     const selectMachine = (machine_id, state) => {
         setSelectedMachines(prev => {
             let updated = state
@@ -106,6 +111,7 @@ export const SelectedMachinesProvider = ({ children }) => {
             selectedMachines,
             selectedSessions,
             selectMachine,
+            selectOnlyMachine,
             selectSession,
             selectAll,
             removeAll,

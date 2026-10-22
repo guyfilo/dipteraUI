@@ -1,10 +1,33 @@
-import React, {useContext, useEffect, useMemo, useState} from "react";
+import React, {useContext, useEffect, useMemo, useState, useRef} from "react";
 import {DataContext} from "../../communication/DataContext.jsx";
 import ReportsMailButton from "./ReportsMailButton.jsx";
 import "./style.css"
 import {Checkbox} from "../../components/Checkbox/index.jsx";
 import Plot from "react-plotly.js";
 import {generateColorMap, PieChart} from "../../components/PieChart/LivePieChart.jsx";
+
+const ReportTitle = ({title}) => {
+    const textRef = useRef(null);
+    const [textWidth, setTextWidth] = useState(0);
+    useEffect(() => {
+        const text = textRef.current;
+        if (!text) return;
+        const measure = () => setTextWidth(Math.ceil(text.getBoundingClientRect().width));
+        measure();
+        const observer = new ResizeObserver(measure);
+        observer.observe(text.parentElement);
+        document.fonts.addEventListener("loadingdone", measure);
+        return () => {
+            observer.disconnect();
+            document.fonts.removeEventListener("loadingdone", measure);
+        };
+    }, [title]);
+    return <b className="title" data-expandable={textWidth > 300}
+              style={{"--report-title-expanded-width": `${Math.min(500, Math.max(300, textWidth))}px`}}
+              title={title}>
+        <span ref={textRef}>{title}</span>
+    </b>;
+};
 
 const DownloadIcon = ({className = "icon", onClick}) => (
     <svg className={className} width="48" height="48" viewBox="0 0 48 48" fill="none" onClick={onClick}>
@@ -86,6 +109,7 @@ function ChartsPane({charts}) {
     map((val, i) => [val, colors[i]]));
 
     const plotLayout = useMemo(() => ({
+        autosize: true,
         title: {
             text: "Larvae area (mm²)",
             font: {
@@ -136,19 +160,19 @@ function ChartsPane({charts}) {
                     {loop[selectedMachine] ? <PieChart title={"Targets"}
                               labels={loop[selectedMachine].labels}
                               values={loop[selectedMachine].values}
-                              width={250} height={250}
+                              width={"100%"} height={250}
                               className={"report-pie"}
                     /> : <p>Output counts unavailable.</p>}
                     {sex[selectedMachine] ? <PieChart title={"Sex"}
                               labels={sex[selectedMachine].labels}
                               values={sex[selectedMachine].values}
-                              width={250} height={250}
+                              width={"100%"} height={250}
                               className={"report-pie"}
                     /> : <p>Sex data unavailable.</p>}
                     {fl[selectedMachine] ? <PieChart title={"Fluorescent"}
                               labels={fl[selectedMachine].labels}
                               values={fl[selectedMachine].values}
-                              width={250} height={250}
+                              width={"100%"} height={250}
                               className={"report-pie"}
                     /> : <p>Fluorescent data unavailable.</p>}
 
@@ -157,6 +181,8 @@ function ChartsPane({charts}) {
 
             <Plot
                 className={"report-histogram"}
+                style={{width: "100%", height: 250}}
+                useResizeHandler
                 data={plotData}
                 layout={plotLayout}
                 config={{ responsive: true }}
@@ -223,7 +249,7 @@ export default function SessionReportLine({
                         src={`/arrow-${expanded ? "hide" : "expand"}.svg`}
                         style={{marginRight: 8}}
                     />
-                    <b className={"title"}>{pretty("title", info["session_title"])}</b>
+                    <ReportTitle title={pretty("title", info["session_title"])}/>
                     {info.report_status === "partial" && <small>Partial report</small>}
                     {["date", "target1", "target2", "specie", "machine_ids"].map((key) => (
                         <div className="header-val" key={key}>

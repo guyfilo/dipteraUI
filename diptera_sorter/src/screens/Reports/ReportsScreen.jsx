@@ -4,6 +4,7 @@ import SessionReportLine from "./SessionReportLine.jsx";
 import "./style.css";
 import {Checkbox} from "../../components/Checkbox/index.jsx";
 import MultiSelectDropdown from "../../components/MultiSelectDropdown/MultiSelectDropdown.jsx";
+import ReportsDateFilter from "./ReportsDateFilter.jsx";
 import ReportsMailButton from "./ReportsMailButton.jsx";
 import subtract from "../SessionSetup/Subtract.svg";
 import subtractBack from "../SessionSetup/Subtract-back.svg";
@@ -181,7 +182,7 @@ const ReportsScreen = () => {
         // Date filter
         const dateMatch =
             selectedDates.length === 0 ||
-            selectedDates.includes(info.date);
+            (info.date >= selectedDates[0] && info.date <= (selectedDates[1] || selectedDates[0]));
 
         return machineMatch && lineMatch && dateMatch;
     }));
@@ -232,9 +233,8 @@ const ReportsScreen = () => {
                         setSelected={setSelectedLines}
                     />
 
-                    <MultiSelectDropdown
-                        label="Dates"
-                        options={reports.dates}
+                    <ReportsDateFilter
+                        dates={reports.dates}
                         selected={selectedDates}
                         setSelected={setSelectedDates}
                     />

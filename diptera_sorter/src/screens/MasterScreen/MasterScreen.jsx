@@ -21,7 +21,7 @@ export const MasterPage = () => {
     } = useContext(DataContext);
 
     const {
-        selectMachine,
+        selectOnlyMachine,
         selectedMachines,
         selectSession,
         selectAll,
@@ -46,8 +46,7 @@ export const MasterPage = () => {
     };
 
     const masterSelectMachine = (machineId) => {
-        removeAll();
-        selectMachine(machineId);
+        selectOnlyMachine(machineId);
         setSelectedMachine(machineId);
         // setSizeMode("hidden");
     }

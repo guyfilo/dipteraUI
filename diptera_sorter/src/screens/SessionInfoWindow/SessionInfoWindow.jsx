@@ -1,4 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
+import {EndSession} from "../../components/EndSession/EndSession.jsx";
+import HandleStop from "../../components/HandleStop/HandleStop.jsx";
 import {InfoContainer} from "../../components/InfoContainer/InfoContainer.jsx";
 import {ChooseTitle} from "../../components/ChooseTitle/ChooseTitle.jsx";
 import "./style.css"
@@ -9,7 +11,7 @@ import LivePieChart from "../../components/PieChart/LivePieChart.jsx";
 import {SelectedMachinesContext} from "../../components/SelectedMachinesContext/SelectedMachinesContext.jsx";
 
 export const SessionInfoWindow = ({data, sessions}) => {
-    const {selectSession, removeAll} = useContext(SelectedMachinesContext);
+    const {selectSession, removeAll, stopSessionRequest, stopRequest, setStopRequest} = useContext(SelectedMachinesContext);
     const [selected, setSelected] = useState(Object.values(sessions).at(0));
 
     useEffect(() => {
@@ -76,7 +78,15 @@ export const SessionInfoWindow = ({data, sessions}) => {
     const allLarvaAreas = Object.values(machines_data)
         .flatMap(machine => machine.larva_area || []);
 
+    const stoppingMachine = selected.machine_ids.find(id => stopRequest.includes(id));
+
     return <div className="session-info-window">
+        {stopSessionRequest.includes(selected.session_id) ? (
+            <EndSession key={selected.session_id} session={selected} presentation="dialog"/>
+        ) : stoppingMachine ? (
+            <HandleStop key={stoppingMachine} machine_id={stoppingMachine}
+                        setStopRequest={setStopRequest} presentation="dialog"/>
+        ) : null}
         <div className="choose-session">
             <ChooseTitle selected={selected} setSelected={setSelected}
                          options={Object.values(sessions)}></ChooseTitle>

@@ -14,3 +14,84 @@
     text-align: left;
     top: 10px;
 }
+
+.master-stop-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.master-stop-dialog {
+    width: 480px;
+    max-width: 100%;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 28px;
+    border-radius: 10px;
+    background: #fefefe;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+    color: #30363b;
+    font-family: var(--font-assistant, sans-serif);
+    text-align: left;
+}
+
+.master-stop-dialog h2 {
+    margin: 0 0 16px;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.master-stop-dialog p {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.master-stop-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.master-stop-actions button {
+    min-width: 100px;
+    min-height: 42px;
+    padding: 8px 20px;
+    border: 1px solid #bababa;
+    border-radius: 5px;
+    background: #f4f4f4;
+    color: #30363b;
+    font: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.master-stop-actions button:hover {
+    background: #e5e5e5;
+}
+
+.master-stop-actions .master-stop-primary {
+    border-color: #707070;
+    background: #707070;
+    color: #fff;
+}
+
+.master-stop-actions .master-stop-primary:hover {
+    background: #555;
+}
+
+.master-stop-actions button:focus-visible {
+    outline: 2px solid #398ccb;
+    outline-offset: 3px;
+}

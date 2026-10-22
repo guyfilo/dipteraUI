@@ -46,11 +46,17 @@
     white-space: nowrap;     /* Keep text on one line */
     text-overflow: ellipsis; /* Show "..." when cut off */
 }
-.session-summary-header .title:hover {
-    width: 500px;
-    overflow: visible;        /* Hide the overflow */
-    white-space: collapse;     /* Keep text on one line */
-    text-overflow: ellipsis; /* Show "..." when cut off */
+.session-summary-header .title {
+    flex: 0 0 auto;
+}
+
+.session-summary-header .title span {
+    display: inline;
+    white-space: nowrap;
+}
+
+.session-summary-header .title[data-expandable="true"]:hover {
+    width: var(--report-title-expanded-width);
 }
 
 .session-summary-header .header-val {
@@ -83,7 +89,8 @@
     flex-direction: row;
     gap: 10px;
     padding-bottom: 16px;
-    width: 1300px;
+    width: 100%;
+    overflow-x: auto;
 
 }
 
@@ -264,41 +271,47 @@
 }
 
 .report-charts {
-    display: flex;
-    flex-direction: row;
-    padding: 20px;
-    justify-content: stretch;
-    gap: 50px;
-    height: 300px;
-
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    align-items: end;
+    gap: 24px;
+    width: 100%;
+    padding: 20px 0;
+    box-sizing: border-box;
 }
+
 .report-pie {
-    width: 150px;
-    height: 200px;
+    min-width: 0;
 }
-.pies-overlay {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 40px;
 
+.pies-overlay {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    min-width: 0;
 }
 
 .report-pies-container {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 16px;
+    min-width: 0;
 }
+
 .select-machine {
     width: 200px;
+    max-width: 100%;
 }
 
 .report-histogram {
     position: relative;
-    top: 50px;
-    width: 750px;
-    height: 200px;
+    min-width: 0;
+}
 
+@media (max-width: 1400px) {
+    .report-charts {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
 
 .btn {
@@ -321,7 +334,7 @@
 
 .expand-report {
     padding-bottom: 40px;
-    width: max-content;
+    width: min(1300px, calc(100% - 20px));
 }
 
 .chart-switch {
@@ -329,3 +342,48 @@
     position: absolute;
 
 }
+
+.reports-date-filter { position: relative; }
+.reports-date-trigger {
+    min-width: 200px;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    text-align: left;
+}
+.reports-date-trigger.has-selection { background: rgba(92, 178, 244, 0.1); }
+.reports-date-calendar {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 100;
+    width: 320px;
+    padding: 16px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    color: #30363b;
+}
+.reports-calendar-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
+.reports-calendar-heading input { min-width: 0; width: 180px; padding: 6px; font: inherit; border: 1px solid #ddd; border-radius: 4px; }
+.reports-calendar-heading button,
+.reports-calendar-footer button { padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px; background: #f4f4f4; color: inherit; cursor: pointer; }
+.reports-calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.reports-calendar-weekday { text-align: center; font-size: 13px; padding-bottom: 6px; color: #707070; }
+.reports-calendar-day { position: relative; height: 36px; border: 1px solid transparent; border-radius: 5px; background: white; font: inherit; font-size: 14px; color: #707070; cursor: pointer; }
+.reports-calendar-day.has-reports { color: #30363b; cursor: pointer; font-weight: 600; }
+.reports-calendar-day.has-reports:hover { background: #eaf3ff; }
+.reports-calendar-day.in-range { background: #eaf3ff; color: #30363b; }
+.reports-calendar-day.is-selected { background: #398ccb; color: white; }
+.reports-calendar-day.is-selected:hover { background: #2876af; }
+.reports-calendar-dot { display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: #398ccb; }
+.reports-calendar-day .reports-calendar-dot { position: absolute; bottom: 3px; left: calc(50% - 2px); }
+.reports-calendar-day.is-selected .reports-calendar-dot { background: white; }
+.reports-calendar-help { margin: 14px 0; font-size: 13px; color: #595959; line-height: 1.5; }
+.reports-calendar-footer { display: flex; justify-content: space-between; gap: 8px; }
+.reports-calendar-footer button:disabled { opacity: 0.5; cursor: default; }
+.reports-date-filter button:focus-visible { outline: 2px solid #398ccb; outline-offset: 2px; }

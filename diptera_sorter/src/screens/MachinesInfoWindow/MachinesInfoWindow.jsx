@@ -9,6 +9,7 @@ import LivePieChart from "../../components/PieChart/LivePieChart.jsx";
 import {InfoContainer} from "../../components/InfoContainer/InfoContainer.jsx";
 import {AreaHistogram} from "../../components/AreaHistogram/AreaHistogram.jsx";
 import {Gauge} from "../../components/Gauge/Gauge.jsx";
+import HandleStop from "../../components/HandleStop/HandleStop.jsx";
 import {SelectedMachinesContext} from "../../components/SelectedMachinesContext/SelectedMachinesContext.jsx";
 
 const formatTime = (seconds) => {
@@ -25,7 +26,7 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
     let data = Object.fromEntries(
         Object.entries(machines_data).filter(([_, machine]) => machine?.session_id)
     );
-    const {removeAll, selectMachine} = useContext(SelectedMachinesContext);
+    const {selectOnlyMachine, stopRequest, setStopRequest} = useContext(SelectedMachinesContext);
     const [machine, setMachine] = React.useState(Object.values(data).at(0));
     useEffect(() => {
         if (machine && data[machine.machine_id]) {
@@ -42,9 +43,8 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
     machine.machine_title = `Machine ${machine.machine_id}`;
 
     useEffect(() => {
-        removeAll();
-        selectMachine(machine.machine_id, true);
-    }, [machine]);
+        selectOnlyMachine(machine.machine_id);
+    }, [machine.machine_id]);
 
     const [displayTime, setDisplayTime] = useState(machine?.running_time ?? 0);
 
@@ -69,6 +69,10 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
 
     return (
         <div className="machinesInfoWindow">
+            {stopRequest.includes(machine.machine_id) && (
+                <HandleStop key={machine.machine_id} machine_id={machine.machine_id}
+                            setStopRequest={setStopRequest} presentation="dialog"/>
+            )}
             <div className="choose-machine">
                 <ChooseTitle selected={machine} setSelected={setMachine}
                              options={Object.values(data)} title_key={"machine_title"}></ChooseTitle>

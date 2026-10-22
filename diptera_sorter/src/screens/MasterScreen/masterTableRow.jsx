@@ -1,9 +1,13 @@
-import React, {useEffect} from 'react';
+import React, {useContext} from 'react';
 import StatusIcon from "../../components/StatusIcon/StatusIcon.jsx";
 import {InputBottle} from "../../components/InputBottle/InputBottle.jsx";
 
+import {SelectedMachinesContext} from "../../components/SelectedMachinesContext/SelectedMachinesContext.jsx";
+import HandleStop from "../../components/HandleStop/HandleStop.jsx";
+
 import "./style.css"
 export const MasterTableRow = ({data, selected, setSelected}) => {
+    const {stopRequest, setStopRequest} = useContext(SelectedMachinesContext);
 
     const getJetsonCell = ({jetId, jetState}) => {
         let is_on = jetState?.online || false;
@@ -63,5 +67,8 @@ export const MasterTableRow = ({data, selected, setSelected}) => {
                     operation going..
                 </div>
             </div>
+            {stopRequest.includes(data.machine_id) && (
+                <HandleStop machine_id={data.machine_id} setStopRequest={setStopRequest} presentation="dialog"/>
+            )}
         </div>)
 }
