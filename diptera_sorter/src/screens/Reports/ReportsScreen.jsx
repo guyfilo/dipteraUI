@@ -56,7 +56,7 @@ const Charging = () => {
 };
 
 const ReportsScreen = () => {
-    const { reports, fetchReports, fetchChartsData, chartsDataMap} = useContext(DataContext);
+    const { reports, fetchReports, reportsLoading, reportsError, reportsProgress} = useContext(DataContext);
     const [expanded, setExpanded] = useState({}); // { session_id: true/false }
     const [selected, setSelected] = useState([]); // { session_id: true/false }
     const [selectedMachines, setSelectedMachines] = useState([]);
@@ -75,7 +75,9 @@ const ReportsScreen = () => {
     }, []);
 
     if (!reports || Object.keys(reports).length === 0) {
-        return <Charging />;
+        return reportsError
+            ? <div role="alert">{reportsError} <button onClick={fetchReports}>Retry</button></div>
+            : <Charging />;
     }
 
     const toggleExpand = (sessionId) => {
@@ -194,6 +196,11 @@ const ReportsScreen = () => {
             }}
         >
             <b className={"reports-screen-title"}>Sessions Reports</b>
+            <div role="status">
+                {reportsLoading && `Loading reports: ${reportsProgress.loaded} / ${reportsProgress.total}`}
+                {!reportsLoading && !reportsError && Object.keys(reports.reports).length === 0 && 'No reports available.'}
+            </div>
+            {reportsError && <div role="alert">{reportsError} <button onClick={fetchReports}>Retry</button></div>}
 
             <div className={"reports-control"}
             >
@@ -259,7 +266,6 @@ const ReportsScreen = () => {
                         if (!data || data.length === 0) return null;
                         const ignore_cols = ["session_id", "_date", "_start_ts"];
                         const columns = Object.keys(data[0]).filter((k) => !ignore_cols.includes(k));
-                        console.log("columns", columns);
                         const sessionId = info.session_id;
 
                         const onDownload = () =>

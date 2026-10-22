@@ -3,8 +3,8 @@ import React, {createContext, useEffect, useRef, useState} from "react";
 const SERVERS = {
     israel: {
         name: "Israel Site",
-        API_BASE: "http://dipt-net.tailb282fd.ts.net:8000",
-        WS_BASE: "ws://dipt-net.tailb282fd.ts.net:8000"
+        API_BASE: "http://office.tailb282fd.ts.net:8000",
+        WS_BASE: "ws://office.tailb282fd.ts.net:8000"
     },
     burkina: {
         name: "Burkina Site",
@@ -305,11 +305,67 @@ export const DataProvider = ({ children }) => {
     const [reports, setReports] = useState([]);
     const [chartsDataMap, setChartsDataMap] = useState({});
 
-    const fetchReports = async () => {
-        const res = await fetch(`${API_BASE}/api/reports`);
-        const json = await res.json();
-        setReports(json);
-        return json;
+    const [reportsLoading, setReportsLoading] = useState(false);
+    const [reportsError, setReportsError] = useState(null);
+    const [reportsProgress, setReportsProgress] = useState({loaded: 0, total: 0});
+    const reportsRequest = useRef(null);
+
+    const fetchReports = () => {
+        if (reportsRequest.current) return reportsRequest.current;
+        const request = (async () => {
+            setReportsLoading(true);
+            setReportsError(null);
+            let reader;
+            try {
+                const response = await fetch(`${API_BASE}/api/reports?stream=true&batch_size=25`);
+                if (!response.ok) throw new Error('Failed to load reports');
+                reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let pending = '';
+                let result = null;
+                let complete = false;
+                const consume = (line) => {
+                    if (!line.trim()) return;
+                    const message = JSON.parse(line);
+                    if (message.type === 'error') throw new Error(message.message);
+                    if (message.type === 'metadata') {
+                        result = {reports: {}, machines: message.machines, dates: message.dates, lines: message.lines};
+                        setReports(result);
+                        setChartsDataMap({});
+                        setReportsProgress({loaded: 0, total: message.total});
+                    } else if (message.type === 'reports') {
+                        result = {...result, reports: {...result.reports, ...message.reports}};
+                        setReports(result);
+                        setReportsProgress(prev => ({...prev, loaded: Object.keys(result.reports).length}));
+                    } else if (message.type === 'complete') {
+                        complete = true;
+                    }
+                };
+                while (true) {
+                    const {value, done} = await reader.read();
+                    pending += decoder.decode(value, {stream: !done});
+                    const lines = pending.split('\n');
+                    pending = lines.pop();
+                    lines.forEach(consume);
+                    if (done) break;
+                }
+                consume(pending);
+                if (!complete || !result) throw new Error('Report download interrupted. Please retry.');
+                return result;
+            } catch (error) {
+                setReportsError(error.message);
+                return null;
+            } finally {
+                if (reader) {
+                    await reader.cancel().catch(() => {});
+                    reader.releaseLock();
+                }
+                setReportsLoading(false);
+                reportsRequest.current = null;
+            }
+        })();
+        reportsRequest.current = request;
+        return request;
     };
 
      const fetchChartsData = async (sessionId) =>{
@@ -378,6 +434,9 @@ export const DataProvider = ({ children }) => {
             getErrors,
             reports,
             fetchReports,
+            reportsLoading,
+            reportsError,
+            reportsProgress,
             fetchChartsData,
             chartsDataMap,
             getTimeline,
