@@ -1,3 +1,4 @@
+import PressureGauge, {pressureGaugeTitle} from '../../components/Gauge/PressureGauge.jsx';
 import React, {useContext, useEffect, useState} from "react";
 import {ChooseTitle} from "../../components/ChooseTitle/ChooseTitle.jsx";
 import "./style.css";
@@ -81,38 +82,36 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
             <div className="machine-table-container">
                 <table className="machine-info-table">
                     <tbody>
-                    <tr style={{height: "92px"}}>
-                        <td style={{width: "150px"}}>
-                            <div className="td-container machine-target-counter">
-                                <p className="cell-header-machine">Target1</p>
-                                <p className="larva-target-count-text">{machine?.target1_counter}</p>
-                                <span style={{fontSize: "18px"}}>
-                                    {machine?.target1_interval_counter}
-                                    <img src="outBottle.svg" alt="" style={{width: "14px", marginLeft: "3px"}}/>
-                                </span>
+                    <tr style={{height: "201px"}}>
+                        <td colSpan={3} style={{width: "560px"}}>
+                            <div className="machine-summary-grid">
+                                <div className="machine-summary-card">
+                                    <p className="cell-header-machine">Larvae</p>
+                                    <p className="larva-count-text">{machine?.larvae_counter}</p>
+                                </div>
+                                <div className="machine-summary-card machine-summary-status">
+                                    <p className="cell-header-machine">Status</p>
+                                    <StatusIcon status={machine.machine_state} width={48} height={48}/>
+                                </div>
+                                <div className="machine-summary-card machine-summary-runtime">
+                                    <p className="cell-header-machine">Run Time</p>
+                                    <p className="machine-runtime-value">{formatTime(displayTime)}</p>
+                                </div>
+                                {[1, 2].map(target => <div className="machine-summary-card machine-target-counter" key={target}>
+                                    <p className="cell-header-machine">Target{target}</p>
+                                    <p className="larva-target-count-text">{machine?.[`target${target}_counter`]}</p>
+                                    <span style={{fontSize: "18px"}}>
+                                        {machine?.[`target${target}_interval_counter`]}
+                                        <img src="outBottle.svg" alt="" style={{width: "14px", marginLeft: "3px"}}/>
+                                    </span>
+                                </div>)}
+                                {[['Junk', machine?.junk_counter ?? 0], ['Recycle', machine?.recycle_counter ?? 0]].map(([label, count]) => <div className="machine-summary-card machine-target-counter" key={label}>
+                                    <p className="cell-header-machine">{label}</p>
+                                    <p className="larva-target-count-text" aria-label={`${label} count`}>{count}</p>
+                                </div>)}
                             </div>
                         </td>
-                        <td style={{width: "150px"}}>
-                            <div className="td-container machine-target-counter">
-                                <p className="cell-header-machine">Target2</p>
-                                <p className="larva-target-count-text">{machine?.target2_counter}</p>
-                                <span style={{fontSize: "18px"}}>
-                                    {machine?.target2_interval_counter}
-                                    <img src="outBottle.svg" alt="" style={{width: "14px", marginLeft: "3px"}}/>
-                                </span>
-                            </div>
-                        </td>
-                        <td rowSpan={2}>
-                            <div className="td-container machine-status">
-
-                                <p className="cell-header-machine">Status</p>
-                                <StatusIcon status={machine.machine_state} width={90} height={90}
-                                            className="machine-status-icon"></StatusIcon>
-                            </div>
-
-                        </td>
-
-                        <td className="" rowSpan={2}>
+                        <td className="">
                             <div className="td-container machine-input-bottle">
 
                                 <p className="cell-header-machine">Input Bottles</p>
@@ -126,7 +125,7 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
                             </div>
 
                         </td>
-                        <td className="" rowSpan={2}>
+                        <td className="">
                             <div className="td-container machine-output-bottle">
 
                                 <p className="cell-header-machine">Output Bottles</p>
@@ -142,19 +141,13 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
                                 ></OutputBottles>
                             </div>
                         </td>
-                        <td rowSpan={3} style={{width: "290px"}}>
+                        <td rowSpan={2} style={{width: "290px"}}>
                             <div className=" td-container machine-dashboard-gauge">
-                                <InfoContainer info={"pressure inside the tankers"} title={"Pressure"}>
-                                    <Gauge style={{width: "200px", height: "130px", left: "25px", position: "relative"}}
-                                           subArcs={[{limit: 30}, {limit: 40}, {limit: 50}]}
-                                           warning={machine?.pressure?.warning}
-                                           val={machine?.pressure?.value}
-                                           ticks={[{value: 30}, {value: 40}, {value: 50}]}
-                                           maxValue={60}
-                                    ></Gauge>
+                                <InfoContainer info={"pressure inside the tankers"} title={pressureGaugeTitle(machine?.pressure)}>
+                                    <PressureGauge style={{width: "220px", maxWidth: "100%"}} pressure={machine?.pressure}/>
                                 </InfoContainer>
                                 <InfoContainer info={"sorts per minute"} title={"Sorting Rate"}>
-                                    <Gauge style={{width: "200px", height: "130px", left: "25px", position: "relative"}}
+                                    <Gauge style={{width: "220px", maxWidth: "100%"}}
                                            val={machine?.sorting_rate?.value}
                                            warning={machine?.sorting_rate?.warning}
                                            subArcs={[{limit: 10}, {limit: 30}, {limit: 50}, {limit: 70}]}
@@ -163,7 +156,7 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
                                     ></Gauge>
                                 </InfoContainer>
                                 <InfoContainer info={"time the system wait for new larva"} title={"Waiting Time"}>
-                                    <Gauge style={{width: "200px", height: "130px", left: "25px", position: "relative"}}
+                                    <Gauge style={{width: "220px", maxWidth: "100%"}}
                                            val={machine?.waiting_time?.value}
                                            warning={machine?.waiting_time?.warning}
 
@@ -171,24 +164,6 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
                                            ticks={[{value: 0.2}, {value: 0.8}, {value: 1}]}
                                     ></Gauge>
                                 </InfoContainer>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr style={{height: "109px"}}>
-                        <td colSpan={1}>
-                            <div className="td-container machine-larva-counter">
-                                <p className="cell-header-machine">Larvae</p>
-                                <p className="larva-count-text">{machine?.larvae_counter}</p>
-                            </div>
-                        </td>
-
-                        <td colSpan={1}>
-                            <div className="td-container machine-larva-counter">
-                                <p className="cell-header-machine">Run Time</p>
-                                <p className="larva-count-text" style={{fontSize: "30px"}}>
-                                    {formatTime(displayTime)}
-                                </p>
                             </div>
                         </td>
                     </tr>

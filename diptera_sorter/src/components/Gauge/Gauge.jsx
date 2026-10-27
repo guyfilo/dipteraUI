@@ -35,7 +35,7 @@ export const Gauge = ({val, style, suffix = '', ticks, subArcs, minValue, maxVal
 
             }}
             arc={{
-                colorArray: ['rgb(217, 217, 217)', 'rgb(68, 68, 68)'],
+                colorArray: subArcs?.some(arc => arc.color) ? undefined : ['rgb(217, 217, 217)', 'rgb(68, 68, 68)'],
                 subArcs: subArcs,
                 padding: 0.02,
                 width: 0.3

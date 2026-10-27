@@ -141,11 +141,11 @@
 }
 
 .machines-table-row.selected {
-    background-color: var(--dipteraai-light-and-transparent);
+    background-color: var(--dipteraai-light);
 }
 
 .session-table-container.selected {
-    background-color: var(--dipteraai-light-and-transparent);
+    background-color: var(--dipteraai-light);
 }
 
 

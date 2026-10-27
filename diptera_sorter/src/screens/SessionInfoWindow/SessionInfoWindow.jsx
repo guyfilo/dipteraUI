@@ -1,6 +1,6 @@
 import SessionViewSwitch from "../../components/SessionNotebook/SessionViewSwitch.jsx";
 import SessionNotebook from "../../components/SessionNotebook/SessionNotebook.jsx";
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {EndSession} from "../../components/EndSession/EndSession.jsx";
 import HandleStop from "../../components/HandleStop/HandleStop.jsx";
 import {InfoContainer} from "../../components/InfoContainer/InfoContainer.jsx";
@@ -15,6 +15,13 @@ import {SelectedMachinesContext} from "../../components/SelectedMachinesContext/
 export const SessionInfoWindow = ({data, sessions}) => {
     const {selectSession, removeAll, stopSessionRequest, stopRequest, setStopRequest} = useContext(SelectedMachinesContext);
     const [detailView, setDetailView] = useState("charts");
+    const detailRef = useRef(null);
+    const [chartHeight, setChartHeight] = useState(300);
+    useEffect(() => {
+        const observer = new ResizeObserver(([entry]) => setChartHeight(Math.max(60, Math.floor(entry.contentRect.height - 60))));
+        if (detailRef.current) observer.observe(detailRef.current);
+        return () => observer.disconnect();
+    }, []);
     const [selected, setSelected] = useState(Object.values(sessions).at(0));
 
     useEffect(() => {
@@ -39,6 +46,11 @@ export const SessionInfoWindow = ({data, sessions}) => {
     const totalTarget2 = Object.values(machines_data)
         .map(machine => machine.target2_counter || 0)
         .reduce((a, b) => a + b, 0);
+
+    const totalJunk = Object.values(machines_data)
+        .reduce((total, machine) => total + (machine.junk_counter || 0), 0);
+    const totalRecycle = Object.values(machines_data)
+        .reduce((total, machine) => total + (machine.recycle_counter || 0), 0);
 
     const totalTarget1Interval = Object.values(machines_data)
         .map(machine => machine.target1_interval_counter || 0)
@@ -98,7 +110,7 @@ export const SessionInfoWindow = ({data, sessions}) => {
             <div className="larva-counter-title">Larvae</div>
             <div className="larva-count">{totalLarvae}</div>
         </div>
-        <div className="target-counters">
+        <div className="target-counters session-primary-counters">
             <div className="larva-counter target-count">
                 <div className="larva-counter-title">Target1</div>
                 <div>{totalTarget1}</div>
@@ -117,10 +129,17 @@ export const SessionInfoWindow = ({data, sessions}) => {
             </div>
         </div>
 
+        <div className="target-counters session-secondary-counters">
+            {[['Junk', totalJunk], ['Recycle', totalRecycle]].map(([label, count]) => <div className="larva-counter target-count" key={label}>
+                <div className="larva-counter-title">{label}</div>
+                <div aria-label={`${label} count`}>{count}</div>
+            </div>)}
+        </div>
+
         <div className="session-live-table">
             <SessionInfoTable session_data={selected} machines_data={machines_data}></SessionInfoTable>
         </div>
-        <div className="session-second-row" data-view={detailView}>
+        <div className="session-second-row" data-view={detailView} ref={detailRef}>
             <div className="session-detail-toolbar">
                 <SessionViewSwitch mode={detailView} onChange={setDetailView}
                                    options={['charts', 'notebook']} label="Session detail view"/>
@@ -128,12 +147,12 @@ export const SessionInfoWindow = ({data, sessions}) => {
             {detailView === "charts" ? <div className="session-detail-charts">
                 <div className="session-pie">
                     <InfoContainer info="Loops Pie" title="Loops Pie">
-                        <LivePieChart width="100%" height={400} selected={combinedData}/>
+                        <LivePieChart width="100%" height={chartHeight} selected={combinedData}/>
                     </InfoContainer>
                 </div>
                 <div className="larva-area-histogram-container">
                     <InfoContainer info="Larva Area Histogram" title="Larva Area Histogram">
-                        <AreaHistogram className="area-histogram" height={400} values={allLarvaAreas}/>
+                        <AreaHistogram className="area-histogram" height={chartHeight} values={allLarvaAreas}/>
                     </InfoContainer>
                 </div>
             </div> : <div className="session-detail-notebook">

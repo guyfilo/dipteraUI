@@ -1,3 +1,4 @@
+import PressureGauge, {pressureGaugeTitle} from '../../components/Gauge/PressureGauge.jsx';
 import React, {useContext, useEffect} from "react";
 import {ChooseTitle} from "../../components/ChooseTitle/ChooseTitle.jsx";
 import "./style.css";
@@ -149,14 +150,8 @@ export const ScannerWindow = ({data, sessions, newSessionCbk}) => {
                         <td colSpan={1} rowSpan={2}>
                             <div className="scanner-td-container" style={{width: "290px"}}>
                                 <InfoContainer className={"scanner-dashboard"} info={"pressure inside the tankers"}
-                                               title={"Pressure"}>
-                                    <Gauge
-                                        style={{width: "256px", height: "228px"}}
-                                        val={scanner?.pressure?.value ?? 35}
-                                        subArcs={[{limit: 30}, {limit: 40}, {limit: 50}]}
-                                        ticks={[{value: 30}, {value: 40}, {value: 50}]}
-                                        maxValue={60}
-                                    />
+                                               title={pressureGaugeTitle(scanner?.pressure)}>
+                                    <PressureGauge style={{width: "220px", maxWidth: "100%"}} pressure={scanner?.pressure}/>
                                 </InfoContainer>
                             </div>
                         </td>

@@ -38,7 +38,7 @@ body {
     --font-assistant: Assistant;
     --caution-orange: #fca447;
     --caution-orange-light: #fcf347;
-    --dipteraai-light-and-transparent: rgba(92, 178, 244, 0.1);
+    --dipteraai-light-and-transparent: rgb(92 178 244);
     --color-lightgreen: #5adb80;
 
 

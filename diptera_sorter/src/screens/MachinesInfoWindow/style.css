@@ -1,6 +1,34 @@
 .machinesInfoWindow {
 }
 
+.machine-summary-grid {
+    position: absolute;
+    inset: 5px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+.machine-summary-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px;
+    border-radius: 10px;
+    background: #fefefe;
+    min-width: 0;
+    min-height: 0;
+}
+.machine-info-table .machine-summary-card p { margin: 0; }
+.machine-info-table .machine-summary-card .cell-header-machine { line-height: 20px; }
+.machine-info-table .machine-summary-card .larva-count-text { font-size: 40px; line-height: 42px; }
+.machine-info-table .machine-summary-card .larva-target-count-text { line-height: 26px; }
+.machine-summary-card > span { line-height: 18px; }
+.machine-summary-runtime { grid-column: span 2; }
+.machine-info-table .machine-runtime-value { font-size: 28px; color: #000; }
+
 
 .machinesInfoWindow .machine-session-title {
     width: 100%;
@@ -138,6 +166,36 @@
 }
 
 .machine-info-table .machine-dashboard-gauge {
-    flex-direction: column;
-
+    display: grid;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    padding: 16px;
+    justify-content: stretch;
+    align-items: stretch;
 }
+.machine-dashboard-gauge .info-container {
+    box-sizing: border-box;
+    display: grid;
+    grid-template-rows: 28px minmax(0, 1fr);
+    min-height: 0;
+    height: auto;
+}
+.machine-dashboard-gauge .info-container-title {
+    position: static;
+    width: auto;
+    height: auto;
+    padding-right: 28px;
+}
+.machine-dashboard-gauge .info-icon { top: 4px; right: 0; left: auto; }
+.machine-dashboard-gauge .info-children {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.machine-dashboard-gauge .info-children svg { overflow: visible; }
