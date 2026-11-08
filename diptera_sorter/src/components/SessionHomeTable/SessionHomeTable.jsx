@@ -76,7 +76,7 @@ export const SessionHomeTable = ({ session_data, machines_data }) => {
                         <td className="session-table-data col-status"><StatusIcon status={machineData.machine_state} error={machineData.error} /></td>
                         <td className="session-table-data" colSpan={4}>
                             <div className="error-handle">
-                                <div className="theMachineHas">The machine has stopped due to an error.</div>
+                                <div className="theMachineHas">{machineData.error || "The machine has stopped due to an error."}</div>
                                 <Button className="handle-error-button" text="restart" onClick={async () => await restart_machines([machine_id])} />
                                 <Button className="handle-error-button" text="remove" onClick={async () => await removeMachine(machineData.session_id, machine_id)} />
                             </div>

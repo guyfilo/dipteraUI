@@ -83,7 +83,7 @@ export const SessionInfoTable = ({className, session_data, machines_data}) => {
                     </td>
                     <td className="table-data " colSpan={4}>
                         <div className={"error-handle"}>
-                            <div className="theMachineHas">The machine has stopped due to an error.</div>
+                            <div className="theMachineHas">{machineData.error || "The machine has stopped due to an error."}</div>
                             <Button className={"handle-error-button"} text={"restart"}
                                     onClick={async () => {
                                         await restart_machines([machine_id]);

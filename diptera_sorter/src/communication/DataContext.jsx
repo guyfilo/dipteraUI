@@ -46,6 +46,17 @@ export const DataProvider = ({ children }) => {
     const [sessions, setSessions] = useState({});
     const [connected, setConnected] = useState(false);
     const socketRef = useRef(null);
+    const [washFailures, setWashFailures] = useState({});
+    const seenWashFailures = useRef(new Set());
+
+    // Keep the instruction visible even after the ended session row disappears.
+    const rememberWashFailure = (machineId, error) => {
+        if (typeof error !== "string" || !error.includes("Wash aborted because input bottle ")) return;
+        const key = JSON.stringify([machineId, error]);
+        if (seenWashFailures.current.has(key)) return;
+        seenWashFailures.current.add(key);
+        setWashFailures(prev => ({...prev, [key]: {machineId, error}}));
+    };
 
     const fetchFullState = async () => {
         const res = await fetch(`${API_BASE}/api/state/full?sudo=${getSudoParam()}`);
@@ -63,6 +74,9 @@ export const DataProvider = ({ children }) => {
 
             return merged;
         });
+        for (const [machineId, machine] of Object.entries(json.machines)) {
+            rememberWashFailure(machineId, machine.error);
+        }
         setSessions(json.sessions);
     };
     const fetchSessionsState = async () => {
@@ -129,6 +143,7 @@ export const DataProvider = ({ children }) => {
                 if (isDisposed) return;
 
                 const update = JSON.parse(event.data);
+                rememberWashFailure(update.machine_id, update.error);
 
             if (update?.machine_id === "tagger") {
                 if (update.remove) {
@@ -468,6 +483,22 @@ export const DataProvider = ({ children }) => {
             addTimelineEvent,
             editTimelineEvent,
         }}>
+            {Object.keys(washFailures).length > 0 && (
+                <aside aria-label="Wash failures" style={{position: "fixed", bottom: "1rem", right: "1rem", zIndex: 10000,
+                    maxWidth: "32rem", maxHeight: "50vh", overflowY: "auto", padding: "1rem", background: "white",
+                    color: "black", border: "2px solid var(--warnning-red)"}}>
+                    {Object.entries(washFailures).map(([key, failure]) => (
+                        <div key={key}>
+                            <p role="alert"><strong>{failure.machineId}: </strong>{failure.error}</p>
+                            <button type="button" onClick={() => setWashFailures(prev => {
+                                const next = {...prev};
+                                delete next[key];
+                                return next;
+                            })}>Dismiss</button>
+                        </div>
+                    ))}
+                </aside>
+            )}
             {children}
         </DataContext.Provider>
     );
