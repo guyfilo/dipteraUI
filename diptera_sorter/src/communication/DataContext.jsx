@@ -1,3 +1,5 @@
+import EndWashDialog from "../components/EndSession/EndWashDialog.jsx";
+import "../components/HandleStop/style.css";
 import React, {createContext, useCallback, useEffect, useRef, useState} from "react";
 
 const SERVERS = {
@@ -236,6 +238,15 @@ export const DataProvider = ({ children }) => {
             socket?.close();
         };
     }, [serverKey]);
+    const answerEndWash = async (machineId, promptId, action) => {
+        const response = await fetch(API_BASE + "/api/command", {
+            method: "POST", headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({command: "wash_end_session", machines: [machineId], sessions: [],
+                kwargs: {action, prompt_id: promptId}}),
+        });
+        if (!response.ok) throw new Error("Command failed");
+    };
+
     const clearImages = (machineId) => {
         setData(prev => {
             if (!prev[machineId]) return prev;
@@ -499,6 +510,13 @@ export const DataProvider = ({ children }) => {
                     ))}
                 </aside>
             )}
+            {Object.entries(data).filter(([, machine]) => machine.session_id && machine.end_wash_prompt?.status === "waiting")
+                .map(([machineId, machine]) => (
+                    <div className="master-stop-overlay" key={machineId}>
+                        <EndWashDialog key={machine.end_wash_prompt.id} machineId={machineId}
+                                       machine={machine} onAnswer={answerEndWash}/>
+                    </div>
+                ))}
             {children}
         </DataContext.Provider>
     );
