@@ -152,7 +152,7 @@ export const SessionInfoWindow = ({data, sessions}) => {
                 </div>
                 <div className="larva-area-histogram-container">
                     <InfoContainer info="Larva Area Histogram" title="Larva Area Histogram">
-                        <AreaHistogram className="area-histogram" height={chartHeight} values={allLarvaAreas}/>
+                        <AreaHistogram className="area-histogram" height={chartHeight} values={allLarvaAreas} bounds={Object.entries(machines_data).map(([machineId, machine]) => ({...machine.area_bounds, label: machineId}))}/>
                     </InfoContainer>
                 </div>
             </div> : <div className="session-detail-notebook">

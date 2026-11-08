@@ -185,7 +185,7 @@ export const MachinesInfoWindow = ({machines_data, sessions}) => {
                             <div className="td-container machine-histogram" style={{width: "630px"}}>
 
                                 <InfoContainer info={"Histogram"} title={"Histogram"}>
-                                    <AreaHistogram width={550} height={340} values={machine.larva_area}></AreaHistogram>
+                                    <AreaHistogram width={550} height={340} values={machine.larva_area} bounds={[machine.area_bounds]}></AreaHistogram>
                                 </InfoContainer>
                             </div>
                         </td>

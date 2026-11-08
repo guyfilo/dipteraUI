@@ -1,13 +1,16 @@
 import React, {useEffect} from "react";
 import Plot from "react-plotly.js";
+import {areaBoundaryMarkers} from "./areaBounds.js";
 import {useState} from "react";
 
-export const AreaHistogram = ({className, width, height, values}) => {
+export const AreaHistogram = ({className, width, height, values, bounds = []}) => {
     const [x, setX] = useState(values);
 
     useEffect(() => {
         setX(values);
     }, [values]);
+
+    const markers = areaBoundaryMarkers(bounds);
 
     let trace = {
         x: x,
@@ -37,34 +40,15 @@ export const AreaHistogram = ({className, width, height, values}) => {
                     },
 
                     yaxis: {showgrid: false},
-                    shapes: [
-                        {
-                            type: "line",
-                            x0: 2,
-                            x1: 2,
-                            y0: 0,
-                            y1: 1, // Stretches to full height (normalized for probability hist)
-                            yref: "paper", // Use 'paper' to span full height
-                            line: {
-                                color: "#181818",
-                                width: 1,
-                                dash: "dash",
-                            },
-                        },
-                        {
-                            type: "line",
-                            x0: 3,
-                            x1: 3,
-                            y0: 0,
-                            y1: 1,
-                            yref: "paper",
-                            line: {
-                                color: "#181818",
-                                width: 1,
-                                dash: "dash",
-                            },
-                        },
-                    ],
+                    shapes: markers.map(({value}) => ({
+                        type: "line", x0: value, x1: value,
+                        y0: 0, y1: 1, yref: "paper",
+                        line: {color: "#181818", width: 1, dash: "dash"},
+                    })),
+                    annotations: markers.map(({value, text}) => ({
+                        x: value, y: 1, xref: "x", yref: "paper", text,
+                        showarrow: false, yanchor: "bottom", font: {size: 11},
+                    })),
                 }}
             />
         </div>
